@@ -1,0 +1,120 @@
+@page "/orders"
+@using Dima.Core.Enums
+@using Dima.Core.Models
+@inherits ListOrdersPage
+
+<div class="d-flex flex-column gap-y-8 animate-fade-in">
+
+    <!-- Cabeçalho -->
+    <div class="d-flex align-center justify-space-between">
+        <div>
+            <MudText Typo="Typo.h4" Style="font-weight: 800;">@(IsPremium ? "Meus Planos" : "Meus Pedidos")</MudText>
+            <MudText Typo="Typo.body1" Color="Color.Secondary">Gerencie suas assinaturas e histórico de compras</MudText>
+        </div>
+        <MudButton
+            Variant="Variant.Filled"
+            Color="Color.Primary"
+            StartIcon="@Icons.Material.Filled.Add"
+            Href="/plans"
+            Style="border-radius: 12px; text-transform: none;">
+            Nova Assinatura
+        </MudButton>
+    </div>
+
+    <MudTable Items="@Orders"
+              T="Order"
+              Hover="true"
+              Elevation="4"
+              Loading="@IsBusy"
+              RowsPerPage="10"
+              Style="border-radius: 16px;"
+              Class="pa-4">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Histórico</MudText>
+            <MudSpacer/>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Pedido</MudTh>
+            <MudTh>Plano</MudTh>
+            <MudTh>Data</MudTh>
+            <MudTh>Vencimento</MudTh>
+            <MudTh>Status</MudTh>
+            <MudTh>Total</MudTh>
+            <MudTh Style="text-align: right">Ações</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Pedido">
+                <MudText Typo="Typo.body2" Style="font-weight: 600;">@context.Number</MudText>
+            </MudTd>
+            <MudTd DataLabel="Plano">
+                <MudText Typo="Typo.body2">@context.Product.Title</MudText>
+            </MudTd>
+            <MudTd DataLabel="Data">
+                <MudText Typo="Typo.body2">@context.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy")</MudText>
+            </MudTd>
+            <MudTd DataLabel="Vencimento">
+                <MudText Typo="Typo.body2">@(context.SubscriptionEndDate?.ToLocalTime().ToString("dd/MM/yyyy") ?? "-")</MudText>
+            </MudTd>
+            <MudTd DataLabel="Status">
+                @switch (context.Status)
+                {
+                    case EOrderStatus.WaitingPayment:
+                        <MudChip Color="Color.Warning" Size="Size.Small" Variant="Variant.Filled" T="string">aguardando</MudChip>
+                        break;
+                    case EOrderStatus.Paid:
+                        @if (context.SubscriptionEndDate >= DateTime.UtcNow)
+                        {
+                            <MudChip Color="Color.Success" Size="Size.Small" Variant="Variant.Filled" T="string">pago</MudChip>
+                        }
+                        else
+                        {
+                            <MudChip Color="Color.Warning" Size="Size.Small" Variant="Variant.Filled" T="string">vencido</MudChip>
+                        }
+                        break;
+                    case EOrderStatus.Canceled:
+                        <MudChip Color="Color.Error" Size="Size.Small" Variant="Variant.Filled" T="string">cancelado</MudChip>
+                        break;
+                    case EOrderStatus.Refunded:
+                        <MudChip Color="Color.Info" Size="Size.Small" Variant="Variant.Filled" T="string">estornado</MudChip>
+                        break;
+                }
+            </MudTd>
+            <MudTd DataLabel="Total">
+                <MudText Typo="Typo.body2" Style="font-weight: 700;">@context.Total.ToString("C")</MudText>
+            </MudTd>
+            <MudTd DataLabel="Ações" Style="text-align: right">
+                <MudTooltip Text="Detalhes">
+                    <MudIconButton 
+                        Icon="@Icons.Material.Filled.Visibility"
+                        Href="@($"/orders/{context.Number}")"
+                        Color="Color.Primary"
+                        Size="Size.Small"
+                        Variant="Variant.Text">
+                    </MudIconButton>
+                </MudTooltip>
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText Typo="Typo.body1" Align="Align.Center">
+                Nenhum pedido encontrado
+            </MudText>
+        </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager 
+                RowsPerPageString="Itens por página:"
+                InfoFormat="{first_item}-{last_item} de {all_items}"
+                HorizontalAlignment="HorizontalAlignment.Right" />
+        </PagerContent>
+    </MudTable>
+</div>
+
+<style>
+    .animate-fade-in {
+        animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>

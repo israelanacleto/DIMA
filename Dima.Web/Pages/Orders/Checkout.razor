@@ -1,0 +1,127 @@
+@page "/checkout/{ProductSlug}"
+@inherits CheckoutPage
+
+<MudText Typo="Typo.h4" Style="font-weight: 800;">Checkout</MudText>
+<MudText Typo="Typo.body1" Color="Color.Secondary">Revise seu pedido e confirme a assinatura</MudText>
+
+<MudGrid Class="mt-8 animate-fade-in">
+    <MudItem xs="12" md="8">
+        <MudCard Elevation="4" Style="border-radius: 16px;">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Resumo do Plano</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                @if (Product is not null)
+                {
+                    <div class="d-flex justify-space-between align-center">
+                        <div>
+                            <MudText Typo="Typo.h5" Style="font-weight: 700;">@Product.Title</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">@Product.Description</MudText>
+                            
+                            <MudList T="string" Class="mt-4" Dense="true">
+                                @foreach (var benefit in Product.Benefits)
+                                {
+                                    <MudListItem Icon="@Icons.Material.Filled.CheckCircle" IconColor="Color.Success">
+                                        <MudText Typo="Typo.body2">@benefit</MudText>
+                                    </MudListItem>
+                                }
+                            </MudList>
+                        </div>
+                        <MudText Typo="Typo.h5" Color="Color.Primary" Style="font-weight: 800;">
+                            @Product.Price.ToString("C")
+                        </MudText>
+                    </div>
+                }
+                else
+                {
+                    <MudSkeleton Width="100%" Height="64px"/>
+                }
+
+                <MudDivider Class="my-6"/>
+
+                <div class="d-flex align-center gap-4">
+                    <MudTextField @bind-Value="VoucherNumber"
+                                  Label="Cupom de Desconto"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  Mask="VoucherMask"
+                                  Placeholder="Ex: DIMA-2026"
+                                  Disabled="IsBusy"/>
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Secondary"
+                               OnClick="OnApplyVoucherAsync"
+                               Disabled="IsBusy || string.IsNullOrEmpty(VoucherNumber)"
+                               Style="border-radius: 8px; height: 40px; text-transform: none;">
+                        Aplicar
+                    </MudButton>
+                </div>
+
+                @if (Voucher is not null)
+                {
+                    <div class="mt-4 d-flex justify-space-between align-center">
+                        <MudText Typo="Typo.body1" Color="Color.Success">Voucher: @Voucher.Title</MudText>
+                        <MudText Typo="Typo.body1" Color="Color.Success">- @Voucher.Amount.ToString("C")</MudText>
+                    </div>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" md="4">
+        <MudCard Elevation="4" Style="border-radius: 16px;">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Total do Pedido</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <div class="d-flex justify-space-between align-center mb-4">
+                    <MudText Typo="Typo.body1">Subtotal</MudText>
+                    <MudText Typo="Typo.body1">@(Product?.Price.ToString("C") ?? "R$ 0,00")</MudText>
+                </div>
+                @if (Voucher is not null)
+                {
+                    <div class="d-flex justify-space-between align-center mb-4">
+                        <MudText Typo="Typo.body1">Desconto</MudText>
+                        <MudText Typo="Typo.body1" Color="Color.Success">- @Voucher.Amount.ToString("C")</MudText>
+                    </div>
+                }
+                <MudDivider Class="my-4"/>
+                <div class="d-flex justify-space-between align-center">
+                    <MudText Typo="Typo.h6" Style="font-weight: 700;">Total</MudText>
+                    <MudText Typo="Typo.h5" Color="Color.Primary" Style="font-weight: 800;">
+                        @Total.ToString("C")
+                    </MudText>
+                </div>
+            </MudCardContent>
+            <MudCardActions Class="pa-4">
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           FullWidth="true"
+                           Size="Size.Large"
+                           OnClick="OnValidSubmitAsync"
+                           Disabled="IsBusy || !IsValid"
+                           Style="border-radius: 12px; text-transform: none; font-weight: 700;">
+                    Confirmar Pedido
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+        
+        <MudText Typo="Typo.caption" Class="mt-4 d-block" Align="Align.Center" Color="Color.Secondary">
+            Ao clicar em confirmar, você será redirecionado para o pagamento.
+        </MudText>
+    </MudItem>
+</MudGrid>
+
+<style>
+    .animate-fade-in {
+        animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>

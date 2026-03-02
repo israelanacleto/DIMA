@@ -1,0 +1,141 @@
+@page "/plans"
+@inherits ListProductsPage
+
+<div class="d-flex flex-column align-center mb-10 animate-fade-in">
+    <MudText Typo="Typo.h3" Style="font-weight: 800; background: linear-gradient(90deg, var(--mud-palette-primary) 0%, var(--mud-palette-secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        Escolha seu Plano
+    </MudText>
+    <MudText Typo="Typo.body1" Color="Color.Secondary" Align="Align.Center" Class="mt-2" Style="max-width: 600px;">
+        Tenha controle total de suas finanças com recursos avançados desenhados para facilitar sua vida.
+    </MudText>
+</div>
+
+@if (IsBusy)
+{
+    <MudGrid Justify="Justify.Center">
+        @for (var i = 0; i < 3; i++)
+        {
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudCard Style="border-radius: 24px; height: 500px;" Elevation="0" Outlined="true">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudSkeleton Width="60%" Height="40px" />
+                            <MudSkeleton Width="40%" Height="24px" />
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudSkeleton Width="100%" Height="100px" />
+                        <MudSkeleton Width="80%" Height="24px" Class="mt-4" />
+                        <MudSkeleton Width="90%" Height="24px" />
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+}
+else if (!Products.Any())
+{
+    <div class="d-flex flex-column align-center justify-center mt-12 animate-fade-in">
+        <MudIcon Icon="@Icons.Material.Filled.SentimentDissatisfied" Size="Size.Large" Color="Color.Secondary" Style="font-size: 100px;"/>
+        <MudText Typo="Typo.h5" Color="Color.Secondary" Class="mt-4">Nenhum plano disponível no momento.</MudText>
+    </div>
+}
+else
+{
+    <MudGrid Justify="Justify.Center" Spacing="6" Class="animate-fade-in mb-12">
+        @foreach (var product in Products)
+        {
+            var isPremium = product.Slug.Contains("premium");
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudCard Elevation="@(isPremium ? 8 : 2)" 
+                         Class="@(isPremium ? "pa-2 card-hover premium-card" : "pa-2 card-hover")">
+                    
+                    @if (isPremium)
+                    {
+                        <div class="popular-badge">
+                            <MudChip T="string" Color="Color.Primary" Size="Size.Small" Variant="Variant.Filled" Style="font-weight: 700; text-transform: uppercase;">Mais Popular</MudChip>
+                        </div>
+                    }
+
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h5" Style="font-weight: 800;" Color="@(isPremium ? Color.Primary : Color.Default)">@product.Title</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">@product.Description</MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                             <MudIcon Icon="@(isPremium ? Icons.Material.Filled.AutoAwesome : Icons.Material.Filled.StarBorder)" 
+                                     Color="@(isPremium ? Color.Primary : Color.Secondary)" 
+                                     Size="Size.Large" />
+                        </CardHeaderActions>
+                    </MudCardHeader>
+
+                    <MudCardContent Class="flex-grow-1">
+                        <div class="d-flex align-baseline mb-6">
+                            <MudText Typo="Typo.h3" Style="font-weight: 900;">@product.Price.ToString("C")</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="ml-1">/mês</MudText>
+                        </div>
+
+                        <MudText Typo="Typo.subtitle2" Style="font-weight: 700; text-transform: uppercase; letter-spacing: 1px;" Class="mb-4">Benefícios:</MudText>
+                        
+                        <MudList T="string" Dense="true" Class="pa-0">
+                            @foreach (var benefit in product.Benefits)
+                            {
+                                <MudListItem Icon="@Icons.Material.Filled.CheckCircle" IconColor="Color.Success" Class="px-0">
+                                    <MudText Typo="Typo.body2">@benefit</MudText>
+                                </MudListItem>
+                            }
+                        </MudList>
+                    </MudCardContent>
+
+                    <MudCardActions Class="pa-4">
+                        <MudButton Variant="@(isPremium ? Variant.Filled : Variant.Outlined)" 
+                                   Color="Color.Primary" 
+                                   FullWidth="true" 
+                                   Size="Size.Large"
+                                   Href="@($"/checkout/{product.Slug}")"
+                                   Style="border-radius: 16px; text-transform: none; font-weight: 700; height: 50px;">
+                            @(isPremium ? "Assinar Agora" : "Começar")
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+}
+
+<style>
+    .animate-fade-in {
+        animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card-hover {
+        border-radius: 24px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card-hover:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--mud-elevation-12);
+    }
+
+    .premium-card {
+        border: 2px solid var(--mud-palette-primary) !important;
+    }
+
+    .popular-badge {
+        position: absolute;
+        top: -16px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>

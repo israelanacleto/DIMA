@@ -1,0 +1,37 @@
+@page "/orders/{OrderNumber}/cancel"
+@inherits CancelPage
+
+<MudText Typo="Typo.h4" Style="font-weight: 800;">Pedido @OrderNumber</MudText>
+<MudText Typo="Typo.body1" Color="Color.Secondary">O pagamento não foi concluído</MudText>
+
+<MudGrid Class="mt-8 animate-fade-in">
+    <MudItem xs="12">
+        <MudCard Elevation="4" Style="border-radius: 16px;">
+            <MudCardContent Class="d-flex flex-column align-center py-12">
+                <MudIcon Icon="@Icons.Material.Filled.Error" Color="Color.Error" Style="font-size: 96px;"/>
+                <MudText Typo="Typo.h5" Class="mt-4" Color="Color.Error" Style="font-weight: 700;">Ops!</MudText>
+                <MudText Typo="Typo.body1" Color="Color.Secondary" Align="Align.Center" Class="mt-2">
+                    Não conseguimos processar o seu pagamento. Nenhuma cobrança foi realizada.
+                </MudText>
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           Class="mt-8"
+                           Href="@($"/orders/{OrderNumber}")"
+                           Style="border-radius: 8px; text-transform: none;">
+                    Tentar Novamente
+                </MudButton>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+<style>
+    .animate-fade-in {
+        animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>

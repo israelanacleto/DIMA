@@ -1,0 +1,134 @@
+@page "/orders/{OrderNumber}"
+@using Dima.Core.Enums
+@inherits DetailsPage
+
+<MudText Typo="Typo.h4" Style="font-weight: 800;">Pedido @OrderNumber</MudText>
+<MudText Typo="Typo.body1" Color="Color.Secondary">Detalhes e status da sua assinatura</MudText>
+
+<MudGrid Class="mt-8 animate-fade-in">
+    <MudItem xs="12" md="8">
+        <MudCard Elevation="4" Style="border-radius: 16px;">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Informações do Pedido</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                @if (Order is not null)
+                {
+                    <div class="d-flex flex-column gap-4">
+                        <div class="d-flex justify-space-between">
+                            <MudText Typo="Typo.body1" Style="font-weight: 600;">Plano:</MudText>
+                            <MudText Typo="Typo.body1">@Order.Product.Title</MudText>
+                        </div>
+                        <div class="d-flex justify-space-between">
+                            <MudText Typo="Typo.body1" Style="font-weight: 600;">Data:</MudText>
+                            <MudText Typo="Typo.body1">@Order.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</MudText>
+                        </div>
+                        <div class="d-flex justify-space-between">
+                            <MudText Typo="Typo.body1" Style="font-weight: 600;">Valor do Plano:</MudText>
+                            <MudText Typo="Typo.body1">@Order.Product.Price.ToString("C")</MudText>
+                        </div>
+                        @if (Order.Voucher is not null)
+                        {
+                            <div class="d-flex justify-space-between">
+                                <MudText Typo="Typo.body1" Style="font-weight: 600;">Voucher:</MudText>
+                                <MudText Typo="Typo.body1" Color="Color.Success">@Order.Voucher.Title (- @Order.Voucher.Amount.ToString("C"))</MudText>
+                            </div>
+                        }
+                        <MudDivider Class="my-2"/>
+                        <div class="d-flex justify-space-between">
+                            <MudText Typo="Typo.h6" Style="font-weight: 700;">Total:</MudText>
+                            <MudText Typo="Typo.h6" Color="Color.Primary" Style="font-weight: 800;">@Order.Total.ToString("C")</MudText>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <MudSkeleton Width="100%" Height="120px"/>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" md="4">
+        <MudCard Elevation="4" Style="border-radius: 16px;">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Status</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent Class="d-flex flex-column align-center py-8">
+                @if (Order is not null)
+                {
+                    @switch (Order.Status)
+                    {
+                        case EOrderStatus.WaitingPayment:
+                            <MudIcon Icon="@Icons.Material.Filled.AccessTime" Color="Color.Warning" Style="font-size: 64px;"/>
+                            <MudText Typo="Typo.h5" Class="mt-4" Color="Color.Warning" Style="font-weight: 700;">Aguardando Pagamento</MudText>
+                            <MudButton Variant="Variant.Filled"
+                                       Color="Color.Primary"
+                                       FullWidth="true"
+                                       Class="mt-8"
+                                       OnClick="OnPayAsync"
+                                       Disabled="IsBusy"
+                                       Style="border-radius: 8px; text-transform: none;">
+                                Pagar Agora
+                            </MudButton>
+                            <MudButton Variant="Variant.Text"
+                                       Color="Color.Error"
+                                       FullWidth="true"
+                                       Class="mt-2"
+                                       OnClick="OnCancelAsync"
+                                       Disabled="IsBusy"
+                                       Style="text-transform: none;">
+                                Cancelar Pedido
+                            </MudButton>
+                            break;
+                        case EOrderStatus.Paid:
+                            <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Style="font-size: 64px;"/>
+                            <MudText Typo="Typo.h5" Class="mt-4" Color="Color.Success" Style="font-weight: 700;">Pedido Pago</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Secondary" Align="Align.Center" Class="mt-2">Sua assinatura está ativa!</MudText>
+                            
+                            @if (CanRefund)
+                            {
+                                <MudButton Variant="Variant.Text"
+                                           Color="Color.Error"
+                                           FullWidth="true"
+                                           Class="mt-2"
+                                           OnClick="OnRefundedAsync"
+                                           Disabled="IsBusy"
+                                           Style="text-transform: none;">
+                                    Solicitar Reembolso
+                                </MudButton>
+                            }
+                            break;
+                        case EOrderStatus.Canceled:
+                            <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" Style="font-size: 64px;"/>
+                            <MudText Typo="Typo.h5" Class="mt-4" Color="Color.Error" Style="font-weight: 700;">Pedido Cancelado</MudText>
+                            break;
+                        case EOrderStatus.Refunded:
+                            <MudIcon Icon="@Icons.Material.Filled.CurrencyExchange" Color="Color.Info" Style="font-size: 64px;"/>
+                            <MudText Typo="Typo.h5" Class="mt-4" Color="Color.Info" Style="font-weight: 700;">Pedido Estornado</MudText>
+                            break;
+                    }
+                }
+                else
+                {
+                    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+<style>
+    .animate-fade-in {
+        animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>

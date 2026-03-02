@@ -1,0 +1,33 @@
+@inject NavigationManager NavigationManager
+
+<MudGrid Justify="Justify.Center">
+    <MudItem xs="12" sm="8" md="6" lg="4" xl="4">
+        <MudPaper Class="pa-8 mud-elevation-4 mt-16" Style="border-radius: 16px;">
+            <div class="d-flex flex-column align-center text-center">
+                <img src="@(IsDarkMode ? "img/logo_dark.png" : "img/logo_light.png")" alt="Dima" class="mb-8" height="80"/>
+                
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" Size="Size.Large" Class="mb-6"/>
+                
+                <MudText Typo="Typo.h5" GutterBottom="true" Style="font-weight: 700;">
+                    Preparando seu acesso...
+                </MudText>
+                
+                <MudText Typo="Typo.body1" Color="Color.Secondary">
+                    Você será redirecionado para a tela de login em instantes.
+                </MudText>
+            </div>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code
+{
+    [CascadingParameter]
+    public bool IsDarkMode { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1500);
+        NavigationManager.NavigateTo("/login");
+    }
+}

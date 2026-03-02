@@ -1,0 +1,33 @@
+using System.Security.Claims;
+using Dima.Api.Common.Api;
+using Dima.Core.Handlers;
+using Dima.Core.Models.Dashboard;
+using Dima.Core.Requests.Dashboard;
+using Dima.Core.Responses;
+
+namespace Dima.Api.Endpoints.Dashboard;
+
+public class GetFinancialSummaryEndpoint : IEndpoint
+{
+    public static void Map(IEndpointRouteBuilder app)
+        => app.MapGet("/summary", HandleAsync)
+            .WithName("Dashboard: Buscar Resumo Financeiro")
+            .WithDescription("Busca o resumo financeiro")
+            .WithSummary("Busca o resumo financeiro")
+            .WithOrder(2)
+            .Produces<Response<FinancialSummary?>>();
+    
+    private static async Task<IResult> HandleAsync(
+        ClaimsPrincipal user,
+        IDashboardHandler handler)
+    {
+        var request = new GetFinancialSummaryRequest
+        {
+            UserId = user.Identity?.Name ?? string.Empty
+        };
+        var result = await handler.GetFinancialSummaryReportAsync(request);
+        return result.IsSuccess
+            ? TypedResults.Ok(result)
+            : TypedResults.BadRequest(result);
+    }
+}

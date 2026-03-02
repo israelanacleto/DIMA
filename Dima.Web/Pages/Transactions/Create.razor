@@ -1,0 +1,133 @@
+@page "/transactions/add"
+@using Dima.Web.Components.Transactions
+@inherits CreateTransactionPage
+
+<div class="d-flex flex-column gap-y-8 animate-fade-in">
+    <!-- Cabeçalho -->
+    <div class="d-flex align-center justify-space-between">
+        <div>
+            <MudText Typo="Typo.h4" Style="font-weight: 800;">Novo Lançamento</MudText>
+            <MudText Typo="Typo.body1" Color="Color.Secondary">Registre suas receitas e despesas com rapidez</MudText>
+        </div>
+        <MudButton Variant="Variant.Outlined"
+                   StartIcon="@Icons.Material.Filled.ArrowBack"
+                   Color="Color.Secondary"
+                   Href="/transactions"
+                   Disabled="IsBusy"
+                   Style="border-radius: 12px; text-transform: none;">
+            Voltar
+        </MudButton>
+    </div>
+
+    <MudGrid>
+        <!-- Formulário principal -->
+        <MudItem xs="12" md="7">
+            <MudCard Elevation="4" Style="border-radius: 16px;">
+                <EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync">
+                    <DataAnnotationsValidator/>
+                    <MudCardContent Class="pa-8">
+                        <div class="d-flex flex-column gap-6">
+                            <MudTextField Label="Título"
+                                          Placeholder="Ex: Salário, Aluguel, Supermercado"
+                                          Variant="Variant.Outlined"
+                                          @bind-Value="InputModel.Title"
+                                          For="@(() => InputModel.Title)"
+                                          Adornment="Adornment.Start"
+                                          AdornmentIcon="@Icons.Material.Filled.Title"
+                                          AdornmentColor="Color.Primary" />
+
+                            <MudTextField Label="Quanto?"
+                                          T="decimal"
+                                          Format="C"
+                                          Clearable="true"
+                                          Variant="Variant.Outlined"
+                                          @bind-Value="InputModel.Amount"
+                                          For="@(() => InputModel.Amount)"
+                                          Adornment="Adornment.Start"
+                                          AdornmentIcon="@Icons.Material.Filled.AttachMoney"
+                                          AdornmentColor="Color.Primary" />
+
+                            <MudDatePicker Label="Quando?"
+                                           Variant="Variant.Outlined"
+                                           @bind-Date="@InputModel.PaidOrReceivedAt"
+                                           For="@(() => InputModel.PaidOrReceivedAt)"
+                                           Adornment="Adornment.Start"
+                                           AdornmentIcon="@Icons.Material.Filled.CalendarMonth"
+                                           AdornmentColor="Color.Primary"
+                                           HelperText="Data do pagamento ou recebimento"/>
+
+                            <div class="d-flex flex-column">
+                                <MudText Typo="Typo.caption" Class="mb-2 ms-1">Tipo de Movimentação</MudText>
+                                <MudToggleGroup T="ETransactionType"
+                                               @bind-Value="InputModel.Type"
+                                               SelectionMode="SelectionMode.SingleSelection"
+                                               Color="Color.Primary"
+                                               CheckMark="false"
+                                               Delimiters="false"
+                                               Class="mud-width-full"
+                                               Style="background-color: var(--mud-palette-background-gray); border-radius: 12px; padding: 4px;">
+                                    <MudToggleItem Value="ETransactionType.Deposit" 
+                                                  UnselectedIcon="@Icons.Material.Outlined.TrendingUp" 
+                                                  SelectedIcon="@Icons.Material.Filled.TrendingUp"
+                                                  Text="Entrada" />
+                                    <MudToggleItem Value="ETransactionType.Withdrawal" 
+                                                  UnselectedIcon="@Icons.Material.Outlined.TrendingDown" 
+                                                  SelectedIcon="@Icons.Material.Filled.TrendingDown"
+                                                  Text="Saída" />
+                                </MudToggleGroup>
+                            </div>
+
+                            <MudSelect T="long"
+                                       Label="Categoria"
+                                       Variant="Variant.Outlined"
+                                       @bind-Value="InputModel.CategoryId"
+                                       Adornment="Adornment.Start"
+                                       AdornmentIcon="@Icons.Material.Filled.Category"
+                                       AdornmentColor="Color.Primary">
+                                @foreach (var itens in CategoriesCombo)
+                                {
+                                    <MudSelectItem T="long" Value="@long.Parse(itens.Value)">
+                                        @itens.Label
+                                    </MudSelectItem>
+                                }
+                            </MudSelect>
+                        </div>
+                    </MudCardContent>
+                    <MudCardActions Class="pa-8 pt-0">
+                        <MudButton ButtonType="ButtonType.Submit"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   Size="Size.Large"
+                                   FullWidth="true"
+                                   Disabled="IsBusy"
+                                   Style="border-radius: 12px; font-weight: 600; padding: 16px; text-transform: none;">
+                            @if (IsBusy)
+                            {
+                                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                                <span class="ms-2">Salvando...</span>
+                            }
+                            else
+                            {
+                                <span>Criar Lançamento</span>
+                            }
+                        </MudButton>
+                    </MudCardActions>
+                </EditForm>
+            </MudCard>
+        </MudItem>
+
+        <!-- Sidebar de Informações -->
+        <TransactionHelperSidebar />
+    </MudGrid>
+</div>
+
+<style>
+    .animate-fade-in {
+        animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>

@@ -1,0 +1,111 @@
+@page "/categories"
+@using Dima.Core.Models
+@inherits ListCategoriesPage
+
+<div class="d-flex flex-column gap-y-8 animate-fade-in">
+
+    <!-- Cabeçalho -->
+    <div class="d-flex align-center justify-space-between">
+        <div>
+            <MudText Typo="Typo.h4" Style="font-weight: 800;">Categorias</MudText>
+            <MudText Typo="Typo.body1" Color="Color.Secondary">Gerencie suas categorias para melhor organizar suas finanças</MudText>
+        </div>
+        <MudButton
+            Variant="Variant.Filled"
+            Color="Color.Primary"
+            StartIcon="@Icons.Material.Filled.Add"
+            Href="/categories/add"
+            Style="border-radius: 12px; text-transform: none;">
+            Nova Categoria
+        </MudButton>
+    </div>
+
+    <MudTable Items="@Categories"
+              T="Category"
+              Filter="Filter"
+              Hover="true"
+              Elevation="4"
+              Loading="@IsBusy"
+              RowsPerPage="10"
+              Style="border-radius: 16px;"
+              Class="pa-4">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Categorias</MudText>
+            <MudSpacer/>
+            <MudTextField
+                @bind-Value="SearchTerm"
+                Placeholder="Filtrar..."
+                Adornment="Adornment.Start"
+                AdornmentIcon="@Icons.Material.Filled.Search"
+                Immediate="true"
+                IconSize="Size.Medium"
+                Class="mt-0">
+            </MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Category, object>(x => x.Title)">
+                    Categoria
+                </MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<Category, object>(x => x.Description ?? string.Empty)">
+                    Descrição
+                </MudTableSortLabel>
+            </MudTh>
+            <MudTh Style="text-align: right">Ações</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Categoria">
+                <MudText Typo="Typo.body1" Style="font-weight: 600;">@context.Title</MudText>
+            </MudTd>
+            <MudTd DataLabel="Descrição">
+                <MudText Typo="Typo.body2" Color="Color.Secondary">@context.Description</MudText>
+            </MudTd>
+            <MudTd DataLabel="Ações" Style="text-align: right">
+                <MudStack Row Justify="Justify.FlexEnd" Spacing="0">
+                    <MudTooltip Text="Editar">
+                        <MudIconButton 
+                            Icon="@Icons.Material.Filled.Edit"
+                            Href="@($"/categories/edit/{context.Id}")"
+                            Color="Color.Primary"
+                            Size="Size.Small"
+                            Variant="Variant.Text">
+                        </MudIconButton>
+                    </MudTooltip>
+                    <MudTooltip Text="Excluir">
+                        <MudIconButton 
+                            Icon="@Icons.Material.Filled.Delete"
+                            Color="Color.Error"
+                            Size="Size.Small"
+                            Variant="Variant.Text"
+                            OnClick="() => OnDeleteButtonClickedAsync(context.Id, context.Title)">
+                        </MudIconButton>
+                    </MudTooltip>
+                </MudStack>
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText Typo="Typo.body1" Align="Align.Center">
+                Nenhuma categoria encontrada
+            </MudText>
+        </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager 
+                RowsPerPageString="Itens por página:"
+                InfoFormat="{first_item}-{last_item} de {all_items}"
+                HorizontalAlignment="HorizontalAlignment.Right" />
+        </PagerContent>
+    </MudTable>
+</div>
+
+<style>
+    .animate-fade-in {
+        animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>

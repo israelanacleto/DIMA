@@ -1,0 +1,27 @@
+
+<MudCard Elevation="25" Class="animate-slide-up">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">Saídas por Categoria</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        @if (IsLoading)
+        {
+            <MudSkeleton SkeletonType="SkeletonType.Circle" Height="300px" Class="mx-auto" Width="300px" />
+        }
+        else
+        {
+            <div class="animate-fade-in">
+                <MudChart ChartType="ChartType.Pie"
+                          InputData="@Data"
+                          InputLabels="@Labels"
+                          LegendPosition="Position.Bottom"
+                          ChartOptions="@Options"
+                          Width="100%"
+                          Height="300px"
+                          Animation="true"/>
+            </div>
+        }
+    </MudCardContent>
+</MudCard>
