@@ -1,27 +1,17 @@
-using Dima.Api;
-using Dima.Api.Common.Api;
-using Dima.Api.Endpoints;
+using Dima.Api.Extensions;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.AddConfiguration();
 
-// Security
-builder.AddSecurity();
-// Dependency Injection
-builder.AddInfrastructure();
-// Cors
-builder.AddCrossOrigin();
-// Docs
-builder.AddDocs();
+builder.Services.AddOpenApi(options => options.AddScalarTransformers());
 
 var app = builder.Build();
 
-app.UseCors(ApiConfiguration.CorsPolicyName);
-app.UseSecurity();
+if (app.Environment.IsDevelopment())
+{
+    app.AddScalarConfig();
+}
 
-app.ConfigureDevEnvironment();
-
-app.MapEndpoints();
-
+app.MapGet("/", () => "Hello World!");
 
 app.Run();
