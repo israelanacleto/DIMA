@@ -4,43 +4,14 @@ services:
   sql-server:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sql-server-dima
+    hostname: sql-server-dima
+    ports:
+      - "1433:1433"
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=!Admin123
-    ports:
-      - "1433:1433"
-    networks:
-      - dima-net
-
-  dima-api:
-    build:
-      context: .
-      target: runtime_api
-    container_name: dima-api
-    depends_on:
-      - sql-server
-    environment:
-      # String de conexão apontando para o container do SQL Server
-      - ConnectionStrings__DefaultConnection=Server=localhost,1433;Database=dima-dev;User ID=sa;Password=!Admin123;Trusted_Connection=False; TrustServerCertificate=True;
-      - BackendUrl=http://localhost:5204
-      - FrontendUrl=http://localhost:5182
-      - StripeApiKey=sk_test_sua_chave_aqui
-    ports:
-      - "5204:8080"
-    networks:
-      - dima-net
-
-  dima-web:
-    build:
-      context: .
-      target: runtime_web
-      args:
-        # URL que o navegador usará para acessar a API
-        - BACKEND_URL=http://localhost:5204
-        - STRIPE_PUBLIC_KEY=pk_test_sua_chave_aqui
-    container_name: dima-web
-    ports:
-      - "5182:80"
+    volumes:
+      - ./mssql-data:/var/opt/mssql
     networks:
       - dima-net
 
