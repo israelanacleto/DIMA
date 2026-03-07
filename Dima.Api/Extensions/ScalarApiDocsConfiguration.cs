@@ -13,6 +13,7 @@ public static class ScalarApiDocsConfiguration
             options.ForceDarkMode();
             options.Theme = ScalarTheme.BluePlanet;
             options.SortOperationsByMethod();
+            options.PreserveSchemaPropertyOrder();
             options.ShowDeveloperTools = DeveloperToolsVisibility.Localhost;
         });
     } 

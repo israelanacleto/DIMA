@@ -2,7 +2,6 @@ using Dima.Api.Data;
 using Dima.Core.Handlers;
 using Dima.Core.Models;
 using Dima.Core.Requests.Categories;
-using Dima.Core.Requests.Common;
 using Dima.Core.Responses;
 using Microsoft.EntityFrameworkCore;
 
@@ -125,28 +124,5 @@ public class CategoryHandler(AppDbContext context) : ICategoryHandler
         {
             return new PagedResponse<List<Category>>(null, 500, "Não foi possível consultar as categorias");
         }
-    }
-
-    public async Task<Response<List<ComboItens>>> GetAllComboSelectAsync(GetCombosRequest request)
-    {
-        try
-        {
-            var comboItensList = await context.Categories
-                .AsNoTracking()
-                .Where(x => x.UserId == request.UserId)
-                .OrderBy(x => x.Title)
-                .Select(x => new ComboItens
-                {
-                    Value = x.Id.ToString(),
-                    Label = x.Title
-                })
-                .ToListAsync();
-            
-            return new Response<List<ComboItens>>(comboItensList);
-        }
-        catch
-        {
-            return new PagedResponse<List<ComboItens>>(null, 500, "Não foi possível consultar as categorias");
-        } 
     }
 }
