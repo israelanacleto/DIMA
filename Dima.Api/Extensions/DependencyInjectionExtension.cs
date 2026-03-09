@@ -27,5 +27,6 @@ public static class DependencyInjectionExtension
     private static void AddServices(IServiceCollection services)
     {
         services.AddTransient<ICategoryHandler, CategoryHandler>();
+        services.AddTransient<ITransactionHandler, TransactionalHandler>();
     }
 }
