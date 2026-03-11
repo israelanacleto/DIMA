@@ -1,6 +1,8 @@
 using Dima.Api.Data;
 using Dima.Api.Handlers;
+using Dima.Api.Models;
 using Dima.Core.Handlers;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dima.Api.Extensions;
@@ -10,6 +12,7 @@ public static class DependencyInjectionExtension
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         AddDbContext(services, configuration);
+        AddIdentity(services);
         AddServices(services);
     }
     
@@ -22,6 +25,15 @@ public static class DependencyInjectionExtension
             config
                 .UseSqlServer(connectionString: connectionString)
         );
+    }
+
+    private static void AddIdentity(IServiceCollection services)
+    {
+        services
+            .AddIdentityCore<User>()
+            .AddRoles<IdentityRole<long>>()
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddApiEndpoints();
     }
 
     private static void AddServices(IServiceCollection services)

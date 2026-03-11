@@ -21,13 +21,6 @@ public class IdentityUserMapping : IEntityTypeConfiguration<User>
         builder.Property(u => u.NormalizedUserName).HasMaxLength(180);
         builder.Property(u => u.PhoneNumber).HasMaxLength(20);
         builder.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
-        
-        builder.Property(u => u.Name)
-            .HasMaxLength(250)
-            .HasDefaultValue(null)
-            .IsRequired(false)
-            .HasColumnName("Name")
-            .HasColumnType("NVARCHAR");
 
         builder.HasMany<IdentityUserClaim<long>>().WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
         builder.HasMany<IdentityUserLogin<long>>().WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
