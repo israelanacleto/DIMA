@@ -1,7 +1,6 @@
 using Dima.Core;
 using Microsoft.AspNetCore.Identity;
 using Scalar.AspNetCore;
-using Stripe;
 
 namespace Dima.Api.Common.Api;
 
@@ -28,14 +27,6 @@ public static class BuilderExtension
                     .Configuration
                     .GetValue<string>("FrontendUrl") 
                 ?? string.Empty;
-            
-            ApiConfiguration.StripeApiKey = 
-                builder
-                    .Configuration
-                    .GetValue<string>("StripeApiKey") 
-                ?? string.Empty;
-            
-            StripeConfiguration.ApiKey = ApiConfiguration.StripeApiKey;
         }
 
         public void AddDocs()
@@ -65,7 +56,10 @@ public static class BuilderExtension
             builder.Services.AddCors(options => options.AddPolicy(
                 ApiConfiguration.CorsPolicyName,
                 policy => policy
-                    .WithOrigins(Configuration.BackendUrl, Configuration.FrontendUrl)
+                    .WithOrigins([
+                        Configuration.BackendUrl,
+                        Configuration.FrontendUrl
+                    ])
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()

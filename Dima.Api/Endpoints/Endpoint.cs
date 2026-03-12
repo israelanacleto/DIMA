@@ -1,6 +1,8 @@
 using Dima.Api.Common.Api;
 using Dima.Api.Endpoints.Categories;
+using Dima.Api.Endpoints.Identity;
 using Dima.Api.Endpoints.Transactions;
+using Dima.Api.Models;
 using Scalar.AspNetCore;
 
 namespace Dima.Api.Endpoints;
@@ -12,6 +14,20 @@ public static class Endpoint
         var endpoints = app
             .MapGroup("")
             .ProducesProblem(StatusCodes.Status500InternalServerError);
+        
+        endpoints.MapGroup("/")
+            .WithTags("Health Check")
+            .MapGet("/", () => new { Message = "Ok" });
+        
+        endpoints.MapGroup("/v1/identity")
+            .WithTags("Identity")
+            .MapIdentityApi<User>();
+
+        endpoints.MapGroup("/v1/identity")
+            .WithTags("Identity")
+            .RequireAuthorization()
+            .MapEndpoint<LogoutEndpoint>()
+            .MapEndpoint<GetRolesEndpoint>();
 
         endpoints.MapGroup("v1/categories")
             .WithTags("Categories")
