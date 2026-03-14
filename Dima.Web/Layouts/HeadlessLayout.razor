@@ -5,76 +5,15 @@
     @ref="_mudThemeProvider"
     @bind-IsDarkMode="_isDarkMode"
     Theme="Configuration.Theme"/>
-<MudDialogProvider />
 <MudSnackbarProvider />
-<MudPopoverProvider />
 
 <MudLayout>
-    <MudMainContent 
-        Class="d-flex align-center justify-center pa-0 headless-bg" 
-        Style="min-height: 100vh;">
-        <MudContainer MaxWidth="MaxWidth.ExtraSmall" Class="pa-4" Style="z-index: 1;">
-            <CascadingValue Value="_isDarkMode">
-                <div class="animate-fade-in">
-                    @Body
-                </div>
-            </CascadingValue>
+    <MudMainContent>
+        <MudContainer>
+            @Body
         </MudContainer>
     </MudMainContent>
 </MudLayout>
-
-<style>
-    .headless-bg {
-        position: relative;
-        background-color: var(--mud-palette-background);
-        overflow: hidden;
-    }
-
-    .headless-bg::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: 
-            radial-gradient(circle at 20% 30%, color-mix(in srgb, var(--mud-palette-primary), transparent 80%), transparent 40%),
-            radial-gradient(circle at 80% 20%, color-mix(in srgb, var(--mud-palette-tertiary), transparent 85%), transparent 40%),
-            radial-gradient(circle at 50% 80%, color-mix(in srgb, var(--mud-palette-secondary), transparent 85%), transparent 45%),
-            radial-gradient(circle at 80% 80%, color-mix(in srgb, var(--mud-palette-primary), transparent 80%), transparent 40%);
-        filter: blur(60px);
-        animation: drift 20s infinite alternate ease-in-out;
-        z-index: 0;
-    }
-
-    /* Adiciona um efeito de ruído sutil para tirar o aspecto "liso" demais */
-    .headless-bg::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        opacity: 0.03;
-        pointer-events: none;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        z-index: 0;
-    }
-
-    @@keyframes drift {
-        from { transform: scale(1) translate(0, 0); }
-        to { transform: scale(1.1) translate(2%, 3%); }
-    }
-
-    .animate-fade-in {
-        animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    @@keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-</style>
 
 @code {
 

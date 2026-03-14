@@ -1,146 +1,32 @@
-﻿@using Dima.Web.Components
-@using Dima.Core.Handlers
-@using Dima.Core.Requests.Account
-@using Dima.Core.Responses.Account
-@inherits LayoutComponentBase
-@implements IDisposable
-@inject IProfileHandler ProfileHandler
+﻿@inherits LayoutComponentBase
 
 <MudThemeProvider 
     @ref="_mudThemeProvider"
     @bind-IsDarkMode="_isDarkMode"
     Theme="Configuration.Theme"/>
-<MudDialogProvider />
 <MudSnackbarProvider />
-<MudPopoverProvider />
 
-<AuthorizeView>
-    <Authorized>
-        <MudLayout>
-            <MudAppBar Elevation="3">
-                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-                <MudImage Src="img/logo_dark.png" Alt="Dima" Height="35" />
-                <MudSpacer />
-
-                <MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" Dense="true">
-                    <ActivatorContent>
-                        <div class="d-flex align-center">
-                            <MudHidden Breakpoint="Breakpoint.SmAndDown">
-                                <MudText Typo="Typo.body2" Class="mr-4">
-                                    Olá, <b>@GetUserName(context.User.Identity?.Name)</b>
-                                </MudText>
-                            </MudHidden>
-                            <MudBadge Visible="@(_profile?.IsPremium == true)" Icon="@Icons.Material.Filled.Star" Color="Color.Warning" Overlap="true" Bordered="true">
-                                <MudAvatar Color="@(_profile?.IsPremium == true ? Color.Primary : Color.Secondary)" Variant="Variant.Filled">
-                                    @GetUserInitial(context.User.Identity?.Name)
-                                </MudAvatar>
-                            </MudBadge>
-                        </div>
-                    </ActivatorContent>
-                    <ChildContent>
-                        <div class="px-4 py-2">
-                            <MudText Typo="Typo.body2" Style="font-weight: 600;">@(_profile?.Name ?? context.User.Identity?.Name)</MudText>
-                            <MudText Typo="Typo.caption" Color="Color.Secondary">@context.User.Identity?.Name</MudText>
-                        </div>
-                        <MudDivider />
-                        <MudMenuItem Icon="@Icons.Material.Filled.Person" Href="/settings">Meu Perfil</MudMenuItem>
-                        <MudMenuItem Icon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)" OnClick="ToggleDarkMode">
-                            @(_isDarkMode ? "Modo Claro" : "Modo Escuro")
-                        </MudMenuItem>
-                        <MudDivider />
-                        <MudMenuItem Icon="@Icons.Material.Filled.Logout" Href="/logout">Sair</MudMenuItem>
-                    </ChildContent>
-                </MudMenu>
-            </MudAppBar>
-            
-            <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2" Variant="@DrawerVariant.Responsive">
-                <NavMenu IsPremium="@(_profile?.IsPremium ?? false)" />
-            </MudDrawer>
-            
-            <MudMainContent>
-                <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-8 mb-8">
-                    <CascadingValue Value="_isDarkMode">
-                        @Body
-                    </CascadingValue>
-                </MudContainer>
-            </MudMainContent>
-        </MudLayout>
-    </Authorized>
-    <NotAuthorized>
-        <LoginRedirect />
-    </NotAuthorized>
-</AuthorizeView>
+<MudLayout>
+    <MudAppBar>
+        Dima
+        <MudSpacer />
+        <MudSwitch
+            Color="Color.Inherit"
+            @bind-Value="@_isDarkMode"
+            T="bool"
+            Class="ma-4"/>
+    </MudAppBar>
+    <MudMainContent>
+        <MudContainer>
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
 
 @code {
 
     private bool _isDarkMode = true;
-    private bool _drawerOpen = true;
     private MudThemeProvider _mudThemeProvider = null!;
-    private GetProfileResponse? _profile;
-
-    [CascadingParameter]
-    private Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
-
-    private void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
-
-    private void ToggleDarkMode()
-    {
-        _isDarkMode = !_isDarkMode;
-    }
-
-    private string GetUserName(string? identityName)
-    {
-        if (_profile is not null && !string.IsNullOrEmpty(_profile.Name))
-            return _profile.Name;
-
-        if (string.IsNullOrEmpty(identityName)) return "Usuário";
-        var index = identityName.IndexOf('@');
-        return index > 0 ? identityName[..index] : identityName;
-    }
-
-    private string GetUserInitial(string? identityName)
-    {
-        if (_profile is not null && !string.IsNullOrEmpty(_profile.Name))
-            return _profile.Name[0].ToString().ToUpper();
-
-        if (string.IsNullOrEmpty(identityName)) return "U";
-        return identityName[0].ToString().ToUpper();
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        ProfileHandler.OnChange += HandleProfileChange;
-        await GetProfileAsync();
-    }
-
-    private async void HandleProfileChange()
-    {
-        await GetProfileAsync();
-        StateHasChanged();
-    }
-
-    private async Task GetProfileAsync()
-    {
-        var authState = await AuthenticationStateTask;
-        var user = authState.User;
-
-        if (user.Identity is { IsAuthenticated: true })
-        {
-            var result = await ProfileHandler.GetProfileAsync(new GetProfileRequest());
-            if (result.IsSuccess)
-            {
-                _profile = result.Data;
-            }
-        }
-    }
-
-    public void Dispose()
-    {
-        ProfileHandler.OnChange -= HandleProfileChange;
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
