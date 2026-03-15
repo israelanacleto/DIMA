@@ -4,7 +4,7 @@
     <MudItem xs="12" sm="8" md="6" lg="4" xl="4">
         <MudPaper Class="pa-8 mud-elevation-4 mt-16" Style="border-radius: 16px;">
             <div class="d-flex flex-column align-center text-center">
-                <img src="@(IsDarkMode ? "img/logo_dark.png" : "img/logo_light.png")" alt="Dima" class="mb-8" height="80"/>
+                <img src="img/dima.png" alt="Dima" width="160" class="mb-8" />
                 
                 <MudProgressCircular Color="Color.Primary" Indeterminate="true" Size="Size.Large" Class="mb-6"/>
                 
@@ -22,9 +22,6 @@
 
 @code
 {
-    [CascadingParameter]
-    public bool IsDarkMode { get; set; }
-    
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(1500);

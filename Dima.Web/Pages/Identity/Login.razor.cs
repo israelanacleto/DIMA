@@ -25,9 +25,6 @@ public partial class LoginPage : ComponentBase
     #endregion
 
     #region Properties
-    
-    [CascadingParameter]
-    public bool IsDarkMode { get; set; }
 
     public bool IsBusy { get; set; } = false;
     public LoginRequest InputModel { get; set; } = new();
@@ -64,7 +61,7 @@ public partial class LoginPage : ComponentBase
                 NavigationManager.NavigateTo("/");
             }
             else
-                Snackbar.Add(result.Message ?? "Não foi possível realizar o login", Severity.Error);
+                Snackbar.Add(result.Message, Severity.Error);
         }
         catch (Exception ex)
         {

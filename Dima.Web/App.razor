@@ -1,5 +1,13 @@
-﻿<Router AppAssembly="@typeof(App).Assembly" NotFoundPage="typeof(Pages.NotFound)">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
-    </Found>
-</Router>
+﻿<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(App).Assembly" NotFoundPage="typeof(Pages.NotFound)">
+        <Found Context="routeData">
+            <AuthorizeRouteView
+                RouteData="@routeData"
+                DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    <h1>Você não tem acesso a esta funcionalidade</h1>
+                </NotAuthorized>
+            </AuthorizeRouteView>
+        </Found>
+    </Router>
+</CascadingAuthenticationState>

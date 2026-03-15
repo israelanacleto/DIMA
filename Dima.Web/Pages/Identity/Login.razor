@@ -1,52 +1,81 @@
 @page "/login"
 @layout HeadlessLayout
+@inherits LoginPage
 
 <PageTitle>Dima - Entrar</PageTitle>
 
 <MudGrid Justify="Justify.Center">
-    <MudItem xs="12" sm="12" md="8" lg="6" xl="6" xxl="6">
-        <MudPaper Class="mud-width-full pa-8">
-            <div class="d-flex justify-center pb-8 pt-8">
-                <img
-                    src="img/dima.png"
-                    alt="Dima - Controle Financeiro"
-                    width="200"/>
+    <MudItem xs="12" sm="8" md="6" lg="4" xl="4">
+        <MudPaper Class="pa-8 mud-elevation-4" Style="border-radius: 16px;">
+            <div class="d-flex flex-column align-center text-center">
+                <img src="img/dima.png" alt="Dima" width="160" class="mb-8" />
+                
+                <MudText Typo="Typo.h4" GutterBottom="true" Style="font-weight: 700;">
+                    Bem-vindo!
+                </MudText>
+                
+                <MudText Typo="Typo.body1" Class="mb-8" Color="Color.Secondary">
+                    Acesse sua conta para gerenciar suas finanças.
+                </MudText>
             </div>
             
-            <MudForm @ref="_mudForm">
+            <EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync" class="gap-4 d-flex flex-column">
+                <DataAnnotationsValidator />
+                
                 <MudTextField
                     T="string"
                     Label="E-mail"
-                    HelperText="Campo obrigatório"
-                    InputType="InputType.Email"/>
+                    Variant="Variant.Outlined"
+                    InputType="InputType.Email"
+                    For="@(() => InputModel.Email)"
+                    @bind-Value="InputModel.Email"
+                    Adornment="Adornment.Start"
+                    AdornmentIcon="@Icons.Material.Filled.Email"
+                    AdornmentColor="Color.Primary"
+                    Class="mt-4"/>
 
                 <MudTextField
                     T="string"
                     Label="Senha"
-                    HelperText="Campo obrigatório"
-                    InputType="InputType.Password"/>
-            </MudForm>
-            
-            <div class="d-flex flex-column mt-8 gap-2">
-                <MudButton
-                    Variant="Variant.Filled"
-                    FullWidth="true"
-                    Color="Color.Primary">
-                    Entrar
-                </MudButton>
-                <MudButton
-                    Variant="Variant.Text"
-                    FullWidth="true"
-                    Href="/register">
-                    Não possui uma conta?
-                </MudButton>
-            </div>
+                    Variant="Variant.Outlined"
+                    InputType="InputType.Password"
+                    For="@(() => InputModel.Password)"
+                    @bind-Value="InputModel.Password"
+                    Adornment="Adornment.Start"
+                    AdornmentIcon="@Icons.Material.Filled.Lock"
+                    AdornmentColor="Color.Primary"
+                    Class="mt-2"/>
+                
+                <div class="d-flex flex-column mt-8 gap-3">
+                    @if (IsBusy)
+                    {
+                        <div class="d-flex justify-center">
+                            <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
+                        </div>
+                    }
+                    else
+                    {
+                        <MudButton
+                            ButtonType="ButtonType.Submit"
+                            Variant="Variant.Filled"
+                            FullWidth="true"
+                            Color="Color.Primary"
+                            Size="Size.Large"
+                            Style="border-radius: 12px; font-weight: 600; padding: 12px 0;">
+                            Entrar
+                        </MudButton>
+                    }
+                    <MudButton
+                        Disabled="IsBusy"
+                        Variant="Variant.Text"
+                        FullWidth="true"
+                        Href="/register"
+                        Style="border-radius: 12px;">
+                        Não possui uma conta? <span class="ml-1" style="color: var(--mud-palette-primary); font-weight: 700;">Cadastre-se</span>
+                    </MudButton>
+                </div>
+                
+            </EditForm>
         </MudPaper>
     </MudItem>
 </MudGrid>
-
-@code {
-
-    MudForm? _mudForm;
-
-}

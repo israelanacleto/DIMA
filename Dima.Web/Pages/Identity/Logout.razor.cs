@@ -23,13 +23,6 @@ public partial class LogoutPage : ComponentBase
 
     #endregion
     
-    #region Properties
-
-    [CascadingParameter]
-    public bool IsDarkMode { get; set; }
-
-    #endregion
-
     #region Overrides
 
     protected override async Task OnInitializedAsync()
@@ -39,9 +32,6 @@ public partial class LogoutPage : ComponentBase
             await Handler.LogoutAsync();
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
             AuthenticationStateProvider.NotifyAuthenticationStateChanged();
-
-            await Task.Delay(1500);
-            NavigationManager.NavigateTo("/login");
         }
 
         await base.OnInitializedAsync();

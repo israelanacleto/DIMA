@@ -56,10 +56,7 @@ public static class BuilderExtension
             builder.Services.AddCors(options => options.AddPolicy(
                 ApiConfiguration.CorsPolicyName,
                 policy => policy
-                    .WithOrigins([
-                        Configuration.BackendUrl,
-                        Configuration.FrontendUrl
-                    ])
+                    .WithOrigins(Configuration.BackendUrl, Configuration.FrontendUrl)
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()

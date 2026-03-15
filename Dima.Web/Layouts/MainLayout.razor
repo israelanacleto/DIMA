@@ -6,22 +6,32 @@
     Theme="Configuration.Theme"/>
 <MudSnackbarProvider />
 
-<MudLayout>
-    <MudAppBar>
-        Dima
-        <MudSpacer />
-        <MudSwitch
-            Color="Color.Inherit"
-            @bind-Value="@_isDarkMode"
-            T="bool"
-            Class="ma-4"/>
-    </MudAppBar>
-    <MudMainContent>
-        <MudContainer>
-            @Body
-        </MudContainer>
-    </MudMainContent>
-</MudLayout>
+<AuthorizeView>
+    <Authorized>
+        <MudLayout>
+            <MudAppBar>
+                Dima
+                <MudSpacer />
+                <MudText>
+                    @context.User.Identity?.Name
+                </MudText>
+                <MudSwitch
+                    Color="Color.Inherit"
+                    @bind-Value="@_isDarkMode"
+                    T="bool"
+                    Class="ma-4"/>
+            </MudAppBar>
+            <MudMainContent>
+                <MudContainer>
+                    @Body
+                </MudContainer>
+            </MudMainContent>
+        </MudLayout>
+    </Authorized>
+    <NotAuthorized>
+        <LoginRedirect />
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
 

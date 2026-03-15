@@ -26,9 +26,6 @@ public partial class RegisterPage : ComponentBase
     
     #region Properties
     
-    [CascadingParameter]
-    public bool IsDarkMode { get; set; }
-
     public bool IsBusy { get; set; } = false;
     public RegisterRequest InputModel { get; set; } = new();
     
@@ -58,11 +55,11 @@ public partial class RegisterPage : ComponentBase
 
             if (result.IsSuccess)
             {
-                Snackbar.Add(result.Message ?? "Cadastro realizado com sucesso", Severity.Success);
+                Snackbar.Add(result.Message, Severity.Success);
                 NavigationManager.NavigateTo("/login");
             }
             else 
-                Snackbar.Add(result.Message ?? "Não foi possível realizar o cadastro", Severity.Error);
+                Snackbar.Add(result.Message, Severity.Error);
         }
         catch (Exception ex)
         {
