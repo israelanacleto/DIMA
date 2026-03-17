@@ -26,6 +26,9 @@ public partial class RegisterPage : ComponentBase
     
     #region Properties
     
+    [CascadingParameter]
+    public bool IsDarkMode { get; set; }
+
     public bool IsBusy { get; set; } = false;
     public RegisterRequest InputModel { get; set; } = new();
     

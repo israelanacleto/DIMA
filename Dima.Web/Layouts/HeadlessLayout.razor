@@ -5,12 +5,16 @@
     @ref="_mudThemeProvider"
     @bind-IsDarkMode="_isDarkMode"
     Theme="Configuration.Theme"/>
+<MudDialogProvider />
 <MudSnackbarProvider />
+<MudPopoverProvider />
 
 <MudLayout>
     <MudMainContent>
         <MudContainer>
-            @Body
+            <CascadingValue Value="_isDarkMode">
+                @Body
+            </CascadingValue>
         </MudContainer>
     </MudMainContent>
 </MudLayout>

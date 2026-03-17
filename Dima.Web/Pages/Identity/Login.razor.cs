@@ -25,6 +25,9 @@ public partial class LoginPage : ComponentBase
     #endregion
 
     #region Properties
+    
+    [CascadingParameter]
+    public bool IsDarkMode { get; set; }
 
     public bool IsBusy { get; set; } = false;
     public LoginRequest InputModel { get; set; } = new();

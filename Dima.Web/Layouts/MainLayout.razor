@@ -4,26 +4,64 @@
     @ref="_mudThemeProvider"
     @bind-IsDarkMode="_isDarkMode"
     Theme="Configuration.Theme"/>
+<MudDialogProvider />
 <MudSnackbarProvider />
+<MudPopoverProvider />
 
 <AuthorizeView>
     <Authorized>
         <MudLayout>
-            <MudAppBar>
-                Dima
+            <MudAppBar Elevation="3">
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+                <MudImage Src="img/logo_dark.png" Alt="Dima" Height="35" />
                 <MudSpacer />
-                <MudText>
-                    @context.User.Identity?.Name
-                </MudText>
-                <MudSwitch
-                    Color="Color.Inherit"
-                    @bind-Value="@_isDarkMode"
-                    T="bool"
-                    Class="ma-4"/>
+
+                <MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" Dense="true">
+                    <ActivatorContent>
+                        <div class="d-flex align-center">
+                            <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                                <MudText Typo="Typo.body2" Class="mr-4">
+                                    Olá, <b>@GetUserName(context.User.Identity?.Name)</b>
+                                </MudText>
+                            </MudHidden>
+                            <MudAvatar Color="Color.Secondary" Variant="Variant.Filled">
+                                @GetUserInitial(context.User.Identity?.Name)
+                            </MudAvatar>
+                        </div>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <div class="px-4 py-2">
+                            <MudText Typo="Typo.body2">@context.User.Identity?.Name</MudText>
+                        </div>
+                        <MudDivider />
+                        <MudMenuItem Icon="@Icons.Material.Filled.Person" Href="/profile">Meu Perfil</MudMenuItem>
+                        <MudMenuItem Icon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)" OnClick="ToggleDarkMode">
+                            @(_isDarkMode ? "Modo Claro" : "Modo Escuro")
+                        </MudMenuItem>
+                        <MudDivider />
+                        <MudMenuItem Icon="@Icons.Material.Filled.Logout" Href="/logout">Sair</MudMenuItem>
+                    </ChildContent>
+                </MudMenu>
             </MudAppBar>
+            
+            <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2" Variant="@DrawerVariant.Responsive">
+                <MudNavMenu>
+                    <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 mt-6 mb-2" Style="font-weight: 700; text-transform: uppercase;">Principal</MudText>
+                    <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard" Href="/">Dashboard</MudNavLink>
+                    <MudNavLink Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AccountBalanceWallet" Href="/lancamentos">Lançamentos</MudNavLink>
+                    <MudNavLink Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PieChart" Href="/relatorios">Relatórios</MudNavLink>
+                    
+                    <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 mt-6 mb-2" Style="font-weight: 700; text-transform: uppercase;">Configurações</MudText>
+                    <MudNavLink Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Category" Href="/categorias">Categorias</MudNavLink>
+                    <MudNavLink Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Settings" Href="/configuracoes">Minha Conta</MudNavLink>
+                </MudNavMenu>
+            </MudDrawer>
+            
             <MudMainContent>
-                <MudContainer>
-                    @Body
+                <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-8 mb-8">
+                    <CascadingValue Value="_isDarkMode">
+                        @Body
+                    </CascadingValue>
                 </MudContainer>
             </MudMainContent>
         </MudLayout>
@@ -36,7 +74,31 @@
 @code {
 
     private bool _isDarkMode = true;
+    private bool _drawerOpen = true;
     private MudThemeProvider _mudThemeProvider = null!;
+
+    private void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private void ToggleDarkMode()
+    {
+        _isDarkMode = !_isDarkMode;
+    }
+
+    private string GetUserName(string? email)
+    {
+        if (string.IsNullOrEmpty(email)) return "Usuário";
+        var index = email.IndexOf('@');
+        return index > 0 ? email[..index] : email;
+    }
+
+    private string GetUserInitial(string? email)
+    {
+        if (string.IsNullOrEmpty(email)) return "U";
+        return email[0].ToString().ToUpper();
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
