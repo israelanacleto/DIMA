@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using Dima.Web.Components
+@inherits LayoutComponentBase
 
 <MudThemeProvider 
     @ref="_mudThemeProvider"
@@ -45,16 +46,7 @@
             </MudAppBar>
             
             <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2" Variant="@DrawerVariant.Responsive">
-                <MudNavMenu>
-                    <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 mt-6 mb-2" Style="font-weight: 700; text-transform: uppercase;">Principal</MudText>
-                    <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard" Href="/">Dashboard</MudNavLink>
-                    <MudNavLink Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AccountBalanceWallet" Href="/lancamentos">Lançamentos</MudNavLink>
-                    <MudNavLink Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PieChart" Href="/relatorios">Relatórios</MudNavLink>
-                    
-                    <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 mt-6 mb-2" Style="font-weight: 700; text-transform: uppercase;">Configurações</MudText>
-                    <MudNavLink Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Category" Href="/categorias">Categorias</MudNavLink>
-                    <MudNavLink Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Settings" Href="/configuracoes">Minha Conta</MudNavLink>
-                </MudNavMenu>
+                <NavMenu />
             </MudDrawer>
             
             <MudMainContent>
