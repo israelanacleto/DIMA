@@ -48,7 +48,7 @@ public static class Configuration
             AppbarBackground = "#1E293B",
             AppbarText = Colors.Shades.White,
             PrimaryContrastText = Colors.Shades.White,
-            DrawerBackground = "#0F172A",
+            DrawerBackground = "#162033",
             DrawerText = Colors.Shades.White
         }
     };

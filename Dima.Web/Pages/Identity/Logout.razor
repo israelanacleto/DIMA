@@ -4,35 +4,40 @@
 
 <PageTitle>Dima - Sair</PageTitle>
 
-<MudGrid Justify="Justify.Center">
-    <MudItem xs="12" sm="8" md="6" lg="4">
-        <MudPaper Class="pa-8 mud-elevation-4" Style="border-radius: 16px;">
-            <div class="d-flex flex-column align-center text-center">
-                <img src="@(IsDarkMode ? "img/logo_dark.png" : "img/logo_light.png")" alt="Dima" class="mb-8" height="80"/>
-                
-                <div class="pa-4 mb-4 rounded-circle" style="background-color: var(--mud-palette-primary-hover);">
-                    <MudIcon Icon="@Icons.Material.Filled.Logout" Color="Color.Primary" Style="font-size: 3rem;" />
-                </div>
-                
-                <MudText Typo="Typo.h4" GutterBottom="true" Style="font-weight: 700;">
-                    Até logo!
-                </MudText>
-                
-                <MudText Typo="Typo.body1" Class="mb-10" Color="Color.Secondary">
-                    Sua sessão foi encerrada com segurança. <br />
-                    Esperamos seu retorno para mais um controle financeiro de sucesso.
-                </MudText>
+<MudPaper Class="pa-10 mud-elevation-4 logout-card">
+    <div class="d-flex flex-column align-center text-center">
+        <img src="@(IsDarkMode ? "img/logo_dark.png" : "img/logo_light.png")" alt="Dima" class="mb-6" height="80"/>
+        
+        <div class="pa-4 mb-6 rounded-circle" style="background-color: var(--mud-palette-primary-hover);">
+            <MudIcon Icon="@Icons.Material.Filled.Logout" Color="Color.Primary" Style="font-size: 3.5rem;" />
+        </div>
+        
+        <MudText Typo="Typo.h4" GutterBottom="true" Style="font-weight: 800;">
+            Até logo!
+        </MudText>
+        
+        <MudText Typo="Typo.body1" Class="mb-10" Color="Color.Secondary">
+            Sua sessão foi encerrada com segurança. <br />
+            Esperamos seu retorno para continuar cuidando do seu futuro financeiro.
+        </MudText>
 
-                <MudButton 
-                    Variant="Variant.Filled" 
-                    Color="Color.Primary" 
-                    Size="Size.Large" 
-                    FullWidth="true" 
-                    Href="/login"
-                    Style="border-radius: 12px; font-weight: 600; padding: 12px 0;">
-                    IR PARA TELA DE LOGIN
-                </MudButton>
-            </div>
-        </MudPaper>
-    </MudItem>
-</MudGrid>
+        <MudButton 
+            Variant="Variant.Filled" 
+            Color="Color.Primary" 
+            Size="Size.Large" 
+            FullWidth="true" 
+            Href="/login"
+            Style="border-radius: 12px; font-weight: 600; padding: 14px 0;">
+            IR PARA TELA DE LOGIN
+        </MudButton>
+    </div>
+</MudPaper>
+
+<style>
+    .logout-card {
+        border-radius: 16px;
+        backdrop-filter: blur(12px);
+        background-color: color-mix(in srgb, var(--mud-palette-surface), transparent 8%) !important;
+        border: 1px solid color-mix(in srgb, var(--mud-palette-divider), transparent 50%);
+    }
+</style>

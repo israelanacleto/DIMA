@@ -4,78 +4,83 @@
 
 <PageTitle>Dima - Registrar</PageTitle>
 
-<MudGrid Justify="Justify.Center">
-    <MudItem xs="12" sm="8" md="6" lg="4" xl="4">
-        <MudPaper Class="pa-8 mud-elevation-4" Style="border-radius: 16px;">
-            <div class="d-flex flex-column align-center text-center">
-                <img src="@(IsDarkMode ? "img/logo_dark.png" : "img/logo_light.png")" alt="Dima" class="mb-8" height="80"/>
-                
-                <MudText Typo="Typo.h4" GutterBottom="true" Style="font-weight: 700;">
-                    Crie sua conta
-                </MudText>
-                
-                <MudText Typo="Typo.body1" Class="mb-8" Color="Color.Secondary">
-                    Junte-se a nós e comece a controlar suas finanças hoje mesmo.
-                </MudText>
-            </div>
-            
-            <EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync" class="gap-4 d-flex flex-column">
-                <DataAnnotationsValidator />
-                
-                <MudTextField
-                    T="string"
-                    Label="E-mail"
-                    Variant="Variant.Outlined"
-                    InputType="InputType.Email"
-                    For="@(() => InputModel.Email)"
-                    @bind-Value="InputModel.Email"
-                    Adornment="Adornment.Start"
-                    AdornmentIcon="@Icons.Material.Filled.Email"
-                    AdornmentColor="Color.Primary"
-                    Class="mt-4"/>
+<MudPaper Class="pa-10 mud-elevation-4 register-card">
+    <div class="d-flex flex-column align-center text-center">
+        <img src="@(IsDarkMode ? "img/logo_dark.png" : "img/logo_light.png")" alt="Dima" class="mb-6" height="80"/>
+        
+        <MudText Typo="Typo.h4" GutterBottom="true" Style="font-weight: 800;">
+            Crie sua conta
+        </MudText>
+        
+        <MudText Typo="Typo.body1" Class="mb-8" Color="Color.Secondary">
+            Junte-se a nós e comece a controlar suas finanças hoje mesmo de forma inteligente.
+        </MudText>
+    </div>
+    
+    <EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync" class="gap-4 d-flex flex-column">
+        <DataAnnotationsValidator />
+        
+        <MudTextField
+            T="string"
+            Label="E-mail"
+            Variant="Variant.Outlined"
+            InputType="InputType.Email"
+            For="@(() => InputModel.Email)"
+            @bind-Value="InputModel.Email"
+            Adornment="Adornment.Start"
+            AdornmentIcon="@Icons.Material.Filled.Email"
+            AdornmentColor="Color.Primary"
+            Class="mt-2"/>
 
-                <MudTextField
-                    T="string"
-                    Label="Senha"
-                    Variant="Variant.Outlined"
-                    InputType="InputType.Password"
-                    For="@(() => InputModel.Password)"
-                    @bind-Value="InputModel.Password"
-                    Adornment="Adornment.Start"
-                    AdornmentIcon="@Icons.Material.Filled.Lock"
-                    AdornmentColor="Color.Primary"
-                    Class="mt-2"/>
-                
-                <div class="d-flex flex-column mt-8 gap-3">
-                    @if (IsBusy)
-                    {
-                        <div class="d-flex justify-center">
-                            <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
-                        </div>
-                    }
-                    else
-                    {
-                        <MudButton
-                            ButtonType="ButtonType.Submit"
-                            Variant="Variant.Filled"
-                            FullWidth="true"
-                            Color="Color.Primary"
-                            Size="Size.Large"
-                            Style="border-radius: 12px; font-weight: 600; padding: 12px 0;">
-                            Cadastrar
-                        </MudButton>
-                    }
-                    <MudButton
-                        Disabled="IsBusy"
-                        Variant="Variant.Text"
-                        FullWidth="true"
-                        Href="/login"
-                        Style="border-radius: 12px;">
-                        Já tem uma conta? <span class="ml-1" style="color: var(--mud-palette-primary); font-weight: 700;">Entre aqui</span>
-                    </MudButton>
+        <MudTextField
+            T="string"
+            Label="Senha"
+            Variant="Variant.Outlined"
+            InputType="InputType.Password"
+            For="@(() => InputModel.Password)"
+            @bind-Value="InputModel.Password"
+            Adornment="Adornment.Start"
+            AdornmentIcon="@Icons.Material.Filled.Lock"
+            AdornmentColor="Color.Primary"
+            Class="mt-2"/>
+        
+        <div class="d-flex flex-column mt-8 gap-3">
+            @if (IsBusy)
+            {
+                <div class="d-flex justify-center">
+                    <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
                 </div>
-                
-            </EditForm>
-        </MudPaper>
-    </MudItem>
-</MudGrid>
+            }
+            else
+            {
+                <MudButton
+                    ButtonType="ButtonType.Submit"
+                    Variant="Variant.Filled"
+                    FullWidth="true"
+                    Color="Color.Primary"
+                    Size="Size.Large"
+                    Style="border-radius: 12px; font-weight: 600; padding: 14px 0;">
+                    Cadastrar
+                </MudButton>
+            }
+            <MudButton
+                Disabled="IsBusy"
+                Variant="Variant.Text"
+                FullWidth="true"
+                Href="/login"
+                Style="border-radius: 12px; text-transform: none;">
+                Já tem uma conta? <span class="ml-1" style="color: var(--mud-palette-primary); font-weight: 700;">Entre aqui</span>
+            </MudButton>
+        </div>
+        
+    </EditForm>
+</MudPaper>
+
+<style>
+    .register-card {
+        border-radius: 16px;
+        backdrop-filter: blur(12px);
+        background-color: color-mix(in srgb, var(--mud-palette-surface), transparent 8%) !important;
+        border: 1px solid color-mix(in srgb, var(--mud-palette-divider), transparent 50%);
+    }
+</style>

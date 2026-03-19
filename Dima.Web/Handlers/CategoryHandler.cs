@@ -2,7 +2,6 @@ using System.Net.Http.Json;
 using Dima.Core.Handlers;
 using Dima.Core.Models;
 using Dima.Core.Requests.Categories;
-using Dima.Core.Requests.Common;
 using Dima.Core.Responses;
 
 namespace Dima.Web.Handlers;
@@ -48,11 +47,5 @@ public class CategoryHandler(IHttpClientFactory httpClientFactory) : ICategoryHa
     {
         return await _client.GetFromJsonAsync<PagedResponse<List<Category>>>("/v1/categories")
             ?? new PagedResponse<List<Category>>(null, 400, "Não foi possível obter as categorias");
-    }
-
-    public async Task<Response<List<ComboItens>>> GetAllComboSelectAsync(GetCombosRequest requests)
-    {
-        return await _client.GetFromJsonAsync<Response<List<ComboItens>>>("/v1/categories/combos")
-            ?? new Response<List<ComboItens>>(null, 400, "Não foi possível obter as categorias");
     }
 }

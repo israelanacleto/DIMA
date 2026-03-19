@@ -22,14 +22,14 @@ public class GetCategoryByIdEndpoint : IEndpoint
         ICategoryHandler handler,
         long id)
     {
-        var request = new DeleteCategoryRequest
+        var request = new GetCategoryByIdRequest()
         {
             Id = id, 
             UserId = user.Identity?.Name ?? string.Empty
         };
-        var result = await handler.DeleteAsync(request);
+        var result = await handler.GetByIdAsync(request);
         return result.IsSuccess
-            ? TypedResults.Created($"/{result.Data?.Id}", result.Data)
-            : TypedResults.BadRequest(result.Data);
+            ? TypedResults.Ok(result)
+            : TypedResults.BadRequest(result);
     }
 }

@@ -64,7 +64,7 @@ public partial class LoginPage : ComponentBase
                 NavigationManager.NavigateTo("/");
             }
             else
-                Snackbar.Add(result.Message, Severity.Error);
+                Snackbar.Add(result.Message ?? "Não foi possível realizar o login", Severity.Error);
         }
         catch (Exception ex)
         {

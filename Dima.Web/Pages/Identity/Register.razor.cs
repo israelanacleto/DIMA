@@ -58,11 +58,11 @@ public partial class RegisterPage : ComponentBase
 
             if (result.IsSuccess)
             {
-                Snackbar.Add(result.Message, Severity.Success);
+                Snackbar.Add(result.Message ?? "Cadastro realizado com sucesso", Severity.Success);
                 NavigationManager.NavigateTo("/login");
             }
             else 
-                Snackbar.Add(result.Message, Severity.Error);
+                Snackbar.Add(result.Message ?? "Não foi possível realizar o cadastro", Severity.Error);
         }
         catch (Exception ex)
         {
