@@ -1,9 +1,7 @@
 using Dima.Core.Handlers;
 using Dima.Core.Models;
 using Dima.Core.Requests.Categories;
-using Dima.Core.Requests.Common;
 using Dima.Core.Requests.Transactions;
-using Dima.Core.Responses;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -15,7 +13,7 @@ public partial class EditTransactionPage : ComponentBase
 
     public bool IsBusy { get; set; } = true;
     public UpdateTransactionRequest InputModel { get; set; } = new();
-    protected List<ComboItens> CategoriesCombos { get; set; } = [];
+    public List<Category> Categories { get; set; } = [];
 
     #endregion
     
@@ -74,7 +72,7 @@ public partial class EditTransactionPage : ComponentBase
             if (result.IsSuccess)
             {
                 Snackbar.Add("Lançamento atualizado", Severity.Success);
-                NavigationManager.NavigateTo("/transactions");
+                NavigationManager.NavigateTo("/transactions/history");
             }
             else
             {
@@ -130,12 +128,12 @@ public partial class EditTransactionPage : ComponentBase
         IsBusy = true;
         try
         {
-            var request = new GetCombosRequest();
-            var result = await CategoryHandler.GetAllComboSelectAsync(request);
+            var request = new GetAllCategoriesRequest();
+            var result = await CategoryHandler.GetAllAsync(request);
             if (result.IsSuccess)
             {
-                CategoriesCombos = result.Data ?? [];
-                InputModel.CategoryId = long.Parse(CategoriesCombos.FirstOrDefault()?.Value ?? "0");
+                Categories = result.Data ?? [];
+                InputModel.CategoryId = Categories.FirstOrDefault()?.Id ?? 0;
             }
         }
         catch (Exception ex)
