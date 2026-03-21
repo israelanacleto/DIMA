@@ -38,5 +38,6 @@ public static class DependencyInjection
     {
         services.AddTransient<ICategoryHandler, CategoryHandler>();
         services.AddTransient<ITransactionHandler, TransactionalHandler>();
+        services.AddTransient<IProfileHandler, ProfileHandler>();
     }
 }

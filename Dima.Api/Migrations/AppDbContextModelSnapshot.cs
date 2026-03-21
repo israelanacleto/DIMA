@@ -50,6 +50,11 @@ namespace Dima.Api.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("Name")
+                        .HasMaxLength(250)
+                        .HasColumnType("NVARCHAR")
+                        .HasColumnName("Name");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(180)
                         .HasColumnType("nvarchar(180)");

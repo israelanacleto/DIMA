@@ -27,12 +27,14 @@ public static class Endpoint
             .WithTags("Identity")
             .RequireAuthorization()
             .MapEndpoint<LogoutEndpoint>()
-            .MapEndpoint<GetRolesEndpoint>();
+            .MapEndpoint<GetRolesEndpoint>()
+            .MapEndpoint<GetProfileEndpoint>();
 
         endpoints.MapGroup("v1/categories")
             .WithTags("Categories")
             .RequireAuthorization()
             .WithBadge("v1", BadgePosition.After)
+            .MapEndpoint<GetAllCombosCategoryEndpoint>()
             .MapEndpoint<CreateCategoryEndpoint>()
             .MapEndpoint<UpdateCategoryEndpoint>()
             .MapEndpoint<DeleteCategoryEndpoint>()

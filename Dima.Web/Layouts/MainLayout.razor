@@ -35,7 +35,7 @@
                             <MudText Typo="Typo.body2">@context.User.Identity?.Name</MudText>
                         </div>
                         <MudDivider />
-                        <MudMenuItem Icon="@Icons.Material.Filled.Person" Href="/profile">Meu Perfil</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Person" Href="/settings/me">Meu Perfil</MudMenuItem>
                         <MudMenuItem Icon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)" OnClick="ToggleDarkMode">
                             @(_isDarkMode ? "Modo Claro" : "Modo Escuro")
                         </MudMenuItem>
