@@ -28,7 +28,8 @@ public static class Endpoint
             .RequireAuthorization()
             .MapEndpoint<LogoutEndpoint>()
             .MapEndpoint<GetRolesEndpoint>()
-            .MapEndpoint<GetProfileEndpoint>();
+            .MapEndpoint<GetProfileEndpoint>()
+            .MapEndpoint<UpdateProfileEndpoint>();
 
         endpoints.MapGroup("v1/categories")
             .WithTags("Categories")

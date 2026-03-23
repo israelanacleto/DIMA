@@ -33,4 +33,35 @@ public class ProfileHandler(AppDbContext context) : IProfileHandler
             return new Response<GetProfileResponse?>(null, 500, "Não foi possível recuperar a conta");
         }
     }
+
+    public async Task<Response<GetProfileResponse?>> UpdateProfileAsync(UpdateProfileRequest request)
+    {
+        try
+        {
+            var user = await context
+                .Users
+                .FirstOrDefaultAsync(u => u.Email == request.UserId);
+        
+            if (user is null)
+                return new Response<GetProfileResponse?>(null, 401, "Erro ao obter o perfil do usuário");
+        
+            user.Name = request.Name;
+            user.PhoneNumber = request.PhoneNumber;
+        
+            await context.SaveChangesAsync();
+
+            return new Response<GetProfileResponse?>(new GetProfileResponse
+                {
+                    Name = user.Name,
+                    Email = user.Email ?? string.Empty,
+                    PhoneNumber = user.PhoneNumber ?? string.Empty,
+                    UserName = user.UserName ?? string.Empty
+                }
+            );
+        }
+        catch
+        {
+            return new Response<GetProfileResponse?>(null, 500, "Erro ao atualizar o perfil do usuário");
+        }
+    }
 }
