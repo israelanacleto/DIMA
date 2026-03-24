@@ -52,4 +52,29 @@ public static class Configuration
             DrawerText = Colors.Shades.White
         }
     };
+
+    public static string[] ChartPalette { get; set; } =
+    [
+        "#594AE2",
+        "#00C853",
+        "#FFAB00",
+        "#FF4081",
+        "#00B0FF",
+        "#FF3D00",
+        "#8E24AA",
+        "#00E5FF",
+        "#D4E157",
+        "#FF6E40",
+        "#B388FF",
+        "#1DE9B6",
+        "#EF6C00",
+        "#00E676",
+        "#E91E63"
+    ];
+
+    public static string[] IncomesExpensesPalette { get; set; } =
+    [
+        "#10B981",
+        "#EF4444"
+    ];
 }

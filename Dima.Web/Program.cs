@@ -33,6 +33,7 @@ builder.Services.AddTransient<IAccountHandler, AccountHandler>();
 builder.Services.AddTransient<IProfileHandler, AccountHandler>();
 builder.Services.AddTransient<ITransactionHandler, TransactionHandler>();
 builder.Services.AddTransient<ICategoryHandler, CategoryHandler>();
+builder.Services.AddTransient<IDashboardHandler, DashboardHandler>();
 
 builder.Services.AddLocalization();
 System.Globalization.CultureInfo.DefaultThreadCurrentCulture = new System.Globalization.CultureInfo("pt-BR");

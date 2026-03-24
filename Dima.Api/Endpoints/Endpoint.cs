@@ -1,5 +1,6 @@
 using Dima.Api.Common.Api;
 using Dima.Api.Endpoints.Categories;
+using Dima.Api.Endpoints.Dashboard;
 using Dima.Api.Endpoints.Identity;
 using Dima.Api.Endpoints.Transactions;
 using Dima.Api.Models;
@@ -29,7 +30,8 @@ public static class Endpoint
             .MapEndpoint<LogoutEndpoint>()
             .MapEndpoint<GetRolesEndpoint>()
             .MapEndpoint<GetProfileEndpoint>()
-            .MapEndpoint<UpdateProfileEndpoint>();
+            .MapEndpoint<UpdateProfileEndpoint>()
+            .MapEndpoint<ChangePasswordEndpoint>();
 
         endpoints.MapGroup("v1/categories")
             .WithTags("Categories")
@@ -51,6 +53,17 @@ public static class Endpoint
             .MapEndpoint<DeleteTransactionEndpoint>()
             .MapEndpoint<GetTransactionByIdEndpoint>()
             .MapEndpoint<GetTransactionsByPeriodEndpoint>();
+        
+        endpoints.MapGroup("/v1/dashboard")
+            .WithTags("Dashboard")
+            .RequireAuthorization()
+            .WithBadge("v1", BadgePosition.After)
+            .MapEndpoint<GetExpensesByCategoryEndpoint>()
+            .MapEndpoint<GetFinancialSummaryEndpoint>()
+            .MapEndpoint<GetIncomesAndExpensesEndpoint>()
+            .MapEndpoint<GetIncomesByCategoryEndpoint>()
+            .MapEndpoint<GetMostUsedCategoriesEndpoint>();
+        
     }
 
     private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)
