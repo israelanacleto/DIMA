@@ -1,5 +1,5 @@
 
-<MudCard Elevation="25">
+<MudCard Elevation="25" Class="animate-slide-up">
     <MudCardHeader>
         <CardHeaderContent>
             <MudText Typo="Typo.h6">Saídas por Categoria</MudText>
@@ -12,13 +12,16 @@
         }
         else
         {
-            <MudChart ChartType="ChartType.Pie"
-                      InputData="@Data"
-                      InputLabels="@Labels"
-                      LegendPosition="Position.Bottom"
-                      ChartOptions="@Options"
-                      Width="100%"
-                      Height="300px"/>
+            <div class="animate-fade-in">
+                <MudChart ChartType="ChartType.Pie"
+                          InputData="@Data"
+                          InputLabels="@Labels"
+                          LegendPosition="Position.Bottom"
+                          ChartOptions="@Options"
+                          Width="100%"
+                          Height="300px"
+                          Animation="true"/>
+            </div>
         }
     </MudCardContent>
 </MudCard>
