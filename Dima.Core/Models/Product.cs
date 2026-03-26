@@ -8,6 +8,4 @@ public class Product
     public string Slug { get; set; } = string.Empty;
     public bool IsActive { get; set; }
     public decimal Price { get; set; }
-    public List<string> Benefits { get; set; } = new();
-    public int SubscriptionDurationInDays { get; set; }
 }

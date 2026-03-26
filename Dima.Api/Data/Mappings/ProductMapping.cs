@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Dima.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -35,18 +34,6 @@ public class ProductMapping : IEntityTypeConfiguration<Product>
         builder.Property(x => x.IsActive)
             .IsRequired()
             .HasColumnType("BIT");
-
-        builder.Property(x => x.Benefits)
-            .HasColumnType("NVARCHAR(MAX)")
-            .HasConversion(
-                v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
-                v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null!) ?? new List<string>()
-            );
-        
-        builder.Property(x => x.SubscriptionDurationInDays)
-            .IsRequired()
-            .HasDefaultValue(0)
-            .HasColumnType("INT");
         
         builder
             .HasIndex(u => u.Slug,"IX_Product_Slug")

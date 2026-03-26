@@ -24,11 +24,4 @@ public class Order
     public string UserId { get; set; } = string.Empty;
 
     public decimal Total => Product.Price - (Voucher?.Amount ?? 0);
-
-    public DateTime? SubscriptionStartDate { get; set; }
-    public DateTime? SubscriptionEndDate { get; set; }
-
-    public bool IsPremiumActive => Status == EOrderStatus.Paid 
-                                   && SubscriptionStartDate <= DateTime.UtcNow 
-                                   && SubscriptionEndDate >= DateTime.UtcNow;
 }

@@ -2,6 +2,7 @@ using Dima.Api.Common.Api;
 using Dima.Api.Endpoints.Categories;
 using Dima.Api.Endpoints.Dashboard;
 using Dima.Api.Endpoints.Identity;
+using Dima.Api.Endpoints.Orders;
 using Dima.Api.Endpoints.Transactions;
 using Dima.Api.Models;
 using Scalar.AspNetCore;
@@ -33,7 +34,7 @@ public static class Endpoint
             .MapEndpoint<UpdateProfileEndpoint>()
             .MapEndpoint<ChangePasswordEndpoint>();
 
-        endpoints.MapGroup("v1/categories")
+        endpoints.MapGroup("/v1/categories")
             .WithTags("Categories")
             .RequireAuthorization()
             .WithBadge("v1", BadgePosition.After)
@@ -44,7 +45,7 @@ public static class Endpoint
             .MapEndpoint<GetCategoryByIdEndpoint>()
             .MapEndpoint<GetAllCategoriesEndpoint>();
         
-        endpoints.MapGroup("v1/transactions")
+        endpoints.MapGroup("/v1/transactions")
             .WithTags("Transactions")
             .RequireAuthorization()
             .WithBadge("v1", BadgePosition.After)
@@ -63,6 +64,30 @@ public static class Endpoint
             .MapEndpoint<GetIncomesAndExpensesEndpoint>()
             .MapEndpoint<GetIncomesByCategoryEndpoint>()
             .MapEndpoint<GetMostUsedCategoriesEndpoint>();
+        
+        endpoints.MapGroup("/v1/products")
+            .WithTags("Products")
+            .RequireAuthorization()
+            .WithBadge("v1", BadgePosition.After)
+            .MapEndpoint<GetAllProductsEndpoint>()
+            .MapEndpoint<GetProductBySlugEndpoint>();
+
+        endpoints.MapGroup("/v1/vouchers")
+            .WithTags("Vouchers")
+            .RequireAuthorization()
+            .WithBadge("v1", BadgePosition.After)
+            .MapEndpoint<GetVoucherByNumberEndpoint>();
+        
+        endpoints.MapGroup("/v1/orders")
+            .WithTags("Orders")
+            .RequireAuthorization()
+            .WithBadge("v1", BadgePosition.After)
+            .MapEndpoint<GetAllOrdersEndpoint>()
+            .MapEndpoint<GetOrderByNumberEndpoint>()
+            .MapEndpoint<CreateOrderEndpoint>()
+            .MapEndpoint<CancelOrderEndpoint>()
+            .MapEndpoint<PayOrderEndpoint>()
+            .MapEndpoint<RefundOrderEndpoint>();
         
     }
 
