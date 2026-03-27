@@ -219,6 +219,14 @@ namespace Dima.Api.Migrations
                     b.Property<short>("Status")
                         .HasColumnType("SMALLINT");
 
+                    b.Property<DateTime?>("SubscriptionEndDate")
+                        .HasColumnType("DATETIME2")
+                        .HasColumnName("SubscriptionEndDate");
+
+                    b.Property<DateTime?>("SubscriptionStartDate")
+                        .HasColumnType("DATETIME2")
+                        .HasColumnName("SubscriptionStartDate");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("DATETIME2");
 
@@ -258,6 +266,10 @@ namespace Dima.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("Benefits")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(MAX)");
+
                     b.Property<string>("Description")
                         .HasMaxLength(255)
                         .HasColumnType("NVARCHAR");
@@ -271,6 +283,11 @@ namespace Dima.Api.Migrations
                     b.Property<string>("Slug")
                         .HasMaxLength(80)
                         .HasColumnType("VARCHAR");
+
+                    b.Property<int>("SubscriptionDurationInDays")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INT")
+                        .HasDefaultValue(0);
 
                     b.Property<string>("Title")
                         .IsRequired()

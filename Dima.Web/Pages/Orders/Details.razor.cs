@@ -117,6 +117,26 @@ public partial class DetailsPage : ComponentBase
         {
             IsBusy = false;
         }
+        // try
+        // {
+        //
+        //     // var request = new PayOrderRequest
+        //     // {
+        //     //     OrderNumber = OrderNumber,
+        //     //     ExternalReference = "PAGAMENTO_SIMULADO"
+        //     // };
+        //     // var result = await Handler.PayAsync(request);
+        //     // if (result.IsSuccess)
+        //     // {
+        //     //     Order = result.Data;
+        //     //     Snackbar.Add("Pagamento realizado com sucesso", Severity.Success);
+        //     //     ProfileHandler.NotifyChange();
+        //     // }
+        //     // else
+        //     // {
+        //     //     Snackbar.Add(result.Message ?? "Não foi possível realizar o pagamento", Severity.Error);
+        //     // }
+        // }
         
     }
 

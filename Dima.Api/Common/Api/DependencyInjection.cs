@@ -43,5 +43,6 @@ public static class DependencyInjection
         services.AddTransient<IProductHandler, ProductHandler>();
         services.AddTransient<IVoucherHandler, VoucherHandler>();
         services.AddTransient<IOrderHandler, OrderHandler>();
+        services.AddTransient<IStripeHandler, StripeHandler>();
     }
 }

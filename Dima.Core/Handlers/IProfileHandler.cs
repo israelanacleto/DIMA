@@ -6,6 +6,8 @@ namespace Dima.Core.Handlers;
 
 public interface IProfileHandler
 {
+    event Action? OnChange;
+    void NotifyChange();
     Task<Response<GetProfileResponse?>> GetProfileAsync(GetProfileRequest request);
     
     Task<Response<GetProfileResponse?>> UpdateProfileAsync(UpdateProfileRequest request);

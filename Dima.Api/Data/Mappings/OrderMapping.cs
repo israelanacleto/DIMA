@@ -54,6 +54,19 @@ public class OrderMapping : IEntityTypeConfiguration<Order>
             .HasConstraintName("FK_Order_Voucher")
             .OnDelete(DeleteBehavior.Restrict);
         
+        builder.Property(x => x.SubscriptionStartDate)
+            .IsRequired(false)
+            .HasColumnName("SubscriptionStartDate")
+            .HasColumnType("DATETIME2");
+        
+        builder.Property(x => x.SubscriptionEndDate)
+            .IsRequired(false)
+            .HasColumnName("SubscriptionEndDate")
+            .HasColumnType("DATETIME2");
+
+        builder.Ignore(x => x.IsPremiumActive);
+        
+        
         builder
             .HasIndex(u => u.Number, "IX_Order_Number")
             .IsUnique();

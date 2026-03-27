@@ -20,6 +20,39 @@
         Lançamentos
     </MudNavLink>
                 
+    @if (IsPremium)
+    {
+        <MudNavLink 
+            Match="NavLinkMatch.Prefix" 
+            Icon="@Icons.Material.Filled.List"
+            Href="/orders">
+            Meus Planos
+        </MudNavLink>
+    }
+    else
+    {
+        <MudText
+            Typo="Typo.subtitle2"
+            Color="Color.Primary"
+            Class="ml-4 mt-6 mb-2"
+            Style="font-weight: 700; 
+            text-transform: uppercase;">
+            Assinaturas
+        </MudText>
+        <MudNavLink 
+            Match="NavLinkMatch.Prefix" 
+            Icon="@Icons.Material.Filled.Star"
+            Href="/plans">
+            Planos
+        </MudNavLink>
+        <MudNavLink 
+            Match="NavLinkMatch.Prefix" 
+            Icon="@Icons.Material.Filled.List"
+            Href="/orders">
+            Meus Pedidos
+        </MudNavLink>
+    }
+                
     
     <MudText
         Typo="Typo.subtitle2"
@@ -38,7 +71,12 @@
     <MudNavLink 
         Match="NavLinkMatch.Prefix"
         Icon="@Icons.Material.Filled.Settings"
-        Href="/settings">
+        Href="/settings/me">
         Minha Conta
     </MudNavLink>
 </MudNavMenu>
+
+@code {
+    [Parameter]
+    public bool IsPremium { get; set; } = false;
+}

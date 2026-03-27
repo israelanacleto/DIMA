@@ -8,8 +8,9 @@ public static class Configuration
     public const string HttpClientName = "dima";
 
     public static string BackendUrl { get; set; } = "http://localhost:5204";
+    public static string StripePublicKey { get; set; } = "";
     
-    public static MudTheme Theme = new()
+    public static readonly MudTheme Theme = new()
     {
         Typography = new Typography
         {

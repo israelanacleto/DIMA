@@ -1,5 +1,6 @@
 using Dima.Api.Data;
 using Dima.Api.Models;
+using Dima.Core.Enums;
 using Dima.Core.Handlers;
 using Dima.Core.Requests.Account;
 using Dima.Core.Responses;
@@ -11,6 +12,9 @@ namespace Dima.Api.Handlers;
 
 public class ProfileHandler(AppDbContext context, UserManager<User> userManager) : IProfileHandler
 {
+    public event Action? OnChange;
+    public void NotifyChange() => OnChange?.Invoke();
+
     public async Task<Response<GetProfileResponse?>> GetProfileAsync(GetProfileRequest request)
     {
         try
@@ -26,9 +30,17 @@ public class ProfileHandler(AppDbContext context, UserManager<User> userManager)
                 })
                 .FirstOrDefaultAsync(u => u.Email == request.UserId);
 
-            return user is null
-                ? new Response<GetProfileResponse?>(null, 401, "Erro ao obter o perfil do usuário")
-                : new Response<GetProfileResponse?>(user);
+            if (user is null)
+                return new Response<GetProfileResponse?>(null, 401, "Erro ao obter o perfil do usuário");
+
+            user.IsPremium = await context.Orders
+                .AsNoTracking()
+                .AnyAsync(x => x.UserId == request.UserId &&
+                               x.Status == EOrderStatus.Paid &&
+                               x.SubscriptionStartDate <= DateTime.UtcNow &&
+                               x.SubscriptionEndDate >= DateTime.UtcNow);
+
+            return new Response<GetProfileResponse?>(user);
         }
         catch
         {
@@ -52,12 +64,20 @@ public class ProfileHandler(AppDbContext context, UserManager<User> userManager)
         
             await context.SaveChangesAsync();
 
+            var isPremium = await context.Orders
+                .AsNoTracking()
+                .AnyAsync(x => x.UserId == request.UserId &&
+                               x.Status == EOrderStatus.Paid &&
+                               x.SubscriptionStartDate <= DateTime.UtcNow &&
+                               x.SubscriptionEndDate >= DateTime.UtcNow);
+
             return new Response<GetProfileResponse?>(new GetProfileResponse
                 {
                     Name = user.Name,
                     Email = user.Email ?? string.Empty,
                     PhoneNumber = user.PhoneNumber ?? string.Empty,
-                    UserName = user.UserName ?? string.Empty
+                    UserName = user.UserName ?? string.Empty,
+                    IsPremium = isPremium
                 }
             );
         }

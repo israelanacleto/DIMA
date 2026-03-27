@@ -12,7 +12,10 @@ public class AccountHandler(IHttpClientFactory httpClientFactory) :
     IProfileHandler
 {
     private readonly HttpClient _client = httpClientFactory.CreateClient(Configuration.HttpClientName);
-    
+    public event Action? OnChange;
+
+    public void NotifyChange() => OnChange?.Invoke();
+
     public async Task<Response<string>> LoginAsync(LoginRequest request)
     {
         var result = await _client.PostAsJsonAsync("v1/identity/login?useCookies=true", request);
@@ -29,12 +32,12 @@ public class AccountHandler(IHttpClientFactory httpClientFactory) :
             : new Response<string>(null, (int)result.StatusCode, "Não foi possível realizar o seu cadastro");
     }
 
-    public async Task<Response<string>> ChangePasswordAsync(ChangePasswordRequest request)
+    public async Task<Response<string?>> ChangePasswordAsync(ChangePasswordRequest request)
     {
         var result = await _client.PostAsJsonAsync("v1/identity/change-password", request);
         return result.IsSuccessStatusCode
-            ? new Response<string>("Senha alterada com sucesso!", 204, "Senha alterada com sucesso!")
-            : new Response<string>(null, (int)result.StatusCode, "Não foi possível alterar a sua senha");
+            ? new Response<string?>("Senha alterada com sucesso!", 204, "Senha alterada com sucesso!")
+            : new Response<string?>(null, (int)result.StatusCode, "Não foi possível alterar a sua senha");
     }
 
     public async Task LogoutAsync()
@@ -52,10 +55,15 @@ public class AccountHandler(IHttpClientFactory httpClientFactory) :
     public async Task<Response<GetProfileResponse?>> UpdateProfileAsync(UpdateProfileRequest request)
     {
         var result = await _client.PutAsJsonAsync("v1/identity/me", request);
-        return await result
-                   .Content
-                   .ReadFromJsonAsync<Response<GetProfileResponse?>>()
-               ?? new Response<GetProfileResponse?>(null, (int)result.StatusCode,
-                   "Falha ao atualizar o perfil do usuário");
+        var response = await result
+                           .Content
+                           .ReadFromJsonAsync<Response<GetProfileResponse?>>()
+                       ?? new Response<GetProfileResponse?>(null, (int)result.StatusCode,
+                           "Falha ao atualizar o perfil do usuário");
+
+        if (response.IsSuccess)
+            NotifyChange();
+
+        return response;
     }
 }

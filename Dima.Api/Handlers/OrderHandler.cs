@@ -3,12 +3,15 @@ using Dima.Core.Enums;
 using Dima.Core.Handlers;
 using Dima.Core.Models;
 using Dima.Core.Requests.Orders;
+using Dima.Core.Requests.Stripe;
 using Dima.Core.Responses;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dima.Api.Handlers;
 
-public class OrderHandler(AppDbContext context): IOrderHandler
+public class OrderHandler(
+    AppDbContext context,
+    IStripeHandler stripeHandler): IOrderHandler
 {
     public async Task<Response<Order?>> CancelAsync(CancelOrderRequest request)
     {
@@ -50,7 +53,7 @@ public class OrderHandler(AppDbContext context): IOrderHandler
         }
         
         order.Status = EOrderStatus.Canceled;
-        order.UpdatedAt = DateTime.Now;
+        order.UpdatedAt = DateTime.UtcNow;
 
         try
         {
@@ -171,10 +174,39 @@ public class OrderHandler(AppDbContext context): IOrderHandler
             default:
                 return new Response<Order?>(order, 400, "Situação do pedido inválida");
         }
+
+        try
+        {
+            var getTransactionsRequest = new GetTransactionsByOrderNumberRequest
+            {
+                Number = order.Number
+            };
+            var result = await stripeHandler.GetTransactionsByOrderNumberAsync(getTransactionsRequest);
+
+            if (!result.IsSuccess)
+                return new Response<Order?>(null, 500, "Não foi possível localizar o pagamento no stripe");
+
+            if (result.Data is null)
+                return new Response<Order?>(null, 500, "Pagamento não encontrado no stripe");
+
+            if (result.Data.Any((x => x.Refunded)))
+                return new Response<Order?>(null, 400, "Pagamento já foi informado e estornado");
+
+            if (!result.Data.Any(x => x.Paid))
+                return new Response<Order?>(null, 400, "Este pedido não foi pago");
+
+            request.ExternalReference = result.Data.First(x => x.Paid).Id;
+        }
+        catch
+        {
+            return new Response<Order?>(null, 500, "Não foi possível dar baixa no seu pedido");
+        }
         
         order.Status = EOrderStatus.Paid;
         order.ExternalReference = request.ExternalReference;
-        order.UpdatedAt = DateTime.Now;
+        order.UpdatedAt = DateTime.UtcNow;
+        order.SubscriptionStartDate = DateTime.UtcNow;
+        order.SubscriptionEndDate = DateTime.UtcNow.AddDays(order.Product.SubscriptionDurationInDays);
 
         try
         {
@@ -226,7 +258,9 @@ public class OrderHandler(AppDbContext context): IOrderHandler
         }
 
         order.Status = EOrderStatus.Refunded;
-        order.UpdatedAt = DateTime.Now;
+        order.UpdatedAt = DateTime.UtcNow;
+        order.SubscriptionStartDate = null;
+        order.SubscriptionEndDate = null;
 
         try
         {

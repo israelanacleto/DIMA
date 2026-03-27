@@ -3,6 +3,7 @@ using Dima.Api.Endpoints.Categories;
 using Dima.Api.Endpoints.Dashboard;
 using Dima.Api.Endpoints.Identity;
 using Dima.Api.Endpoints.Orders;
+using Dima.Api.Endpoints.Stripe;
 using Dima.Api.Endpoints.Transactions;
 using Dima.Api.Models;
 using Scalar.AspNetCore;
@@ -88,7 +89,13 @@ public static class Endpoint
             .MapEndpoint<CancelOrderEndpoint>()
             .MapEndpoint<PayOrderEndpoint>()
             .MapEndpoint<RefundOrderEndpoint>();
-        
+
+        endpoints.MapGroup("/v1/payments/stripe")
+            .WithTags("Payments - Stripe")
+            .RequireAuthorization()
+            .WithBadge("v1", BadgePosition.After)
+            .MapEndpoint<CreateSessionEndpoint>();
+
     }
 
     private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)
