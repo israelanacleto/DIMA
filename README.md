@@ -3,7 +3,7 @@
 # 💎 DIMA
 ### *Sober Fintech Elite — Elevando sua Gestão Financeira*
 
-<img src="Dima.Web/wwwroot/img/logo_dark.png" alt="Dima Logo" width="220" />
+<img src="Dima.Web/wwwroot/img/logo_light.png" alt="Dima Logo" width="220" />
 
 [![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?style=for-the-badge&logo=dotnet)](https://dotnet.microsoft.com/)
 [![Blazor](https://img.shields.io/badge/Blazor-WASM-512BD4?style=for-the-badge&logo=blazor)](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor)
@@ -21,6 +21,29 @@
 O **Dima** é uma plataforma de gestão financeira pessoal de alta performance, projetada para quem valoriza sobriedade, precisão e uma experiência de usuário de nível "Fintech Elite". 
 
 Construído com o estado da arte do ecossistema .NET, o projeto prioriza a **robustez técnica** e a **manutenibilidade**, utilizando uma arquitetura moderna que separa claramente as responsabilidades entre cliente, API e domínio.
+
+---
+
+## 📸 Interface Experience
+
+<div align="center">
+
+### 📊 Dashboard
+| Light Mode | Dark Mode |
+| :---: | :---: |
+| ![Dashboard Light](screenshots/Dima_Dashboard_Light.jpeg) | ![Dashboard Dark](screenshots/Dima_Dashboard_Dark.jpeg) |
+
+### 🔖 Categorias
+| Light Mode | Dark Mode |
+| :---: | :---: |
+| ![Categories Light](screenshots/Dima_Categories_Light.jpeg) | ![Categories Dark](screenshots/Dima_Categories_Dark.jpeg) |
+
+### 💸 Transações
+| Light Mode | Dark Mode |
+| :---: | :---: |
+| ![Transactions Light](screenshots/Dima_Transactions_Light.jpeg) | ![Transactions Dark](screenshots/Dima_Transactions_Dark.jpeg) |
+
+</div>
 
 ---
 
