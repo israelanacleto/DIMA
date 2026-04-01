@@ -18,13 +18,13 @@ public static class Configuration
             {
                 FontFamily = ["Inter", "Raleway", "sans-serif"],
                 FontSize = "0.875rem",
-                FontWeight = 400
+                FontWeight = "400"
             },
-            H4 = new H4
+            H4 = new H4Typography
             {
                 FontFamily = ["Inter", "Raleway", "sans-serif"],
                 FontSize = "2rem",
-                FontWeight = 600
+                FontWeight = "600"
             }
         },
         PaletteLight = new PaletteLight
