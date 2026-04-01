@@ -28,6 +28,7 @@ public static class Endpoint
 
         identity.MapEndpoint<RegisterEndpoint>();
         identity.MapEndpoint<LoginEndpoint>();
+        identity.MapIdentityApi<User>();
 
         // Identity Protected Endpoints
         var identityProtected = endpoints.MapGroup("/v1/identity")
