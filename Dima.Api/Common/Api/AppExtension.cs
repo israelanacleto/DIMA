@@ -16,7 +16,11 @@ public static class AppExtension
         try
         {
             // 1. Automatically Apply Migrations (including Views)
-            context.Database.Migrate();
+            // Skip migrations if using In-Memory Database (common in integration tests)
+            if (context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+            {
+                context.Database.Migrate();
+            }
         }
         catch (Exception ex)
         {

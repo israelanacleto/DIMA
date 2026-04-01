@@ -24,11 +24,18 @@ public static class DependencyInjectionExtension
     {
         var connectionString = configuration
             .GetConnectionString("DefaultConnection") ?? string.Empty;
-        
-        services.AddDbContext<AppDbContext>(config => 
-            config
-                .UseSqlServer(connectionString: connectionString)
-        );
+
+        services.AddDbContext<AppDbContext>(config =>
+        {
+            if (connectionString == "TestDb")
+            {
+                config.UseInMemoryDatabase("IntegrationTestDb");
+            }
+            else
+            {
+                config.UseSqlServer(connectionString);
+            }
+        });
     }
 
     private static void AddIdentity(IServiceCollection services)
