@@ -16,41 +16,37 @@ public static class Configuration
         {
             Default = new DefaultTypography
             {
-                FontFamily = ["Raleway", "sans-serif"]
+                FontFamily = ["Inter", "Raleway", "sans-serif"],
+                FontSize = "0.875rem",
+                FontWeight = 400
+            },
+            H4 = new H4
+            {
+                FontFamily = ["Inter", "Raleway", "sans-serif"],
+                FontSize = "2rem",
+                FontWeight = 600
             }
         },
         PaletteLight = new PaletteLight
         {
-            Primary = "#1E293B", // Navy - Sobriedade e Confiança
-            Secondary = "#64748B", // Slate - Equilíbrio
-            Tertiary = "#10B981", // Emerald - Finanças/Crescimento
-            Success = "#10B981", 
-            Error = "#EF4444",
-            Warning = "#F59E0B",
-            Info = "#3B82F6",
-            Background = "#F8FAFC",
-            AppbarBackground = "#334155",
+            Primary = "#6366F1",
+            PrimaryContrastText = new MudColor("#FFFFFF"),
+            Secondary = "#8B5CF6",
+            Background = "#F5F5F5",
+            AppbarBackground = "#6366F1",
             AppbarText = Colors.Shades.White,
-            PrimaryContrastText = Colors.Shades.White,
-            DrawerBackground = Colors.Shades.White,
-            DrawerText = "#1E293B"
+            TextPrimary = Colors.Shades.Black,
+            DrawerText = Colors.Shades.White,
+            DrawerBackground = "#0F172A"
         },
         PaletteDark = new PaletteDark
         {
-            Primary = "#10B981", // Destaque em Emerald no modo dark
-            Secondary = "#94A3B8",
-            Tertiary = "#34D399",
-            Success = "#34D399",
-            Error = "#F87171",
-            Warning = "#FBBF24",
-            Info = "#60A5FA",
-            Background = "#0F172A", // Navy mais profundo
-            Surface = "#1E293B",
-            AppbarBackground = "#1E293B",
-            AppbarText = Colors.Shades.White,
-            PrimaryContrastText = Colors.Shades.White,
-            DrawerBackground = "#162033",
-            DrawerText = Colors.Shades.White
+            Primary = "#818CF8",
+            Secondary = "#8B5CF6",
+            // Background = Colors.LightGreen.Darken4,
+            AppbarBackground = "#818CF8",
+            AppbarText = Colors.Shades.Black,
+            PrimaryContrastText = new MudColor("#000000")
         }
     };
 
