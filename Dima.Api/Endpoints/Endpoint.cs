@@ -22,22 +22,23 @@ public static class Endpoint
             .WithTags("Health Check")
             .MapGet("/", () => new { Message = "Ok" });
         
-        endpoints.MapGroup("/v1/identity")
-            .WithTags("Identity")
-            .MapIdentityApi<User>();
+        // Identity Public Endpoints
+        var identity = endpoints.MapGroup("/v1/identity")
+            .WithTags("Identity");
 
-        endpoints.MapGroup("/v1/identity")
-            .WithTags("Identity")
-            .MapEndpoint<RegisterEndpoint>();
+        identity.MapEndpoint<RegisterEndpoint>();
+        identity.MapEndpoint<LoginEndpoint>();
 
-        endpoints.MapGroup("/v1/identity")
+        // Identity Protected Endpoints
+        var identityProtected = endpoints.MapGroup("/v1/identity")
             .WithTags("Identity")
-            .RequireAuthorization()
-            .MapEndpoint<LogoutEndpoint>()
-            .MapEndpoint<GetRolesEndpoint>()
-            .MapEndpoint<GetProfileEndpoint>()
-            .MapEndpoint<UpdateProfileEndpoint>()
-            .MapEndpoint<ChangePasswordEndpoint>();
+            .RequireAuthorization();
+
+        identityProtected.MapEndpoint<LogoutEndpoint>();
+        identityProtected.MapEndpoint<GetRolesEndpoint>();
+        identityProtected.MapEndpoint<GetProfileEndpoint>();
+        identityProtected.MapEndpoint<UpdateProfileEndpoint>();
+        identityProtected.MapEndpoint<ChangePasswordEndpoint>();
 
         endpoints.MapGroup("/v1/categories")
             .WithTags("Categories")
