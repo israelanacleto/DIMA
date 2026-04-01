@@ -50,6 +50,14 @@ public static class BuilderExtension
             builder.Services
                 .AddAuthentication(IdentityConstants.ApplicationScheme)
                 .AddIdentityCookies();
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+            });
+
             builder.Services.AddAuthorization();
         }
 
