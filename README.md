@@ -1,26 +1,26 @@
 <div align="center">
 
-# 💎 DIMA
-### *Sober Fintech Elite — Elevando sua Gestão Financeira*
+# 💎 DIMA: Elite Financial Ecosystem
+### *Modern Management — Empowering Your Financial Journey*
 
-<img src="Dima.Web/wwwroot/img/logo_light.png" alt="Dima Logo" width="220" />
+<img src="Dima.Web/wwwroot/img/logo_light.png" alt="Dima Logo" width="200" />
 
-[![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?style=for-the-badge&logo=dotnet)](https://dotnet.microsoft.com/)
-[![Blazor](https://img.shields.io/badge/Blazor-WASM-512BD4?style=for-the-badge&logo=blazor)](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor)
-[![MudBlazor](https://img.shields.io/badge/MudBlazor-Interactive-60A5FA?style=for-the-badge)](https://mudblazor.com/)
-[![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=for-the-badge&logo=docker)](https://www.docker.com/)
+[![.NET 10](https://img.shields.io/badge/.NET-10.0-indigo?style=for-the-badge&logo=dotnet)](https://dotnet.microsoft.com/)
+[![Blazor](https://img.shields.io/badge/Blazor-WASM-violet?style=for-the-badge&logo=blazor)](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor)
+[![MudBlazor](https://img.shields.io/badge/MudBlazor-Interactive-6366F1?style=for-the-badge)](https://mudblazor.com/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker)](https://www.docker.com/)
 
-[Funcionalidades](#-funcionalidades-premium) • [Tecnologias](#-deep-dive-tecnológico) • [Arquitetura](#-arquitetura-e-design) • [Execução](#-execução-rápida)
+[Features](#-key-features) • [Tech Stack](#-technology-stack) • [Architecture](#-architecture--design) • [Quick Start](#-quick-start)
 
 </div>
 
 ---
 
-## 🏛️ Visão Geral
+## 🏛️ Overview
 
-O **Dima** é uma plataforma de gestão financeira pessoal de alta performance, projetada para quem valoriza sobriedade, precisão e uma experiência de usuário de nível "Fintech Elite". 
+**DIMA** is a high-performance personal finance management platform designed for users who demand precision, security, and a premium user experience. Built with the latest .NET 10 ecosystem, the project prioritizes **SOLID principles**, architectural robustness, and professional-grade UI/UX.
 
-Construído com o estado da arte do ecossistema .NET, o projeto prioriza a **robustez técnica** e a **manutenibilidade**, utilizando uma arquitetura moderna que separa claramente as responsabilidades entre cliente, API e domínio.
+This version features a modernized **Indigo & Violet** aesthetic, decoupled security layers, and an automated data seeding engine to provide a seamless "Out of the Box" experience.
 
 ---
 
@@ -28,90 +28,84 @@ Construído com o estado da arte do ecossistema .NET, o projeto prioriza a **rob
 
 <div align="center">
 
-### 📊 Dashboard
-| Light Mode | Dark Mode |
+### 📊 Professional Dashboard
+| Light Mode (Indigo) | Dark Mode (Slate) |
 | :---: | :---: |
 | ![Dashboard Light](screenshots/Dima_Dashboard_Light.jpeg) | ![Dashboard Dark](screenshots/Dima_Dashboard_Dark.jpeg) |
-
-### 🔖 Categorias
-| Light Mode | Dark Mode |
-| :---: | :---: |
-| ![Categories Light](screenshots/Dima_Categories_Light.jpeg) | ![Categories Dark](screenshots/Dima_Categories_Dark.jpeg) |
-
-### 💸 Transações
-| Light Mode | Dark Mode |
-| :---: | :---: |
-| ![Transactions Light](screenshots/Dima_Transactions_Light.jpeg) | ![Transactions Dark](screenshots/Dima_Transactions_Dark.jpeg) |
 
 </div>
 
 ---
 
-## ✨ Funcionalidades Premium
+## ✨ Key Features
 
-| Funcionalidade | Descrição | Status |
+| Feature | Description | Status |
 | :--- | :--- | :---: |
-| **💼 Identity System** | Autenticação completa via JWT com gerenciamento de perfil e tokens seguros. | ✅ |
-| **📈 Dashboard Central** | Agregação automática de saldos e fluxo de caixa para tomada de decisão. | ✅ |
-| **🔖 Smart Categories** | Organização inteligente de transações através de um sistema flexível de categorias. | ✅ |
-| **💸 Precision Flow** | Lançamentos financeiros detalhados com suporte a diferentes tipos de movimentação. | ✅ |
-| **🎨 Sober Theme** | Design adaptativo com paleta Deep Navy & Emerald para o máximo conforto visual. | ✅ |
-| **📱 Full Responsive** | Interface fluida e responsiva, garantindo a mesma qualidade no Mobile ou Desktop. | ✅ |
+| **🛡️ SOLID Identity** | Decoupled authentication system with custom registration and secure session handling. | ✅ |
+| **📈 Dynamic Analytics** | Real-time interactive charts for income, expenses, and category-based distribution. | ✅ |
+| **💳 Stripe Integration** | Full checkout flow for premium subscriptions and order management. | ✅ |
+| **🌱 Smart Seeding** | User-choice demo data generation upon registration for immediate exploration. | ✅ |
+| **🎨 Modern UI/UX** | Refined typography (Inter), rounded aesthetics, and smooth CSS transitions. | ✅ |
+| **🚢 Containerized** | Full Docker support for both API and Frontend with CI/CD GitHub Actions. | ✅ |
 
 ---
 
-## 🛠️ Deep Dive Tecnológico
+## 🛠️ Technology Stack
 
-Em vez de apenas listar as ferramentas, aqui está o papel fundamental de cada tecnologia neste ecossistema:
+### 🚀 **Frontend: Blazor WebAssembly**
+Powered by .NET 10, the frontend executes directly in the browser via WebAssembly. This ensures a strictly typed Single Page Application (SPA) experience with near-native performance.
 
-### 🚀 **Blazor WebAssembly**
-Utilizado como o motor do frontend, o Blazor WASM permite a execução de lógica C# diretamente no navegador através do WebAssembly. Isso garante um carregamento inicial rápido (após o cache), tipagem forte do início ao fim e uma experiência de Single Page Application (SPA) extremadamente fluida, aproximando a performance do web app de uma aplicação nativa.
+### ⚡ **Backend: ASP.NET Core & Minimal APIs**
+A lightweight and ultra-fast backend architecture. We leveraged Minimal APIs to reduce overhead and focus on high-concurrency performance and clean endpoint definitions.
 
-### 🧩 **MudBlazor**
-A biblioteca de componentes UI escolhida para elevar a estética do Dima. O MudBlazor fornece componentes baseados em Material Design com alto nível de customização via CSS isolado e temas em C#. Ele é o responsável pelas interações suaves, drawers elegantes e o suporte nativo ao modo dark que define a nossa estética "Fintech Elite".
+### 💾 **Data: EF Core & SQL Server**
+Uses Entity Framework Core for robust Object-Relational Mapping (ORM). Advanced dashboard views are managed directly via **EF Migrations** to ensure database schema consistency across environments.
 
-### ⚡ **ASP.NET Core 10 & Minimal APIs**
-O coração do backend. Optamos por **Minimal APIs** para reduzir a verbosidade e focar na performance. Esta abordagem arquitetônica permite definir endpoints de forma direta e performática, resultando em menor consumo de memória e tempos de resposta ultra-rápidos para o frontend.
-
-### 💾 **Entity Framework Core & SQL Server**
-A camada de persistência utiliza o EF Core para um mapeamento objeto-relacional (ORM) moderno e eficiente. Combinado com o SQL Server, garante integridade referencial, transações atômicas e uma base sólida para o crescimento dos dados financeiros do usuário.
-
-### � **Docker & Docker Compose**
-Toda a infraestrutura do projeto é containerizada. Isso garante que o ambiente de desenvolvimento seja idêntico ao de produção (ou staging). Com o Docker Compose, subimos o banco de dados e as dependências com um único comando, isolando o projeto de conflitos de versões no sistema operacional local.
+### 🧩 **UI: MudBlazor & Custom CSS**
+A premium component library enhanced with custom Indigo-theme transitions, modern hover effects, and optimized data tables for a true 'Fintech' look and feel.
 
 ---
 
-## 🏗️ Arquitetura e Design
+## 🏗️ Architecture & Design
+
+The project follows a clean **Layered Architecture**, ensuring that business logic is separated from infrastructure and presentation concerns.
 
 ```mermaid
-graph TD
-    User((Usuário)) --> Web[Dima.Web - Blazor WASM]
+graph LR
+    User((User)) --> Web[Dima.Web - Blazor WASM]
     Web --> API[Dima.Api - Minimal APIs]
     API --> DB[(SQL Server)]
-    Web & API -.-> Core[Dima.Core - Dominio & Contratos]
+    Web & API -.-> Core[Dima.Core - Models & Shared Logic]
     
-    style Web fill:#1e293b,stroke:#10b981,color:#fff
-    style API fill:#1e293b,stroke:#10b981,color:#fff
-    style Core fill:#1e293b,stroke:#64748b,color:#fff
-    style DB fill:#162033,stroke:#34d399,color:#fff
+    style Web fill:#6366F1,stroke:#fff,color:#fff
+    style API fill:#8B5CF6,stroke:#fff,color:#fff
+    style Core fill:#1E293B,stroke:#fff,color:#fff
+    style DB fill:#0F172A,stroke:#fff,color:#fff
 ```
 
-### 📂 Organização de Camadas
-- **Dima.Web**: Interface rica e lógica de interação do usuário.
-- **Dima.Api**: Serviço de backend, endpoints e segurança.
-- **Dima.Core**: O "Single Source of Truth", contendo modelos, regras de negócio compartilhadas e contratos de API.
+### 📂 Repository Structure
+- **Dima.Web**: The interactive client-side application.
+- **Dima.Api**: High-performance backend services and security handlers.
+- **Dima.Core**: Shared contracts, enums, and domain models.
 
 ---
 
-## 🚥 Execução Rápida
+## 🚥 Quick Start
 
+### 1. Using Docker (Recommended)
 ```bash
-# 1. Subir infraestrutura
 docker-compose up -d
+```
 
-# 2. Restaurar dependências e rodar
+### 2. Manual Run
+```bash
+# Restore and Build
 dotnet build
+
+# Run API
 dotnet run --project Dima.Api
+
+# Run Web
 dotnet run --project Dima.Web
 ```
 
@@ -119,5 +113,5 @@ dotnet run --project Dima.Web
 
 <div align="center">
 
-Desenvolvido com excelência técnica por **[Rafael Jáber]**.
+Crafted with technical excellence by **[Israel Anacleto]**.
 </div>
