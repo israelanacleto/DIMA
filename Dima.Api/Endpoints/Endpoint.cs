@@ -29,6 +29,7 @@ public static class Endpoint
         identity.MapEndpoint<RegisterEndpoint>();
         identity.MapEndpoint<LoginEndpoint>();
         identity.MapEndpoint<GetInfoEndpoint>();
+        
         identity.MapEndpoint<LogoutEndpoint>()
             .RequireAuthorization();
         identity.MapEndpoint<GetRolesEndpoint>()
@@ -110,10 +111,9 @@ public static class Endpoint
 
     }
 
-    private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)
+    private static RouteHandlerBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)
         where TEndpoint : IEndpoint
     {
-        TEndpoint.Map(app);
-        return app;
+        return TEndpoint.Map(app);
     }
 }
