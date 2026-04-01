@@ -6,15 +6,13 @@ namespace Dima.Api.Endpoints.Identity;
 
 public class GetInfoEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
-    {
-        app.MapGet("/manage/info", Handle)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
+        => app.MapGet("/manage/info", Handle)
             .WithName("Identity: Get Info")
             .WithSummary("Gets current user info")
             .WithDescription("Returns information about the currently authenticated user")
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized);
-    }
 
     private static IResult Handle(ClaimsPrincipal user)
     {

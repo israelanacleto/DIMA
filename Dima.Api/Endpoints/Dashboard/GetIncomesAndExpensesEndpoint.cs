@@ -9,9 +9,9 @@ namespace Dima.Api.Endpoints.Dashboard;
 
 public class GetIncomesAndExpensesEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapGet("/incomes-expenses", HandleAsync)
-            .WithName("Dashboard: Buscar Entradas e Saídas")
+            .WithName("Dashboard: Get Incomes and Expenses")
             .WithDescription("Busca as entradas e saídas")
             .WithSummary("Busca as entradas e saídas")
             .WithOrder(3)

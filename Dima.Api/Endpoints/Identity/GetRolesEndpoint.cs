@@ -6,7 +6,7 @@ namespace Dima.Api.Endpoints.Identity;
 
 public class GetRolesEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapGet("/roles", Handle)
             .WithName("v1/identity/roles")
             .Produces(StatusCodes.Status200OK);

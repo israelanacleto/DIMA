@@ -9,7 +9,7 @@ namespace Dima.Api.Endpoints.Orders;
 
 public class GetOrderByNumberEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapGet("/{number}", HandleAsync)
             .WithName("Orders: Get By Number")
             .WithSummary("Recupera um pedido pelo número")

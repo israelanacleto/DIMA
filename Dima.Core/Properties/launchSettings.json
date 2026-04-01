@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Dima.Core": {
+      "commandName": "Project"
+    },
+    "Profile 1": {
+      "commandName": "Executable"
+    }
+  }
+}

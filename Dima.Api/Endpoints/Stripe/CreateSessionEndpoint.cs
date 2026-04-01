@@ -7,7 +7,7 @@ namespace Dima.Api.Endpoints.Stripe;
 
 public abstract class CreateSessionEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapPost("/session", HandleAsync)
             .WithName("Stripe: Criar Sessão")
             .WithSummary("Stripe: Criar sessão para pagamento via stripe")

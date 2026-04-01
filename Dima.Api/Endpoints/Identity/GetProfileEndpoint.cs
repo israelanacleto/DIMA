@@ -7,7 +7,7 @@ namespace Dima.Api.Endpoints.Identity;
 
 public abstract class GetProfileEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapGet("/me", HandleAsync)
             .WithName("v1/identity/me")
             .Produces(StatusCodes.Status200OK);

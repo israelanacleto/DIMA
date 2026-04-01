@@ -8,7 +8,7 @@ namespace Dima.Api.Endpoints.Orders;
 
 public class GetVoucherByNumberEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapGet("/{number}", HandleAsync)
             .WithName("Voucher: Get By Number")
             .WithSummary("Recupera um voucher")

@@ -9,7 +9,7 @@ namespace Dima.Api.Endpoints.Categories;
 
 public class UpdateCategoryEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapPut("/{id}", HandleAsync)
             .WithName("Categories: Update")
             .WithSummary("Atualiza uma categoria")

@@ -9,7 +9,7 @@ namespace Dima.Api.Endpoints.Categories;
 
 public class CreateCategoryEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapPost("/", HandleAsync)
             .WithName("Categories: Create")
             .WithSummary("Cria uma nova categoria")

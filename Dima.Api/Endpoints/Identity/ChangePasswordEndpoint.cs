@@ -8,7 +8,7 @@ namespace Dima.Api.Endpoints.Identity;
 
 public abstract class ChangePasswordEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapPost("/change-password", HandleAsync)
             .WithName("v1/identity/change-password")
             .WithDescription("Alterar a senha do usuário")

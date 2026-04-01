@@ -9,7 +9,7 @@ namespace Dima.Api.Endpoints.Orders;
 
 public class PayOrderEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapPost("/{number}/pay", HandleAsync)
             .WithName("Orders: Pay an order")
             .WithSummary("Marca um pedido como pago")

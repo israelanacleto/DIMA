@@ -11,7 +11,7 @@ namespace Dima.Api.Endpoints.Transactions;
 
 public class GetTransactionsByPeriodEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapGet("/", HandleAsync)
             .WithName("Transactions: Get All")
             .WithSummary("Recupera todas as transações")

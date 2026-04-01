@@ -10,7 +10,7 @@ namespace Dima.Api.Endpoints.Orders;
 
 public class GetAllProductsEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapGet("/", HandleAsync)
             .WithName("Products: Get All")
             .WithSummary("Recupera todos os produtos")

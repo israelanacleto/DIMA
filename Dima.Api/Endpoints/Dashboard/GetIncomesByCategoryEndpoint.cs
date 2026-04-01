@@ -9,9 +9,9 @@ namespace Dima.Api.Endpoints.Dashboard;
 
 public class GetIncomesByCategoryEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapGet("/incomes", HandleAsync)
-            .WithName("Dashboard: Buscar Entradas por Categoria")
+            .WithName("Dashboard: Get Incomes By Category")
             .WithDescription("Busca as entradas por categoria")
             .WithSummary("Busca as entradas por categoria")
             .WithOrder(4)

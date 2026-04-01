@@ -9,7 +9,7 @@ namespace Dima.Api.Endpoints.Transactions;
 
 public class GetTransactionByIdEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapGet("/{id}", HandleAsync)
             .WithName("Transactions: Get By Id")
             .WithSummary("Recupera uma transação")

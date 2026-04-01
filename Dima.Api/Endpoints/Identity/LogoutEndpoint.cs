@@ -6,7 +6,7 @@ namespace Dima.Api.Endpoints.Identity;
 
 public class LogoutEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapPost("/logout", HandleAsync)
             .WithName("v1/identity/logout")
             .Produces(StatusCodes.Status204NoContent);

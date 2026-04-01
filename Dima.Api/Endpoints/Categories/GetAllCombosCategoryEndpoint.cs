@@ -8,9 +8,9 @@ namespace Dima.Api.Endpoints.Categories;
 
 public class GetAllCombosCategoryEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
-    => app.MapGet("/combos", HandleAsync)
-        .WithName("Categories: Get All Combos")
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
+        => app.MapGet("/all", HandleAsync)
+            .WithName("Categories: Get All Combos")
         .WithSummary("Recupera todas as categorias para combo select")
         .WithDescription("Recupera todas as categorias para combo select")
         .WithOrder(5)

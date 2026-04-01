@@ -8,7 +8,7 @@ namespace Dima.Api.Endpoints.Orders;
 
 public class GetProductBySlugEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapGet("/{slug}", HandleAsync)
             .WithName("Products: Get By Id")
             .WithSummary("Recupera um produto")

@@ -22,24 +22,23 @@ public static class Endpoint
             .WithTags("Health Check")
             .MapGet("/", () => new { Message = "Ok" });
         
-        // Identity Public Endpoints
+        // Identity Endpoints
         var identity = endpoints.MapGroup("/v1/identity")
             .WithTags("Identity");
 
         identity.MapEndpoint<RegisterEndpoint>();
         identity.MapEndpoint<LoginEndpoint>();
         identity.MapEndpoint<GetInfoEndpoint>();
-
-        // Identity Protected Endpoints
-        var identityProtected = endpoints.MapGroup("/v1/identity")
-            .WithTags("Identity")
+        identity.MapEndpoint<LogoutEndpoint>()
             .RequireAuthorization();
-
-        identityProtected.MapEndpoint<LogoutEndpoint>();
-        identityProtected.MapEndpoint<GetRolesEndpoint>();
-        identityProtected.MapEndpoint<GetProfileEndpoint>();
-        identityProtected.MapEndpoint<UpdateProfileEndpoint>();
-        identityProtected.MapEndpoint<ChangePasswordEndpoint>();
+        identity.MapEndpoint<GetRolesEndpoint>()
+            .RequireAuthorization();
+        identity.MapEndpoint<GetProfileEndpoint>()
+            .RequireAuthorization();
+        identity.MapEndpoint<UpdateProfileEndpoint>()
+            .RequireAuthorization();
+        identity.MapEndpoint<ChangePasswordEndpoint>()
+            .RequireAuthorization();
 
         endpoints.MapGroup("/v1/categories")
             .WithTags("Categories")
@@ -104,10 +103,9 @@ public static class Endpoint
 
     }
 
-    private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)
+    private static RouteHandlerBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)
         where TEndpoint : IEndpoint
     {
-        TEndpoint.Map(app);
-        return app;
+        return TEndpoint.Map(app);
     }
 }

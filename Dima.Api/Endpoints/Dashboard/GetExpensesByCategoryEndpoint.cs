@@ -9,9 +9,9 @@ namespace Dima.Api.Endpoints.Dashboard;
 
 public class GetExpensesByCategoryEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapGet("/expenses", HandleAsync)
-            .WithName("Dashboard: Buscar Gastos por Categoria")
+            .WithName("Dashboard: Get Expenses By Category")
             .WithDescription("Busca os gastos por categoria")
             .WithSummary("Busca os gastos por categoria")
             .WithOrder(1)

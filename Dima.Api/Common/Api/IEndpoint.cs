@@ -2,5 +2,5 @@ namespace Dima.Api.Common.Api;
 
 public interface IEndpoint
 {
-    static abstract void Map(IEndpointRouteBuilder app);
+    static abstract RouteHandlerBuilder Map(IEndpointRouteBuilder app);
 }

@@ -9,9 +9,9 @@ namespace Dima.Api.Endpoints.Dashboard;
 
 public class GetFinancialSummaryEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapGet("/summary", HandleAsync)
-            .WithName("Dashboard: Buscar Resumo Financeiro")
+            .WithName("Dashboard: Get Financial Summary")
             .WithDescription("Busca o resumo financeiro")
             .WithSummary("Busca o resumo financeiro")
             .WithOrder(2)

@@ -8,15 +8,13 @@ namespace Dima.Api.Endpoints.Identity;
 
 public class RegisterEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
-    {
-        app.MapPost("/register", HandleAsync)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
+        => app.MapPost("/register", HandleAsync)
             .WithName("Identity: Register")
             .WithSummary("Registers a new user")
             .WithDescription("Registers a new user and optionally seeds demo data")
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest);
-    }
 
     private static async Task<IResult> HandleAsync(
         UserManager<User> userManager,

@@ -7,7 +7,7 @@ namespace Dima.Api.Endpoints.Identity;
 
 public class UpdateProfileEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapPut("/me", HandleAsync)
             .WithName("/v1/identity/me")
             .WithDescription("Atualizar o perfil do usuário")

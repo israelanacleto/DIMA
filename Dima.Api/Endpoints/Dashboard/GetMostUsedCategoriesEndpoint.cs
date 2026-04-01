@@ -9,7 +9,7 @@ namespace Dima.Api.Endpoints.Dashboard;
 
 public class GetMostUsedCategoriesEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapGet("/most-used", HandleAsync)
             .WithName("Dashboard: Buscar Categorias Mais Utilizadas")
             .WithDescription("Busca as categorias mais utilizadas no mês")

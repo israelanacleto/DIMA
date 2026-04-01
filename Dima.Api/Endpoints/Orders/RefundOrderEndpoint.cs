@@ -9,7 +9,7 @@ namespace Dima.Api.Endpoints.Orders;
 
 public class RefundOrderEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapPost("/{id}/refund", HandleAsync)
             .WithName("Orders: Refund an order")
             .WithSummary("Estorna um pedido")

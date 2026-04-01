@@ -9,7 +9,7 @@ namespace Dima.Api.Endpoints.Transactions;
 
 public class CreateTransactionEndpoint : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app)
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app)
         => app.MapPost("/", HandleAsync)
             .WithName("Transactions: Create")
             .WithSummary("Cria uma nova transação")
