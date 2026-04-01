@@ -1,3 +1,5 @@
+using Asp.Versioning;
+using Asp.Versioning.Builder;
 using Dima.Api.Common.Api;
 using Dima.Api.Endpoints.Categories;
 using Dima.Api.Endpoints.Dashboard;
@@ -14,16 +16,22 @@ public static class Endpoint
 {
     public static void MapEndpoints(this WebApplication app)
     {
+        var versionSet = app.NewApiVersionSet()
+            .HasApiVersion(new ApiVersion(1, 0))
+            .ReportApiVersions()
+            .Build();
+
         var endpoints = app
-            .MapGroup("")
+            .MapGroup("v{version:apiVersion}")
+            .WithApiVersionSet(versionSet)
             .ProducesProblem(StatusCodes.Status500InternalServerError);
         
-        endpoints.MapGroup("/")
+        app.MapGroup("/")
             .WithTags("Health Check")
             .MapGet("/", () => new { Message = "Ok" });
         
         // Identity Endpoints
-        var identity = endpoints.MapGroup("/v1/identity")
+        var identity = endpoints.MapGroup("identity")
             .WithTags("Identity");
 
         identity.MapEndpoint<RegisterEndpoint>();
@@ -41,7 +49,7 @@ public static class Endpoint
         identity.MapEndpoint<ChangePasswordEndpoint>()
             .RequireAuthorization();
 
-        var categories = endpoints.MapGroup("/v1/categories")
+        var categories = endpoints.MapGroup("categories")
             .WithTags("Categories")
             .RequireAuthorization()
             .WithBadge("v1", BadgePosition.After);
@@ -53,7 +61,7 @@ public static class Endpoint
         categories.MapEndpoint<GetCategoryByIdEndpoint>();
         categories.MapEndpoint<GetAllCategoriesEndpoint>();
         
-        var transactions = endpoints.MapGroup("/v1/transactions")
+        var transactions = endpoints.MapGroup("transactions")
             .WithTags("Transactions")
             .RequireAuthorization()
             .WithBadge("v1", BadgePosition.After);
@@ -64,7 +72,7 @@ public static class Endpoint
         transactions.MapEndpoint<GetTransactionByIdEndpoint>();
         transactions.MapEndpoint<GetTransactionsByPeriodEndpoint>();
         
-        var dashboard = endpoints.MapGroup("/v1/dashboard")
+        var dashboard = endpoints.MapGroup("dashboard")
             .WithTags("Dashboard")
             .RequireAuthorization()
             .WithBadge("v1", BadgePosition.After);
@@ -75,7 +83,7 @@ public static class Endpoint
         dashboard.MapEndpoint<GetIncomesByCategoryEndpoint>();
         dashboard.MapEndpoint<GetMostUsedCategoriesEndpoint>();
         
-        var products = endpoints.MapGroup("/v1/products")
+        var products = endpoints.MapGroup("products")
             .WithTags("Products")
             .RequireAuthorization()
             .WithBadge("v1", BadgePosition.After);
@@ -83,14 +91,14 @@ public static class Endpoint
         products.MapEndpoint<GetAllProductsEndpoint>();
         products.MapEndpoint<GetProductBySlugEndpoint>();
 
-        var vouchers = endpoints.MapGroup("/v1/vouchers")
+        var vouchers = endpoints.MapGroup("vouchers")
             .WithTags("Vouchers")
             .RequireAuthorization()
             .WithBadge("v1", BadgePosition.After);
 
         vouchers.MapEndpoint<GetVoucherByNumberEndpoint>();
         
-        var orders = endpoints.MapGroup("/v1/orders")
+        var orders = endpoints.MapGroup("orders")
             .WithTags("Orders")
             .RequireAuthorization()
             .WithBadge("v1", BadgePosition.After);
@@ -102,7 +110,7 @@ public static class Endpoint
         orders.MapEndpoint<PayOrderEndpoint>();
         orders.MapEndpoint<RefundOrderEndpoint>();
 
-        var payments = endpoints.MapGroup("/v1/payments/stripe")
+        var payments = endpoints.MapGroup("payments/stripe")
             .WithTags("Payments - Stripe")
             .RequireAuthorization()
             .WithBadge("v1", BadgePosition.After);

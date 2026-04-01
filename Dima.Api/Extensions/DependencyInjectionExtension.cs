@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Dima.Api.Common.Api;
 using Dima.Api.Data;
 using Dima.Api.Handlers;
@@ -15,9 +16,28 @@ public static class DependencyInjectionExtension
         AddDbContext(services, configuration);
         AddIdentity(services);
         AddHandlers(services);
+        AddVersioning(services);
 
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
+    }
+
+    private static void AddVersioning(IServiceCollection services)
+    {
+        services.AddApiVersioning(options =>
+        {
+            options.DefaultApiVersion = new ApiVersion(1, 0);
+            options.ReportApiVersions = true;
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.ApiVersionReader = ApiVersionReader.Combine(
+                new UrlSegmentApiVersionReader(),
+                new HeaderApiVersionReader("api-version")
+            );
+        }).AddApiExplorer(options =>
+        {
+            options.GroupNameFormat = "'v'VVV";
+            options.SubstituteApiVersionInUrl = true;
+        });
     }
     
     private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
