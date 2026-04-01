@@ -69,8 +69,8 @@ public static class AppExtension
             var transactions = new List<Transaction>
             {
                 new() { Title = "Salário Mensal", Amount = 5000, Type = ETransactionType.Deposit, CategoryId = salaryCat.Id, PaidOrReceivedAt = DateTime.Now.AddDays(-5), UserId = demoUser },
-                new() { Title = "Pagamento Aluguel", Amount = 1200, Type = ETransactionType.Withdraw, CategoryId = rentCat.Id, PaidOrReceivedAt = DateTime.Now.AddDays(-3), UserId = demoUser },
-                new() { Title = "Jantar", Amount = 150, Type = ETransactionType.Withdraw, CategoryId = foodCat.Id, PaidOrReceivedAt = DateTime.Now.AddDays(-1), UserId = demoUser }
+                new() { Title = "Pagamento Aluguel", Amount = 1200, Type = ETransactionType.Withdrawal, CategoryId = rentCat.Id, PaidOrReceivedAt = DateTime.Now.AddDays(-3), UserId = demoUser },
+                new() { Title = "Jantar", Amount = 150, Type = ETransactionType.Withdrawal, CategoryId = foodCat.Id, PaidOrReceivedAt = DateTime.Now.AddDays(-1), UserId = demoUser }
             };
 
             context.Transactions.AddRange(transactions);
