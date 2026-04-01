@@ -57,6 +57,7 @@ public static class DependencyInjectionExtension
 
     private static void AddHandlers(IServiceCollection services)
     {
+        services.AddTransient<IAuditHandler, AuditHandler>();
         services.AddTransient<ICategoryHandler, CategoryHandler>();
         services.AddTransient<ITransactionHandler, TransactionalHandler>();
         services.AddTransient<IVoucherHandler, VoucherHandler>();

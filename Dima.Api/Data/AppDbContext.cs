@@ -23,6 +23,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<Product> Products { get; set; } = null!;
     public DbSet<Voucher> Vouchers { get; set; } = null!;
     public DbSet<Order> Orders { get; set; } = null!;
+    public DbSet<AuditLog> AuditLogs { get; set; } = null!;
 
 
     public DbSet<IncomesAndExpenses> IncomesAndExpenses { get; set; } = null!;

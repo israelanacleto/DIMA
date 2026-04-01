@@ -11,7 +11,8 @@ namespace Dima.Api.Handlers;
 
 public class OrderHandler(
     AppDbContext context,
-    IStripeHandler stripeHandler): IOrderHandler
+    IStripeHandler stripeHandler,
+    IAuditHandler auditHandler): IOrderHandler
 {
     public async Task<Response<Order?>> CancelAsync(CancelOrderRequest request)
     {
@@ -59,6 +60,7 @@ public class OrderHandler(
         {
             context.Orders.Update(order);
             await context.SaveChangesAsync();
+            await auditHandler.LogAsync(order.UserId, "Cancel", "Order", order.Id.ToString(), $"Order {order.Number} canceled.");
         }
         catch
         {
@@ -128,6 +130,7 @@ public class OrderHandler(
         {
             await context.Orders.AddAsync(order);
             await context.SaveChangesAsync();
+            await auditHandler.LogAsync(order.UserId, "Create", "Order", order.Id.ToString(), $"Order created for product {product.Title}.");
         }
         catch
         {
@@ -212,6 +215,7 @@ public class OrderHandler(
         {
             context.Orders.Update(order);
             await context.SaveChangesAsync();
+            await auditHandler.LogAsync(order.UserId, "Pay", "Order", order.Id.ToString(), $"Order {order.Number} paid. External Ref: {order.ExternalReference}");
         }
         catch
         {
@@ -266,6 +270,7 @@ public class OrderHandler(
         {
             context.Orders.Update(order);
             await context.SaveChangesAsync();
+            await auditHandler.LogAsync(order.UserId, "Refund", "Order", order.Id.ToString(), $"Order {order.Number} refunded.");
         }
         catch
         {
