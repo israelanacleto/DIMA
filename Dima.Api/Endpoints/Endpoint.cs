@@ -40,72 +40,80 @@ public static class Endpoint
         identity.MapEndpoint<ChangePasswordEndpoint>()
             .RequireAuthorization();
 
-        endpoints.MapGroup("/v1/categories")
+        var categories = endpoints.MapGroup("/v1/categories")
             .WithTags("Categories")
             .RequireAuthorization()
-            .WithBadge("v1", BadgePosition.After)
-            .MapEndpoint<GetAllCombosCategoryEndpoint>()
-            .MapEndpoint<CreateCategoryEndpoint>()
-            .MapEndpoint<UpdateCategoryEndpoint>()
-            .MapEndpoint<DeleteCategoryEndpoint>()
-            .MapEndpoint<GetCategoryByIdEndpoint>()
-            .MapEndpoint<GetAllCategoriesEndpoint>();
+            .WithBadge("v1", BadgePosition.After);
+
+        categories.MapEndpoint<GetAllCombosCategoryEndpoint>();
+        categories.MapEndpoint<CreateCategoryEndpoint>();
+        categories.MapEndpoint<UpdateCategoryEndpoint>();
+        categories.MapEndpoint<DeleteCategoryEndpoint>();
+        categories.MapEndpoint<GetCategoryByIdEndpoint>();
+        categories.MapEndpoint<GetAllCategoriesEndpoint>();
         
-        endpoints.MapGroup("/v1/transactions")
+        var transactions = endpoints.MapGroup("/v1/transactions")
             .WithTags("Transactions")
             .RequireAuthorization()
-            .WithBadge("v1", BadgePosition.After)
-            .MapEndpoint<CreateTransactionEndpoint>()
-            .MapEndpoint<UpdateTransactionEndpoint>()
-            .MapEndpoint<DeleteTransactionEndpoint>()
-            .MapEndpoint<GetTransactionByIdEndpoint>()
-            .MapEndpoint<GetTransactionsByPeriodEndpoint>();
+            .WithBadge("v1", BadgePosition.After);
+
+        transactions.MapEndpoint<CreateTransactionEndpoint>();
+        transactions.MapEndpoint<UpdateTransactionEndpoint>();
+        transactions.MapEndpoint<DeleteTransactionEndpoint>();
+        transactions.MapEndpoint<GetTransactionByIdEndpoint>();
+        transactions.MapEndpoint<GetTransactionsByPeriodEndpoint>();
         
-        endpoints.MapGroup("/v1/dashboard")
+        var dashboard = endpoints.MapGroup("/v1/dashboard")
             .WithTags("Dashboard")
             .RequireAuthorization()
-            .WithBadge("v1", BadgePosition.After)
-            .MapEndpoint<GetExpensesByCategoryEndpoint>()
-            .MapEndpoint<GetFinancialSummaryEndpoint>()
-            .MapEndpoint<GetIncomesAndExpensesEndpoint>()
-            .MapEndpoint<GetIncomesByCategoryEndpoint>()
-            .MapEndpoint<GetMostUsedCategoriesEndpoint>();
+            .WithBadge("v1", BadgePosition.After);
+
+        dashboard.MapEndpoint<GetExpensesByCategoryEndpoint>();
+        dashboard.MapEndpoint<GetFinancialSummaryEndpoint>();
+        dashboard.MapEndpoint<GetIncomesAndExpensesEndpoint>();
+        dashboard.MapEndpoint<GetIncomesByCategoryEndpoint>();
+        dashboard.MapEndpoint<GetMostUsedCategoriesEndpoint>();
         
-        endpoints.MapGroup("/v1/products")
+        var products = endpoints.MapGroup("/v1/products")
             .WithTags("Products")
             .RequireAuthorization()
-            .WithBadge("v1", BadgePosition.After)
-            .MapEndpoint<GetAllProductsEndpoint>()
-            .MapEndpoint<GetProductBySlugEndpoint>();
+            .WithBadge("v1", BadgePosition.After);
 
-        endpoints.MapGroup("/v1/vouchers")
+        products.MapEndpoint<GetAllProductsEndpoint>();
+        products.MapEndpoint<GetProductBySlugEndpoint>();
+
+        var vouchers = endpoints.MapGroup("/v1/vouchers")
             .WithTags("Vouchers")
             .RequireAuthorization()
-            .WithBadge("v1", BadgePosition.After)
-            .MapEndpoint<GetVoucherByNumberEndpoint>();
+            .WithBadge("v1", BadgePosition.After);
+
+        vouchers.MapEndpoint<GetVoucherByNumberEndpoint>();
         
-        endpoints.MapGroup("/v1/orders")
+        var orders = endpoints.MapGroup("/v1/orders")
             .WithTags("Orders")
             .RequireAuthorization()
-            .WithBadge("v1", BadgePosition.After)
-            .MapEndpoint<GetAllOrdersEndpoint>()
-            .MapEndpoint<GetOrderByNumberEndpoint>()
-            .MapEndpoint<CreateOrderEndpoint>()
-            .MapEndpoint<CancelOrderEndpoint>()
-            .MapEndpoint<PayOrderEndpoint>()
-            .MapEndpoint<RefundOrderEndpoint>();
+            .WithBadge("v1", BadgePosition.After);
 
-        endpoints.MapGroup("/v1/payments/stripe")
+        orders.MapEndpoint<GetAllOrdersEndpoint>();
+        orders.MapEndpoint<GetOrderByNumberEndpoint>();
+        orders.MapEndpoint<CreateOrderEndpoint>();
+        orders.MapEndpoint<CancelOrderEndpoint>();
+        orders.MapEndpoint<PayOrderEndpoint>();
+        orders.MapEndpoint<RefundOrderEndpoint>();
+
+        var payments = endpoints.MapGroup("/v1/payments/stripe")
             .WithTags("Payments - Stripe")
             .RequireAuthorization()
-            .WithBadge("v1", BadgePosition.After)
-            .MapEndpoint<CreateSessionEndpoint>();
+            .WithBadge("v1", BadgePosition.After);
+
+        payments.MapEndpoint<CreateSessionEndpoint>();
 
     }
 
-    private static RouteHandlerBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)
+    private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)
         where TEndpoint : IEndpoint
     {
-        return TEndpoint.Map(app);
+        TEndpoint.Map(app);
+        return app;
     }
 }
