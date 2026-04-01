@@ -28,6 +28,10 @@ public static class Endpoint
 
         endpoints.MapGroup("/v1/identity")
             .WithTags("Identity")
+            .MapEndpoint<RegisterEndpoint>();
+
+        endpoints.MapGroup("/v1/identity")
+            .WithTags("Identity")
             .RequireAuthorization()
             .MapEndpoint<LogoutEndpoint>()
             .MapEndpoint<GetRolesEndpoint>()

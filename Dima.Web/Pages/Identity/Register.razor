@@ -43,6 +43,12 @@
             AdornmentIcon="@Icons.Material.Filled.Lock"
             AdornmentColor="Color.Primary"
             Class="mt-2"/>
+
+        <MudCheckBox 
+            @bind-Value="InputModel.GenerateDemoData" 
+            Label="Gerar dados de demonstração (Categorias e Transações)" 
+            Color="Color.Primary" 
+            Class="mt-2" />
         
         <div class="d-flex flex-column mt-8 gap-3">
             @if (IsBusy)
