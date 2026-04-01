@@ -1,3 +1,4 @@
+using Dima.Api.Common.Api;
 using Dima.Api.Data;
 using Dima.Api.Handlers;
 using Dima.Api.Models;
@@ -9,11 +10,14 @@ namespace Dima.Api.Extensions;
 
 public static class DependencyInjectionExtension
 {
-    public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static void AddApiInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         AddDbContext(services, configuration);
         AddIdentity(services);
-        AddServices(services);
+        AddHandlers(services);
+
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddProblemDetails();
     }
     
     private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
@@ -44,9 +48,15 @@ public static class DependencyInjectionExtension
             .AddApiEndpoints();
     }
 
-    private static void AddServices(IServiceCollection services)
+    private static void AddHandlers(IServiceCollection services)
     {
         services.AddTransient<ICategoryHandler, CategoryHandler>();
         services.AddTransient<ITransactionHandler, TransactionalHandler>();
+        services.AddTransient<IVoucherHandler, VoucherHandler>();
+        services.AddTransient<IProductHandler, ProductHandler>();
+        services.AddTransient<IOrderHandler, OrderHandler>();
+        services.AddTransient<IProfileHandler, ProfileHandler>();
+        services.AddTransient<IStripeHandler, StripeHandler>();
+        services.AddTransient<IDashboardHandler, DashboardHandler>();
     }
 }

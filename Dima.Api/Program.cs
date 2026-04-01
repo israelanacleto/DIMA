@@ -16,6 +16,7 @@ builder.AddDocs();
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
 app.UseCors(ApiConfiguration.CorsPolicyName);
 app.UseSecurity();
 
