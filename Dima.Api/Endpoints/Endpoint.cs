@@ -28,7 +28,6 @@ public static class Endpoint
 
         identity.MapEndpoint<RegisterEndpoint>();
         identity.MapEndpoint<LoginEndpoint>();
-        identity.MapIdentityApi<User>();
 
         // Identity Protected Endpoints
         var identityProtected = endpoints.MapGroup("/v1/identity")
@@ -40,6 +39,7 @@ public static class Endpoint
         identityProtected.MapEndpoint<GetProfileEndpoint>();
         identityProtected.MapEndpoint<UpdateProfileEndpoint>();
         identityProtected.MapEndpoint<ChangePasswordEndpoint>();
+        identityProtected.MapEndpoint<GetInfoEndpoint>();
 
         endpoints.MapGroup("/v1/categories")
             .WithTags("Categories")
