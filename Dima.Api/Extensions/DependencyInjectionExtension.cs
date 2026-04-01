@@ -30,7 +30,15 @@ public static class DependencyInjectionExtension
     private static void AddIdentity(IServiceCollection services)
     {
         services
-            .AddIdentityCore<User>()
+            .AddIdentityCore<User>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+                options.User.RequireUniqueEmail = true;
+            })
             .AddRoles<IdentityRole<long>>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddApiEndpoints();

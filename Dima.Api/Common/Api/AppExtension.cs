@@ -1,6 +1,7 @@
 using Dima.Api.Data;
 using Dima.Api.Models;
 using Dima.Core.Enums;
+using Dima.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dima.Api.Common.Api;
@@ -14,66 +15,66 @@ public static class AppExtension
 
         try
         {
-            // 1. Ensure Database and Views
-            context.Database.EnsureCreated();
-            CreateViews(context);
+            // 1. Automatically Apply Migrations (including Views)
+            context.Database.Migrate();
             
-            // 2. Seed Data if empty
+            // 2. Seed Demo Data if empty
             SeedInitialData(context);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error during initialization: {ex.Message}");
         }
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.AddScalarConfig();
+        }
     }
 
-    private static void CreateViews(AppDbContext context)
+    public static void UseSecurity(this WebApplication app)
     {
-        var views = new[]
-        {
-            @"CREATE OR ALTER VIEW [vwGetExpensesByCategory] AS
-                SELECT [Transaction].[UserId], [Category].[Title] AS [Category], YEAR([Transaction].[PaidOrReceivedAt]) AS [Year], SUM([Transaction].[Amount]) AS [Expenses]
-                FROM [Transaction] INNER JOIN [Category] ON [Transaction].[CategoryId] = [Category].[Id]
-                WHERE [Transaction].PaidOrReceivedAt >= DATEADD(MONTH, -12, CAST(GETDATE() AS DATE)) AND [Transaction].[Type] = 2
-                GROUP BY [Transaction].[UserId], [Category].[Title], YEAR([Transaction].[PaidOrReceivedAt])",
-
-            @"CREATE OR ALTER VIEW [vwGetIncomesAndExpenses] AS
-                SELECT [Transaction].[UserId], MONTH([Transaction].[PaidOrReceivedAt]) AS [Month], YEAR([Transaction].[PaidOrReceivedAt]) AS [Year],
-                SUM(CASE WHEN [Transaction].[Type] = 1 THEN [Transaction].[Amount] ELSE 0 END) AS [Incomes],
-                SUM(CASE WHEN [Transaction].[Type] = 2 THEN [Transaction].[Amount] ELSE 0 END) AS [Expenses]
-                FROM [Transaction]
-                WHERE [Transaction].[PaidOrReceivedAt] >= DATEADD(MONTH, -11, CAST(GETDATE() AS DATE))
-                GROUP BY [Transaction].[UserId], MONTH([Transaction].[PaidOrReceivedAt]), YEAR([Transaction].[PaidOrReceivedAt])",
-
-            @"CREATE OR ALTER VIEW [vwGetIncomesByCategory] AS
-                SELECT [Transaction].[UserId], [Category].[Title] AS [Category], YEAR([Transaction].[PaidOrReceivedAt]) AS [Year], SUM([Transaction].[Amount]) AS [Incomes]
-                FROM [Transaction] INNER JOIN [Category] ON [Transaction].[CategoryId] = [Category].[Id]
-                WHERE [Transaction].[PaidOrReceivedAt] >= DATEADD(MONTH, -11, CAST(GETDATE() AS DATE)) AND [Transaction].[Type] = 1
-                GROUP BY [Transaction].[UserId], [Category].[Title], YEAR([Transaction].[PaidOrReceivedAt])"
-        };
-
-        foreach (var view in views)
-        {
-            context.Database.ExecuteSqlRaw(view);
-        }
+        app.UseAuthentication();
+        app.UseAuthorization();
     }
 
     private static void SeedInitialData(AppDbContext context)
     {
-        // We look for any user to seed some demo data if the DB is empty
         if (context.Categories.Any()) return;
 
-        // Note: Seed usually needs a UserId. For demo, we can skip or wait for first login.
-        // But let's create global categories at least.
+        // Note: For a true "Senior" portfolio, you might want to link this 
+        // to the first registered user. For now, we seed global demo categories.
+        var demoUser = "demo@dima.com";
+        
         var categories = new List<Category>
         {
-            new() { Title = "Salário", Description = "Renda principal", UserId = "demo@dima.com" },
-            new() { Title = "Aluguel", Description = "Moradia", UserId = "demo@dima.com" },
-            new() { Title = "Alimentação", Description = "Supermercado e Restaurantes", UserId = "demo@dima.com" },
-            new() { Title = "Lazer", Description = "Cinema, Viagens, etc", UserId = "demo@dima.com" }
+            new() { Title = "Salário", Description = "Renda principal", UserId = demoUser },
+            new() { Title = "Investimentos", Description = "Dividendos e Juros", UserId = demoUser },
+            new() { Title = "Aluguel", Description = "Moradia", UserId = demoUser },
+            new() { Title = "Alimentação", Description = "Supermercado e Restaurantes", UserId = demoUser },
+            new() { Title = "Lazer", Description = "Cinema, Viagens, etc", UserId = demoUser },
+            new() { Title = "Saúde", Description = "Farmácia e Convênio", UserId = demoUser }
         };
 
         context.Categories.AddRange(categories);
         context.SaveChanges();
+
+        // Let's add some dummy transactions to make the dashboard alive immediately
+        if (!context.Transactions.Any())
+        {
+            var salaryCat = categories[0];
+            var rentCat = categories[2];
+            var foodCat = categories[3];
+
+            var transactions = new List<Transaction>
+            {
+                new() { Title = "Salário Mensal", Amount = 5000, Type = ETransactionType.Deposit, CategoryId = salaryCat.Id, PaidOrReceivedAt = DateTime.Now.AddDays(-5), UserId = demoUser },
+                new() { Title = "Pagamento Aluguel", Amount = 1200, Type = ETransactionType.Withdraw, CategoryId = rentCat.Id, PaidOrReceivedAt = DateTime.Now.AddDays(-3), UserId = demoUser },
+                new() { Title = "Jantar", Amount = 150, Type = ETransactionType.Withdraw, CategoryId = foodCat.Id, PaidOrReceivedAt = DateTime.Now.AddDays(-1), UserId = demoUser }
+            };
+
+            context.Transactions.AddRange(transactions);
+            context.SaveChanges();
+        }
     }
 }
