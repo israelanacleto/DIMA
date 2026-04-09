@@ -1,29 +1,65 @@
-# Introdução
+# DIMA — Gestão Financeira Pessoal
 
-Olá e seja bem-vindo(a) ao curso Fullstack .NET do balta.io, eu sou André Baltieri, ou balta, 11x Microsoft MVP e vou te guiar por este curso.
+DIMA é uma aplicação fullstack de gestão financeira pessoal construída com **.NET 8**, **ASP.NET Core** e **Blazor WebAssembly**.
 
-## O problema
+## Funcionalidades
 
-Criar aplicações completas é sempre um desafio, e precisamos do conhecimento de ponta-a-ponta para entregar uma solução que realmente agrega valor.
+- **Transações**: registro de depósitos e retiradas com categoria, valor e data
+- **Categorias**: organização das transações por categoria personalizada
+- **Pedidos / Pagamentos**: gestão de pedidos com integração ao **Stripe**
+- **Relatórios financeiros**:
+  - Resumo financeiro
+  - Receitas vs. despesas
+  - Despesas por categoria
+  - Receitas por categoria
 
-Mesmo que você não vá atuar com Frontend ou Backend, conhecer os dois é essencial. No fim, o Backend trabalha para o Frontend e vice-versa.
+## Tecnologias
 
-## O que vamos aprender?
+| Camada | Tecnologias |
+|--------|-------------|
+| Backend (API) | ASP.NET Core 8, Entity Framework Core 8, SQL Server, ASP.NET Core Identity, Stripe.net, Swagger |
+| Frontend | Blazor WebAssembly 8, MudBlazor |
+| Compartilhado | .NET 8 Class Library (modelos, handlers, requests/responses) |
 
-Neste curso vamos criar uma aplicação completa e do zero, passo-a-passo, desde a idealização, implementação da API e criação do Fronend.
+## Estrutura do projeto
 
-Vamos passar por desafios como organização e arquitetura, ORM vs SQL, padronização de APIs e organização (Layouts e Componentes) no Frontend.
+```
+src/
+├── Dima.Api      # API REST (ASP.NET Core)
+├── Dima.Core     # Biblioteca compartilhada (modelos, enums, contratos)
+└── Dima.Web      # Frontend Blazor WebAssembly
+```
 
-Durante esta jornada com mais de 160 aulas, você vai codificar comigo uma aplicação realmente completa.
+## Pré-requisitos
 
-## Para quem é este curso?
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- SQL Server (local ou remoto)
+- Conta no [Stripe](https://stripe.com) (para funcionalidades de pagamento)
 
-Este curso se destina a pessoas que já tenham conhecimentos sólidos em ASP.NET, .NET e C#, que estejam seguindo nossa carreira .NET ou que possuam conhecimentos equivalentes.
+## Como executar
 
-Caso você esteja começando com .NET, é só seguir nossas carreiras que chegará neste conteúdo! Fica tranquilo!
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/israelanacleto/DIMA.git
+   cd DIMA
+   ```
 
-## Suporte e versões
+2. Configure a string de conexão e a chave da API do Stripe em `src/Dima.Api/appsettings.json` (ou via `user-secrets`).
 
-Este curso utiliza a versão 8 do .NET e 12 do C# (Últimas versões até a gravação deste conteúdo).
+3. Aplique as migrations do banco de dados:
+   ```bash
+   cd src/Dima.Api
+   dotnet ef database update
+   ```
 
-Além disso, os conceitos apresentados aqui são atemporais e podem até mesmo serem utilizados em outras tecnologias.
+4. Inicie a API:
+   ```bash
+   dotnet run --project src/Dima.Api
+   ```
+
+5. Em outro terminal, inicie o frontend:
+   ```bash
+   dotnet run --project src/Dima.Web
+   ```
+
+6. Acesse `https://localhost:5001` no navegador.
