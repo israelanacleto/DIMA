@@ -88,7 +88,9 @@
                                    Label="Categoria"
                                    Variant="Variant.Outlined"
                                    @bind-Value="InputModel.CategoryId"
+                                   AnchorOrigin="Origin.BottomCenter"
                                    Margin="Margin.Dense">
+                            <MudSelectItem T="long" Value="0">Selecione uma categoria</MudSelectItem>
                             @foreach (var item in CategoriesCombo)
                             {
                                 <MudSelectItem T="long" Value="@long.Parse(item.Value)">
@@ -96,6 +98,12 @@
                                 </MudSelectItem>
                             }
                         </MudSelect>
+                        @if (!CategoriesCombo.Any() && !IsBusy)
+                        {
+                            <MudText Typo="Typo.caption" Color="Color.Error" Class="ml-1">
+                                Nenhuma categoria cadastrada. <MudLink Href="/categorias/adicionar" Underline="Underline.Always">Criar agora</MudLink>
+                            </MudText>
+                        }
                     </MudItem>
                 </MudGrid>
             </div>

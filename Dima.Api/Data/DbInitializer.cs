@@ -15,35 +15,47 @@ public static class DbInitializer
 
     private static async Task SeedProductsAsync(AppDbContext context)
     {
-        if (await context.Products.AnyAsync())
-            return;
-
-        var products = new List<Product>
+        try
         {
-            new()
+            if (await context.Products.AnyAsync())
             {
-                Title = "Dima Lite",
-                Description = "Ideal para quem está começando a organizar as finanças.",
-                Slug = "dima-lite",
-                IsActive = true,
-                Price = 0,
-                SubscriptionDurationInDays = 365,
-                Benefits = new List<string> { "Até 50 lançamentos mensais", "Gráficos básicos", "Suporte via e-mail" }
-            },
-            new()
-            {
-                Title = "Dima Premium Elite",
-                Description = "A experiência completa para quem busca liberdade financeira.",
-                Slug = "dima-premium-elite",
-                IsActive = true,
-                Price = 29.90m,
-                SubscriptionDurationInDays = 30,
-                Benefits = new List<string> { "Lançamentos ilimitados", "Dashboards avançados", "Suporte prioritário", "Exportação de dados" }
+                Console.WriteLine("Products already exist. Skipping seed.");
+                return;
             }
-        };
 
-        await context.Products.AddRangeAsync(products);
-        await context.SaveChangesAsync();
+            Console.WriteLine("Seeding products...");
+            var products = new List<Product>
+            {
+                new()
+                {
+                    Title = "Dima Lite",
+                    Description = "Ideal para quem está começando a organizar as finanças.",
+                    Slug = "dima-lite",
+                    IsActive = true,
+                    Price = 0,
+                    SubscriptionDurationInDays = 365,
+                    Benefits = new List<string> { "Até 50 lançamentos mensais", "Gráficos básicos", "Suporte via e-mail" }
+                },
+                new()
+                {
+                    Title = "Dima Premium Elite",
+                    Description = "A experiência completa para quem busca liberdade financeira.",
+                    Slug = "dima-premium-elite",
+                    IsActive = true,
+                    Price = 29.90m,
+                    SubscriptionDurationInDays = 30,
+                    Benefits = new List<string> { "Lançamentos ilimitados", "Dashboards avançados", "Suporte prioritário", "Exportação de dados" }
+                }
+            };
+
+            await context.Products.AddRangeAsync(products);
+            await context.SaveChangesAsync();
+            Console.WriteLine("Products seeded successfully.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to seed products: {ex.Message}");
+        }
     }
 
     public static async Task SeedDemoDataAsync(AppDbContext context, string userId)

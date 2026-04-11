@@ -48,12 +48,13 @@ public partial class CreateTransactionPage : ComponentBase
             if (result.IsSuccess)
             {
                 CategoriesCombo = result.Data ?? [];
-                InputModel.CategoryId = long.Parse(CategoriesCombo.FirstOrDefault()?.Value ?? "0");
+                // Do not auto-select the first item if we want the user to choose
+                InputModel.CategoryId = 0; 
             }
         }
         catch (Exception ex)
         {
-            Snackbar.Add(ex.Message, Severity.Error);
+            Snackbar.Add("Não foi possível carregar as categorias. Verifique sua conexão.", Severity.Error);
         }
         finally
         {
