@@ -358,3 +358,7 @@ __pycache__/
 
 # Database
 /mssql-data
+
+# Claude Cache
+.claude/
+.claude/**
