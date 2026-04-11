@@ -11,6 +11,7 @@ COPY ["Dima.sln", "./"]
 COPY ["Dima.Api/Dima.Api.csproj", "Dima.Api/"]
 COPY ["Dima.Web/Dima.Web.csproj", "Dima.Web/"]
 COPY ["Dima.Core/Dima.Core.csproj", "Dima.Core/"]
+COPY ["Dima.Tests/Dima.Tests.csproj", "Dima.Tests/"]
 RUN dotnet restore
 
 # Copia o restante dos arquivos
