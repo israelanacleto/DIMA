@@ -1,60 +1,28 @@
-# 💰 Dima - Seu Controle Financeiro Inteligente
+# Dima.Web — Frontend Blazor WASM
 
-![Dima Logo](wwwroot/img/logo.png)
+Projeto frontend da plataforma DIMA. SPA em Blazor WebAssembly com design system corporativo Navy & Cyan.
 
-O **Dima** é uma aplicação fintech moderna desenvolvida para proporcionar um controle financeiro pessoal sólido, intuitivo e visualmente impactante. O projeto foi concebido com foco em **sobriedade**, **estabilidade** e uma **experiência de usuário premium**.
+## Design System
 
----
+- **Paleta**: Navy `#0F2D5E` (primária) + Cyan `#00B4D8` (destaque) + `#0A1628` (drawer/dark bg)
+- **Tipografia**: Inter (400/500/600/700) para interface + JetBrains Mono para valores numéricos
+- **Tema**: configurado em `Configuration.cs` via `MudTheme` (PaletteLight + PaletteDark)
+- **CSS**: tokens globais em `wwwroot/css/app.css` + estilos da landing em `wwwroot/css/landing.css`
 
-## 🌟 Destaques do Projeto (Sober Fintech Elite)
+## Estrutura de Layouts
 
-Recentemente, a aplicação passou por um **Redesign Completo**, elevando o padrão visual de uma ferramenta simples para uma plataforma de nível institucional.
+| Layout | Rota | Uso |
+| :--- | :--- | :--- |
+| `LandingLayout` | `/` | Homepage pública sem autenticação |
+| `HeadlessLayout` | `/login`, `/register`, `/logout` | Tela dividida 50/50 — painel Navy + formulário |
+| `MainLayout` | Demais rotas autenticadas | AppBar Navy + drawer lateral + conteúdo |
 
-- **Identidade Visual**: Transição para uma paleta "Navy & Emerald", que remete à confiança bancária e crescimento financeiro.
-- **Layout Dashboard**: Implementação de um dashboard moderno com navegação responsiva e menus estruturados.
-- **Fluxo de Identidade**: Páginas de Login, Registro e Logout totalmente redesenhadas com foco em design centrado no usuário.
-- **Modo Dark Premium**: Um modo escuro meticulosamente ajustado para reduzir a fadiga visual e manter a elegância.
+## Logos
 
----
+Logos em SVG vetorial — sem dependência de raster:
 
-## 🛠️ Stack Tecnológica
-
-![.NET](https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
-![Blazor](https://img.shields.io/badge/Blazor-512BD4?style=for-the-badge&logo=blazor&logoColor=white)
-![MudBlazor](https://img.shields.io/badge/MudBlazor-5942C1?style=for-the-badge&logo=mudblazor&logoColor=white)
-![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
-
----
-
-## 🚀 Principais Funcionalidades
-
-- [x] **Dashboard Financeiro**: Visão clara e objetiva do seu patrimônio e fluxo de caixa.
-- [x] **Gestão de Lançamentos**: Registro de entradas e saídas de forma simplificada.
-- [x] **Categorização Inteligente**: Organize seus gastos por categorias customizáveis.
-- [x] **Relatórios Avançados**: Gráficos e tabelas para análise detalhada do seu dinheiro.
-- [x] **Segurança & Privacidade**: Fluxo de autenticação robusto e interface protegida.
-- [x] **Totalmente Responsivo**: Acesse seu controle financeiro de qualquer dispositivo.
-
----
-
-## 🎨 Design System
-
-O projeto utiliza o **MudBlazor** como base, com customizações profundas no `Configuration.cs` para atingir a estética "Sober Fintech Elite":
-
-- **Cores**: Deep Navy para autoridade, Emerald para crescimento, e Slate para neutralidade profissional.
-- **Tipografia**: Uso de fontes equilibradas que prezam pela legibilidade em dados numéricos.
-- **Componentes**: Cards com elevação suave, inputs outline e switches dinâmicos.
-
----
-
-## 👨‍💻 Portfólio & Aprendizado
-
-Este projeto faz parte do meu desenvolvimento contínuo como desenvolvedor .NET Full Stack, demonstrando competências em:
-- Arquitetura de aplicações WebAssembly.
-- Integração de temas complexos e Design Systems.
-- UI/UX focado em aplicações corporativas/fintech.
-- Desenvolvimento de fluxos de autenticação seguros em Blazor.
-
----
-
-*Desenvolvido com foco no domínio das finanças pessoais e excelência técnica.*
+| Arquivo | Uso |
+| :--- | :--- |
+| `wwwroot/img/logo_dark.svg` | Wordmark para fundos escuros/Navy (texto branco + Cyan) |
+| `wwwroot/img/logo_light.svg` | Wordmark para fundos claros (texto Navy + Cyan) |
+| `wwwroot/img/icon.svg` | Badge compacto para favicon e tamanhos pequenos |
