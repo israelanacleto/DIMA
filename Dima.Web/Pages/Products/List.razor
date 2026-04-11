@@ -1,141 +1,257 @@
 @page "/plans"
 @inherits ListProductsPage
 
-<div class="d-flex flex-column align-center mb-10 animate-fade-in">
-    <MudText Typo="Typo.h3" Style="font-weight: 800; background: linear-gradient(90deg, var(--mud-palette-primary) 0%, var(--mud-palette-secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-        Escolha seu Plano
-    </MudText>
-    <MudText Typo="Typo.body1" Color="Color.Secondary" Align="Align.Center" Class="mt-2" Style="max-width: 600px;">
-        Tenha controle total de suas finanças com recursos avançados desenhados para facilitar sua vida.
-    </MudText>
+<div class="d-flex flex-column gap-6 animate-fade-in">
+
+    @* Header *@
+    <div class="text-center" style="margin-bottom: 1rem;">
+        <span class="text-label" style="color: var(--dima-cyan, #00B4D8);">Planos & Assinaturas</span>
+        <MudText Typo="Typo.h3" Style="font-weight: 700; letter-spacing: -0.02em; margin-top: 0.5rem;">
+            Escolha seu plano
+        </MudText>
+        <MudText Typo="Typo.body1" Color="Color.Secondary" Style="max-width: 520px; margin: 0.75rem auto 0;">
+            Tenha controle total de suas finanças com recursos avançados desenhados para facilitar sua vida.
+        </MudText>
+    </div>
+
+    @if (IsBusy)
+    {
+        <MudGrid Justify="Justify.Center" Spacing="4">
+            @for (var i = 0; i < 2; i++)
+            {
+                <MudItem xs="12" sm="6" md="5">
+                    <MudPaper Elevation="0" Class="plan-card">
+                        <div class="skeleton" style="height: 28px; width: 40%;"></div>
+                        <div class="skeleton" style="height: 48px; width: 60%; margin: 1rem 0;"></div>
+                        <div class="skeleton" style="height: 14px; width: 80%;"></div>
+                        <div class="skeleton" style="height: 14px; width: 70%; margin-top: 0.5rem;"></div>
+                        <div class="skeleton" style="height: 14px; width: 75%; margin-top: 0.5rem;"></div>
+                        <div class="skeleton" style="height: 48px; width: 100%; margin-top: 1.5rem; border-radius: 10px;"></div>
+                    </MudPaper>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+    else if (!Products.Any())
+    {
+        <MudPaper Elevation="0" Class="empty-plans-paper">
+            <div class="empty-state">
+                <div class="empty-icon-wrap">
+                    <MudIcon Icon="@Icons.Material.Outlined.Inventory2" Style="font-size: 36px; color: #64748B;" />
+                </div>
+                <MudText Typo="Typo.h6" Style="font-weight: 600; color: #64748B;">
+                    Nenhum plano disponível
+                </MudText>
+                <MudText Typo="Typo.body2" Color="Color.Secondary">
+                    Os planos serão exibidos aqui quando estiverem disponíveis. Volte em breve.
+                </MudText>
+                <MudButton
+                    Variant="Variant.Outlined"
+                    Color="Color.Primary"
+                    Href="/dashboard"
+                    Class="dima-action-btn mt-2">
+                    Voltar ao Dashboard
+                </MudButton>
+            </div>
+        </MudPaper>
+    }
+    else
+    {
+        <MudGrid Justify="Justify.Center" Spacing="4" Class="animate-fade-in">
+            @foreach (var product in Products)
+            {
+                var isFeatured = product.Slug.Contains("premium");
+                <MudItem xs="12" sm="6" md="5">
+                    <div class="plan-card-wrapper @(isFeatured ? "plan-card-featured" : "")">
+                        @if (isFeatured)
+                        {
+                            <div class="plan-featured-badge">Mais Popular</div>
+                        }
+                        <MudPaper Elevation="0" Class="@($"plan-card {(isFeatured ? "plan-card-highlight" : "")}")">
+                            <div class="plan-header">
+                                <div>
+                                    <span class="text-label">@product.Title</span>
+                                    <div class="plan-price">
+                                        <span class="plan-currency">R$</span>
+                                        <span class="text-financial plan-amount">@((int)product.Price)</span>
+                                        <span class="plan-period">/mês</span>
+                                    </div>
+                                </div>
+                                <div class="plan-icon-wrap @(isFeatured ? "plan-icon-featured" : "")">
+                                    <MudIcon
+                                        Icon="@(isFeatured ? Icons.Material.Outlined.AutoAwesome : Icons.Material.Outlined.StarBorder)"
+                                        Style="font-size: 22px;" />
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(product.Description))
+                            {
+                                <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-2 mb-4">
+                                    @product.Description
+                                </MudText>
+                            }
+
+                            <MudDivider Class="my-4" />
+
+                            <MudList T="string" Dense="true" Class="pa-0 plan-benefits">
+                                @foreach (var benefit in product.Benefits)
+                                {
+                                    <MudListItem Dense="true" Class="px-0 py-1">
+                                        <div class="d-flex align-center gap-2">
+                                            <MudIcon Icon="@Icons.Material.Outlined.CheckCircle"
+                                                     Style="font-size: 16px; color: #10B981; flex-shrink: 0;" />
+                                            <MudText Typo="Typo.body2">@benefit</MudText>
+                                        </div>
+                                    </MudListItem>
+                                }
+                            </MudList>
+
+                            <div class="plan-cta">
+                                <MudButton
+                                    Variant="@(isFeatured ? Variant.Filled : Variant.Outlined)"
+                                    Color="Color.Primary"
+                                    FullWidth="true"
+                                    Size="Size.Large"
+                                    Href="@($"/checkout/{product.Slug}")"
+                                    Class="plan-btn">
+                                    @(isFeatured ? "Assinar Agora" : "Começar Grátis")
+                                </MudButton>
+                            </div>
+                        </MudPaper>
+                    </div>
+                </MudItem>
+            }
+        </MudGrid>
+    }
 </div>
 
-@if (IsBusy)
-{
-    <MudGrid Justify="Justify.Center">
-        @for (var i = 0; i < 3; i++)
-        {
-            <MudItem xs="12" sm="6" md="4" lg="3">
-                <MudCard Style="border-radius: 24px; height: 500px;" Elevation="0" Outlined="true">
-                    <MudCardHeader>
-                        <CardHeaderContent>
-                            <MudSkeleton Width="60%" Height="40px" />
-                            <MudSkeleton Width="40%" Height="24px" />
-                        </CardHeaderContent>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudSkeleton Width="100%" Height="100px" />
-                        <MudSkeleton Width="80%" Height="24px" Class="mt-4" />
-                        <MudSkeleton Width="90%" Height="24px" />
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-        }
-    </MudGrid>
-}
-else if (!Products.Any())
-{
-    <div class="d-flex flex-column align-center justify-center mt-12 animate-fade-in">
-        <MudIcon Icon="@Icons.Material.Filled.SentimentDissatisfied" Size="Size.Large" Color="Color.Secondary" Style="font-size: 100px;"/>
-        <MudText Typo="Typo.h5" Color="Color.Secondary" Class="mt-4">Nenhum plano disponível no momento.</MudText>
-    </div>
-}
-else
-{
-    <MudGrid Justify="Justify.Center" Spacing="6" Class="animate-fade-in mb-12">
-        @foreach (var product in Products)
-        {
-            var isPremium = product.Slug.Contains("premium");
-            <MudItem xs="12" sm="6" md="4" lg="3">
-                <MudCard Elevation="@(isPremium ? 8 : 2)" 
-                         Class="@(isPremium ? "pa-2 card-hover premium-card" : "pa-2 card-hover")">
-                    
-                    @if (isPremium)
-                    {
-                        <div class="popular-badge">
-                            <MudChip T="string" Color="Color.Primary" Size="Size.Small" Variant="Variant.Filled" Style="font-weight: 700; text-transform: uppercase;">Mais Popular</MudChip>
-                        </div>
-                    }
-
-                    <MudCardHeader>
-                        <CardHeaderContent>
-                            <MudText Typo="Typo.h5" Style="font-weight: 800;" Color="@(isPremium ? Color.Primary : Color.Default)">@product.Title</MudText>
-                            <MudText Typo="Typo.body2" Color="Color.Secondary">@product.Description</MudText>
-                        </CardHeaderContent>
-                        <CardHeaderActions>
-                             <MudIcon Icon="@(isPremium ? Icons.Material.Filled.AutoAwesome : Icons.Material.Filled.StarBorder)" 
-                                     Color="@(isPremium ? Color.Primary : Color.Secondary)" 
-                                     Size="Size.Large" />
-                        </CardHeaderActions>
-                    </MudCardHeader>
-
-                    <MudCardContent Class="flex-grow-1">
-                        <div class="d-flex align-baseline mb-6">
-                            <MudText Typo="Typo.h3" Style="font-weight: 900;">@product.Price.ToString("C")</MudText>
-                            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="ml-1">/mês</MudText>
-                        </div>
-
-                        <MudText Typo="Typo.subtitle2" Style="font-weight: 700; text-transform: uppercase; letter-spacing: 1px;" Class="mb-4">Benefícios:</MudText>
-                        
-                        <MudList T="string" Dense="true" Class="pa-0">
-                            @foreach (var benefit in product.Benefits)
-                            {
-                                <MudListItem Icon="@Icons.Material.Filled.CheckCircle" IconColor="Color.Success" Class="px-0">
-                                    <MudText Typo="Typo.body2">@benefit</MudText>
-                                </MudListItem>
-                            }
-                        </MudList>
-                    </MudCardContent>
-
-                    <MudCardActions Class="pa-4">
-                        <MudButton Variant="@(isPremium ? Variant.Filled : Variant.Outlined)" 
-                                   Color="Color.Primary" 
-                                   FullWidth="true" 
-                                   Size="Size.Large"
-                                   Href="@($"/checkout/{product.Slug}")"
-                                   Style="border-radius: 16px; text-transform: none; font-weight: 700; height: 50px;">
-                            @(isPremium ? "Assinar Agora" : "Começar")
-                        </MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </MudItem>
-        }
-    </MudGrid>
-}
-
 <style>
-    .animate-fade-in {
-        animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    .dima-action-btn {
+        border-radius: 10px !important;
+        text-transform: none !important;
+        font-weight: 600 !important;
     }
 
-    .card-hover {
-        border-radius: 24px;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
+    .plan-card-wrapper {
         position: relative;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        padding-top: 0;
     }
 
-    .card-hover:hover {
-        transform: translateY(-8px);
-        box-shadow: var(--mud-elevation-12);
+    .plan-card-wrapper.plan-card-featured {
+        padding-top: 1rem;
     }
 
-    .premium-card {
-        border: 2px solid var(--mud-palette-primary) !important;
-    }
-
-    .popular-badge {
+    .plan-featured-badge {
         position: absolute;
-        top: -16px;
+        top: 0;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 10;
+        background: #00B4D8;
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 0.25rem 1rem;
+        border-radius: 99px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        z-index: 1;
     }
 
-    @@keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+    .plan-card {
+        border-radius: 16px !important;
+        border: 1px solid var(--mud-palette-divider) !important;
+        background: var(--mud-palette-surface) !important;
+        padding: 1.75rem;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .plan-card:hover {
+        box-shadow: 0 8px 32px rgba(0,0,0,0.1) !important;
+        transform: translateY(-2px);
+    }
+
+    .plan-card-highlight {
+        border-color: #00B4D8 !important;
+        box-shadow: 0 0 0 1px rgba(0,180,216,0.2), 0 8px 32px rgba(0,180,216,0.1) !important;
+    }
+
+    .plan-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .plan-price {
+        display: flex;
+        align-items: baseline;
+        gap: 0.25rem;
+        margin-top: 0.5rem;
+    }
+
+    .plan-currency { font-size: 1.25rem; font-weight: 600; }
+    .plan-amount   { font-size: 2.75rem; line-height: 1; }
+    .plan-period   { font-size: 0.875rem; color: var(--mud-palette-text-secondary); }
+
+    .plan-icon-wrap {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: rgba(100,116,139,0.08);
+        color: #64748B;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .plan-icon-featured {
+        background: rgba(0,180,216,0.12);
+        color: #00B4D8;
+    }
+
+    .plan-benefits {
+        flex: 1;
+    }
+
+    .plan-cta {
+        margin-top: 1.5rem;
+    }
+
+    .plan-btn {
+        border-radius: 10px !important;
+        text-transform: none !important;
+        font-weight: 600 !important;
+        height: 48px !important;
+    }
+
+    .empty-plans-paper {
+        border-radius: 16px !important;
+        border: 1px solid var(--mud-palette-divider) !important;
+        background: var(--mud-palette-surface) !important;
+    }
+
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 4rem 1.5rem;
+        text-align: center;
+    }
+
+    .empty-icon-wrap {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: rgba(100, 116, 139, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.5rem;
     }
 </style>

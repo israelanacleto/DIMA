@@ -1,99 +1,206 @@
-﻿@page "/"
+@page "/dashboard"
 @inherits HomePage
 
-<div class="d-flex flex-column gap-y-8">
-    <!-- Cabeçalho -->
+<div class="d-flex flex-column gap-6 animate-fade-in">
+
+    @* ---- Header ---- *@
     <div class="d-flex align-center justify-space-between">
         <div>
-            <MudText Typo="Typo.h4" Style="font-weight: 800;">Dashboard</MudText>
-            <MudText Typo="Typo.body1" Color="Color.Secondary">
-                Resumo das suas finanças e categorias cadastradas
+            <MudText Typo="Typo.h3" Style="font-weight: 700; letter-spacing: -0.02em;">
+                Dashboard
+            </MudText>
+            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
+                Resumo financeiro do período selecionado
             </MudText>
         </div>
-        <MudIconButton Icon="@(ShowValues ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff)"
-                       Color="Color.Inherit"
-                       OnClick="ToggleShowValues"
-                       Edge="Edge.End"/>
+        <MudTooltip Text="@(ShowValues ? "Ocultar valores" : "Exibir valores")">
+            <MudIconButton
+                Icon="@(ShowValues ? Icons.Material.Outlined.Visibility : Icons.Material.Outlined.VisibilityOff)"
+                Color="Color.Default"
+                OnClick="ToggleShowValues"
+                Variant="Variant.Outlined"
+                Size="Size.Small"/>
+        </MudTooltip>
     </div>
-    
-    <MudGrid>
+
+    @* ---- Summary Cards ---- *@
+    <MudGrid Spacing="4">
+        @* Entradas *@
         <MudItem xs="12" sm="6" md="4">
-            <MudPaper Elevation="25" Class="pa-4 d-flex flex-column justify-center animate-slide-up" Style="height: 150px;">
-                <div class="d-flex align-center justify-space-between">
-                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary">Entradas</MudText>
-                    <MudIcon Icon="@Icons.Material.Filled.ArrowCircleUp" Color="Color.Success" Size="Size.Large" />
+            <MudPaper Elevation="0" Class="summary-card animate-fade-in-up animate-delay-1">
+                <div class="summary-card-top">
+                    <div>
+                        <span class="text-label">Entradas</span>
+                    </div>
+                    <div class="icon-circle icon-circle-success">
+                        <MudIcon Icon="@Icons.Material.Outlined.ArrowCircleUp" Style="font-size: 20px;" />
+                    </div>
                 </div>
-                <div class="mt-auto">
+                <div class="summary-card-value">
                     @if (SummaryLoading)
                     {
-                        <MudSkeleton Width="80%" Height="48px" />
+                        <div class="skeleton" style="height: 36px; width: 140px;"></div>
                     }
                     else
                     {
-                        <MudText Typo="Typo.h4">
-                            @(ShowValues ? Summary?.Incomes.ToString("C") ?? "R$ 0,00" : "R$ ****")
-                        </MudText>
+                        <span class="text-financial summary-amount" style="color: #10B981;">
+                            @(ShowValues ? Summary?.Incomes.ToString("C") ?? "R$ 0,00" : "R$ •••••")
+                        </span>
                     }
+                </div>
+                <div class="summary-card-trend">
+                    <span class="badge-success">↑ +12% vs mês anterior</span>
                 </div>
             </MudPaper>
         </MudItem>
 
+        @* Saídas *@
         <MudItem xs="12" sm="6" md="4">
-            <MudPaper Elevation="25" Class="pa-4 d-flex flex-column justify-center animate-slide-up" Style="height: 150px;">
-                <div class="d-flex align-center justify-space-between">
-                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary">Saídas</MudText>
-                    <MudIcon Icon="@Icons.Material.Filled.ArrowCircleDown" Color="Color.Error" Size="Size.Large" />
+            <MudPaper Elevation="0" Class="summary-card animate-fade-in-up animate-delay-2">
+                <div class="summary-card-top">
+                    <div>
+                        <span class="text-label">Saídas</span>
+                    </div>
+                    <div class="icon-circle icon-circle-danger">
+                        <MudIcon Icon="@Icons.Material.Outlined.ArrowCircleDown" Style="font-size: 20px;" />
+                    </div>
                 </div>
-                <div class="mt-auto">
+                <div class="summary-card-value">
                     @if (SummaryLoading)
                     {
-                        <MudSkeleton Width="80%" Height="48px" />
+                        <div class="skeleton" style="height: 36px; width: 140px;"></div>
                     }
                     else
                     {
-                        <MudText Typo="Typo.h4">
-                            @(ShowValues ? Summary?.Expenses.ToString("C") ?? "R$ 0,00" : "R$ ****")
-                        </MudText>
+                        <span class="text-financial summary-amount" style="color: #F43F5E;">
+                            @(ShowValues ? Summary?.Expenses.ToString("C") ?? "R$ 0,00" : "R$ •••••")
+                        </span>
                     }
+                </div>
+                <div class="summary-card-trend">
+                    <span class="badge-danger">↓ -5% vs mês anterior</span>
                 </div>
             </MudPaper>
         </MudItem>
 
+        @* Saldo *@
         <MudItem xs="12" sm="12" md="4">
-            <MudPaper Elevation="25" Class="pa-4 d-flex flex-column justify-center animate-slide-up" Style="height: 150px;">
-                <div class="d-flex align-center justify-space-between">
-                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary">Saldo</MudText>
-                    <MudIcon Icon="@Icons.Material.Filled.AccountBalanceWallet" Color="Color.Info" Size="Size.Large" />
+            <MudPaper Elevation="0" Class="summary-card summary-card-highlight animate-fade-in-up animate-delay-3">
+                <div class="summary-card-top">
+                    <div>
+                        <span class="text-label" style="color: rgba(0,180,216,0.7);">Saldo Atual</span>
+                    </div>
+                    <div class="icon-circle icon-circle-info">
+                        <MudIcon Icon="@Icons.Material.Outlined.AccountBalance" Style="font-size: 20px;" />
+                    </div>
                 </div>
-                <div class="mt-auto">
+                <div class="summary-card-value">
                     @if (SummaryLoading)
                     {
-                        <MudSkeleton Width="80%" Height="48px" />
+                        <div class="skeleton" style="height: 36px; width: 140px;"></div>
                     }
                     else
                     {
-                        <MudText Typo="Typo.h4" Color="@(Summary is null ? Color.Default : Summary.Total >= 0 ? Color.Success : Color.Error)">
-                            @(ShowValues ? Summary?.Total.ToString("C") ?? "R$ 0,00" : "R$ ****")
-                        </MudText>
+                        <span class="text-financial summary-amount"
+                              style="color: @(Summary is null ? "inherit" : Summary.Total >= 0 ? "#10B981" : "#F43F5E");">
+                            @(ShowValues ? Summary?.Total.ToString("C") ?? "R$ 0,00" : "R$ •••••")
+                        </span>
                     }
                 </div>
+                <div class="summary-card-trend">
+                    <span class="badge-info">Atualizado agora</span>
+                </div>
             </MudPaper>
-        </MudItem>
-
-        <MudItem xs="12">
-            <IncomesAndExpensesChart />
-        </MudItem>
-
-        <MudItem xs="12" md="6">
-            <IncomesByCategoryChart />
-        </MudItem>
-
-        <MudItem xs="12" md="6">
-            <ExpensesByCategoryChart />
-        </MudItem>
-
-        <MudItem xs="12">
-            <MostUsedCategoriesChart />
         </MudItem>
     </MudGrid>
+
+    @* ---- Gráfico de Barras (largura total) ---- *@
+    <MudPaper Elevation="0" Class="chart-paper animate-fade-in-up animate-delay-3">
+        <div class="chart-header">
+            <MudText Typo="Typo.h6">Entradas e Saídas</MudText>
+            <MudText Typo="Typo.body2" Color="Color.Secondary">Comparativo mensal</MudText>
+        </div>
+        <IncomesAndExpensesChart />
+    </MudPaper>
+
+    @* ---- Gráficos de Categoria em painel unificado ---- *@
+    <MudPaper Elevation="0" Class="chart-paper animate-fade-in-up animate-delay-4">
+        <div class="chart-header">
+            <MudText Typo="Typo.h6">Distribuição por Categoria</MudText>
+            <MudText Typo="Typo.body2" Color="Color.Secondary">Análise do período</MudText>
+        </div>
+        <MudTabs Elevation="0" Rounded="false" PanelClass="pt-4" Color="Color.Secondary">
+            <MudTabPanel Text="Entradas">
+                <IncomesByCategoryChart />
+            </MudTabPanel>
+            <MudTabPanel Text="Saídas">
+                <ExpensesByCategoryChart />
+            </MudTabPanel>
+            <MudTabPanel Text="Mais Usadas">
+                <MostUsedCategoriesChart />
+            </MudTabPanel>
+        </MudTabs>
+    </MudPaper>
+
 </div>
+
+<style>
+    /* Summary Cards */
+    .summary-card {
+        padding: 1.25rem 1.5rem;
+        border-radius: 14px !important;
+        border: 1px solid var(--mud-palette-divider) !important;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        background: var(--mud-palette-surface) !important;
+        transition: box-shadow 0.2s, transform 0.2s;
+        height: 100%;
+    }
+
+    .summary-card:hover {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08) !important;
+        transform: translateY(-2px);
+    }
+
+    .summary-card-highlight {
+        border-color: rgba(0, 180, 216, 0.3) !important;
+        background: linear-gradient(135deg, var(--mud-palette-surface), rgba(0,180,216,0.03)) !important;
+    }
+
+    .summary-card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    .summary-card-value {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+
+    .summary-amount {
+        font-size: 1.875rem;
+        line-height: 1;
+    }
+
+    .summary-card-trend {
+        display: flex;
+    }
+
+    /* Charts */
+    .chart-paper {
+        border-radius: 14px !important;
+        border: 1px solid var(--mud-palette-divider) !important;
+        background: var(--mud-palette-surface) !important;
+        padding: 1.5rem;
+    }
+
+    .chart-header {
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+    }
+</style>

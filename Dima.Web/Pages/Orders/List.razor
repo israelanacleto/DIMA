@@ -3,34 +3,38 @@
 @using Dima.Core.Models
 @inherits ListOrdersPage
 
-<div class="d-flex flex-column gap-y-8 animate-fade-in">
+<div class="d-flex flex-column gap-6 animate-fade-in">
 
-    <!-- Cabeçalho -->
-    <div class="d-flex align-center justify-space-between">
+    @* Header *@
+    <div class="d-flex align-center justify-space-between flex-wrap gap-3">
         <div>
-            <MudText Typo="Typo.h4" Style="font-weight: 800;">@(IsPremium ? "Meus Planos" : "Meus Pedidos")</MudText>
-            <MudText Typo="Typo.body1" Color="Color.Secondary">Gerencie suas assinaturas e histórico de compras</MudText>
+            <MudText Typo="Typo.h3" Style="font-weight: 700; letter-spacing: -0.02em;">
+                @(IsPremium ? "Meus Planos" : "Meus Pedidos")
+            </MudText>
+            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
+                Gerencie suas assinaturas e histórico de compras
+            </MudText>
         </div>
         <MudButton
             Variant="Variant.Filled"
             Color="Color.Primary"
-            StartIcon="@Icons.Material.Filled.Add"
+            StartIcon="@Icons.Material.Outlined.WorkspacePremium"
             Href="/plans"
-            Style="border-radius: 12px; text-transform: none;">
-            Nova Assinatura
+            Class="dima-action-btn">
+            Ver Planos
         </MudButton>
     </div>
 
+    @* Tabela *@
     <MudTable Items="@Orders"
               T="Order"
               Hover="true"
-              Elevation="4"
+              Elevation="0"
               Loading="@IsBusy"
               RowsPerPage="10"
-              Style="border-radius: 16px;"
-              Class="pa-4">
+              Class="dima-table">
         <ToolBarContent>
-            <MudText Typo="Typo.h6">Histórico</MudText>
+            <MudText Typo="Typo.h6" Style="font-weight: 600;">Histórico de Pedidos</MudText>
             <MudSpacer/>
         </ToolBarContent>
         <HeaderContent>
@@ -44,63 +48,84 @@
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Pedido">
-                <MudText Typo="Typo.body2" Style="font-weight: 600;">@context.Number</MudText>
+                <span class="text-mono" style="font-size: 0.8125rem; color: var(--mud-palette-text-secondary);">
+                    #@context.Number
+                </span>
             </MudTd>
             <MudTd DataLabel="Plano">
-                <MudText Typo="Typo.body2">@context.Product.Title</MudText>
+                <MudText Typo="Typo.body2" Style="font-weight: 600;">@context.Product.Title</MudText>
             </MudTd>
             <MudTd DataLabel="Data">
                 <MudText Typo="Typo.body2">@context.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy")</MudText>
             </MudTd>
             <MudTd DataLabel="Vencimento">
-                <MudText Typo="Typo.body2">@(context.SubscriptionEndDate?.ToLocalTime().ToString("dd/MM/yyyy") ?? "-")</MudText>
+                <MudText Typo="Typo.body2">
+                    @(context.SubscriptionEndDate?.ToLocalTime().ToString("dd/MM/yyyy") ?? "—")
+                </MudText>
             </MudTd>
             <MudTd DataLabel="Status">
                 @switch (context.Status)
                 {
                     case EOrderStatus.WaitingPayment:
-                        <MudChip Color="Color.Warning" Size="Size.Small" Variant="Variant.Filled" T="string">aguardando</MudChip>
+                        <span class="badge-warning">⏳ Aguardando</span>
                         break;
                     case EOrderStatus.Paid:
                         @if (context.SubscriptionEndDate >= DateTime.UtcNow)
                         {
-                            <MudChip Color="Color.Success" Size="Size.Small" Variant="Variant.Filled" T="string">pago</MudChip>
+                            <span class="badge-success">✓ Ativo</span>
                         }
                         else
                         {
-                            <MudChip Color="Color.Warning" Size="Size.Small" Variant="Variant.Filled" T="string">vencido</MudChip>
+                            <span class="badge-warning">⚠ Vencido</span>
                         }
                         break;
                     case EOrderStatus.Canceled:
-                        <MudChip Color="Color.Error" Size="Size.Small" Variant="Variant.Filled" T="string">cancelado</MudChip>
+                        <span class="badge-danger">✕ Cancelado</span>
                         break;
                     case EOrderStatus.Refunded:
-                        <MudChip Color="Color.Info" Size="Size.Small" Variant="Variant.Filled" T="string">estornado</MudChip>
+                        <span class="badge-info">↩ Estornado</span>
                         break;
                 }
             </MudTd>
             <MudTd DataLabel="Total">
-                <MudText Typo="Typo.body2" Style="font-weight: 700;">@context.Total.ToString("C")</MudText>
+                <span class="text-financial" style="font-size: 0.9rem;">
+                    @context.Total.ToString("C")
+                </span>
             </MudTd>
             <MudTd DataLabel="Ações" Style="text-align: right">
-                <MudTooltip Text="Detalhes">
-                    <MudIconButton 
-                        Icon="@Icons.Material.Filled.Visibility"
+                <MudTooltip Text="Ver detalhes">
+                    <MudIconButton
+                        Icon="@Icons.Material.Outlined.Visibility"
                         Href="@($"/orders/{context.Number}")"
                         Color="Color.Primary"
                         Size="Size.Small"
-                        Variant="Variant.Text">
-                    </MudIconButton>
+                        Variant="Variant.Text"/>
                 </MudTooltip>
             </MudTd>
         </RowTemplate>
         <NoRecordsContent>
-            <MudText Typo="Typo.body1" Align="Align.Center">
-                Nenhum pedido encontrado
-            </MudText>
+            <div class="empty-state">
+                <div class="empty-icon-wrap">
+                    <MudIcon Icon="@Icons.Material.Outlined.ReceiptLong" Style="font-size: 36px; color: #64748B;" />
+                </div>
+                <MudText Typo="Typo.h6" Style="font-weight: 600; color: #64748B;">
+                    Nenhum pedido ainda
+                </MudText>
+                <MudText Typo="Typo.body2" Color="Color.Secondary">
+                    Conheça os planos disponíveis e escolha o que melhor se adapta a você.
+                </MudText>
+                <MudButton
+                    Variant="Variant.Filled"
+                    Color="Color.Primary"
+                    StartIcon="@Icons.Material.Outlined.WorkspacePremium"
+                    Href="/plans"
+                    Class="dima-action-btn mt-2">
+                    Ver Planos Disponíveis
+                </MudButton>
+            </div>
         </NoRecordsContent>
         <PagerContent>
-            <MudTablePager 
+            <MudTablePager
                 RowsPerPageString="Itens por página:"
                 InfoFormat="{first_item}-{last_item} de {all_items}"
                 HorizontalAlignment="HorizontalAlignment.Right" />
@@ -109,12 +134,36 @@
 </div>
 
 <style>
-    .animate-fade-in {
-        animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    .dima-action-btn {
+        border-radius: 10px !important;
+        text-transform: none !important;
+        font-weight: 600 !important;
     }
 
-    @@keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+    .dima-table {
+        border-radius: 14px !important;
+        border: 1px solid var(--mud-palette-divider) !important;
+        background: var(--mud-palette-surface) !important;
+        overflow: hidden;
+    }
+
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 3.5rem 1.5rem;
+        text-align: center;
+    }
+
+    .empty-icon-wrap {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: rgba(100, 116, 139, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.5rem;
     }
 </style>

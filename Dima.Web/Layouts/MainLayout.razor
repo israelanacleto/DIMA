@@ -1,4 +1,4 @@
-﻿@using Dima.Web.Components
+@using Dima.Web.Components
 @using Dima.Core.Handlers
 @using Dima.Core.Requests.Account
 @using Dima.Core.Responses.Account
@@ -6,7 +6,7 @@
 @implements IDisposable
 @inject IProfileHandler ProfileHandler
 
-<MudThemeProvider 
+<MudThemeProvider
     @ref="_mudThemeProvider"
     @bind-IsDarkMode="_isDarkMode"
     Theme="Configuration.Theme"/>
@@ -17,48 +17,95 @@
 <AuthorizeView>
     <Authorized>
         <MudLayout>
-            <MudAppBar Elevation="3">
-                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-                <MudImage Src="img/logo_dark.png" Alt="Dima" Height="35" />
+            <MudAppBar Elevation="0" Class="dima-appbar">
+                <MudIconButton
+                    Icon="@Icons.Material.Outlined.Menu"
+                    Color="Color.Inherit"
+                    Edge="Edge.Start"
+                    OnClick="@((e) => DrawerToggle())"
+                    Class="mr-1" />
+
+                <MudImage Src="img/logo_dark.png" Alt="Dima" Height="30" Class="ml-1" />
+
                 <MudSpacer />
+
+                <MudIconButton
+                    Icon="@(_isDarkMode ? Icons.Material.Outlined.LightMode : Icons.Material.Outlined.DarkMode)"
+                    Color="Color.Inherit"
+                    OnClick="ToggleDarkMode"
+                    Class="mr-1"
+                    Title="@(_isDarkMode ? "Modo Claro" : "Modo Escuro")" />
 
                 <MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" Dense="true">
                     <ActivatorContent>
-                        <div class="d-flex align-center">
+                        <div class="d-flex align-center gap-2 dima-user-trigger">
                             <MudHidden Breakpoint="Breakpoint.SmAndDown">
-                                <MudText Typo="Typo.body2" Class="mr-4">
-                                    Olá, <b>@GetUserName(context.User.Identity?.Name)</b>
-                                </MudText>
+                                <div class="d-flex flex-column align-end">
+                                    <MudText Typo="Typo.body2" Style="font-weight: 600; line-height: 1.2;">
+                                        @GetUserName(context.User.Identity?.Name)
+                                    </MudText>
+                                    <MudText Typo="Typo.caption" Style="opacity: 0.6; font-size: 0.7rem;">
+                                        @(_profile?.IsPremium == true ? "Premium" : "Plano Free")
+                                    </MudText>
+                                </div>
                             </MudHidden>
-                            <MudBadge Visible="@(_profile?.IsPremium == true)" Icon="@Icons.Material.Filled.Star" Color="Color.Warning" Overlap="true" Bordered="true">
-                                <MudAvatar Color="@(_profile?.IsPremium == true ? Color.Primary : Color.Secondary)" Variant="Variant.Filled">
+                            <MudBadge
+                                Visible="@(_profile?.IsPremium == true)"
+                                Icon="@Icons.Material.Filled.Star"
+                                Color="Color.Warning"
+                                Overlap="true"
+                                Bordered="true">
+                                <MudAvatar
+                                    Style="background: var(--dima-cyan); color: white; font-weight: 700; font-size: 0.875rem; width: 36px; height: 36px;">
                                     @GetUserInitial(context.User.Identity?.Name)
                                 </MudAvatar>
                             </MudBadge>
                         </div>
                     </ActivatorContent>
                     <ChildContent>
-                        <div class="px-4 py-2">
-                            <MudText Typo="Typo.body2" Style="font-weight: 600;">@(_profile?.Name ?? context.User.Identity?.Name)</MudText>
-                            <MudText Typo="Typo.caption" Color="Color.Secondary">@context.User.Identity?.Name</MudText>
+                        <div class="px-4 py-3 dima-menu-header">
+                            <MudText Typo="Typo.body2" Style="font-weight: 700;">
+                                @(_profile?.Name ?? GetUserName(context.User.Identity?.Name))
+                            </MudText>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">
+                                @context.User.Identity?.Name
+                            </MudText>
+                            @if (_profile?.IsPremium == true)
+                            {
+                                <span class="badge-warning mt-1" style="font-size: 0.65rem;">
+                                    ★ Premium
+                                </span>
+                            }
                         </div>
                         <MudDivider />
-                        <MudMenuItem Icon="@Icons.Material.Filled.Person" Href="/settings">Meu Perfil</MudMenuItem>
-                        <MudMenuItem Icon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)" OnClick="ToggleDarkMode">
+                        <MudMenuItem Icon="@Icons.Material.Outlined.Person" Href="/settings/me">
+                            Minha Conta
+                        </MudMenuItem>
+                        <MudMenuItem
+                            Icon="@(_isDarkMode ? Icons.Material.Outlined.LightMode : Icons.Material.Outlined.DarkMode)"
+                            OnClick="ToggleDarkMode">
                             @(_isDarkMode ? "Modo Claro" : "Modo Escuro")
                         </MudMenuItem>
                         <MudDivider />
-                        <MudMenuItem Icon="@Icons.Material.Filled.Logout" Href="/logout">Sair</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Outlined.Logout" Href="/logout">
+                            Sair
+                        </MudMenuItem>
                     </ChildContent>
                 </MudMenu>
             </MudAppBar>
-            
-            <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2" Variant="@DrawerVariant.Responsive">
+
+            <MudDrawer
+                @bind-Open="_drawerOpen"
+                ClipMode="DrawerClipMode.Always"
+                Elevation="0"
+                Variant="@DrawerVariant.Responsive"
+                Width="230px"
+                Class="dima-drawer">
                 <NavMenu IsPremium="@(_profile?.IsPremium ?? false)" />
             </MudDrawer>
-            
-            <MudMainContent>
-                <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-8 mb-8">
+
+            <MudMainContent Class="dima-main-content">
+                <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="pt-8 pb-10 px-6">
                     <CascadingValue Value="_isDarkMode">
                         @Body
                     </CascadingValue>
@@ -70,6 +117,37 @@
         <LoginRedirect />
     </NotAuthorized>
 </AuthorizeView>
+
+<style>
+    .dima-appbar {
+        border-bottom: 1px solid var(--mud-palette-divider) !important;
+        backdrop-filter: blur(8px);
+    }
+
+    .dima-drawer {
+        border-right: 1px solid var(--mud-palette-divider) !important;
+    }
+
+    .dima-main-content {
+        background-color: var(--mud-palette-background);
+        min-height: 100vh;
+    }
+
+    .dima-user-trigger {
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 8px;
+        transition: background 0.15s ease;
+    }
+
+    .dima-user-trigger:hover {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .dima-menu-header {
+        min-width: 200px;
+    }
+</style>
 
 @code {
 

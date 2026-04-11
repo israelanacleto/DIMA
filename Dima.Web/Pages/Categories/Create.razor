@@ -1,87 +1,89 @@
 @page "/categories/add"
-@using Dima.Web.Components.Categories
 @inherits CreateCategoryPage
 
-<div class="d-flex flex-column gap-y-8 animate-fade-in">
-    <!-- Cabeçalho -->
+<div class="d-flex flex-column gap-6 animate-fade-in">
+
     <div class="d-flex align-center justify-space-between">
         <div>
-            <MudText Typo="Typo.h4" Style="font-weight: 800;">Nova Categoria</MudText>
-            <MudText Typo="Typo.body1" Color="Color.Secondary">Organize suas finanças com categorias personalizadas</MudText>
+            <MudText Typo="Typo.h3" Style="font-weight: 700; letter-spacing: -0.02em;">Nova Categoria</MudText>
+            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
+                Organize seus lançamentos com categorias personalizadas
+            </MudText>
         </div>
         <MudButton Variant="Variant.Outlined"
-                   StartIcon="@Icons.Material.Filled.ArrowBack"
+                   StartIcon="@Icons.Material.Outlined.ArrowBack"
                    Color="Color.Secondary"
                    Href="/categories"
                    Disabled="IsBusy"
-                   Style="border-radius: 12px; text-transform: none;">
+                   Style="border-radius: 10px; text-transform: none; font-weight: 600;">
             Voltar
         </MudButton>
     </div>
 
-    <MudGrid>
-        <!-- Formulário principal -->
-        <MudItem xs="12" md="7">
-            <MudCard Elevation="4" Style="border-radius: 16px;">
-                <EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync">
-                    <DataAnnotationsValidator/>
-                    <MudCardContent Class="pa-8">
-                        <div class="d-flex flex-column gap-6">
-                            <MudTextField Label="Título"
-                                          Placeholder="Ex: Alimentação, Lazer, Saúde"
-                                          Variant="Variant.Outlined"
-                                          @bind-Value="InputModel.Title"
-                                          For="@(() => InputModel.Title)"
-                                          Adornment="Adornment.Start"
-                                          AdornmentIcon="@Icons.Material.Filled.Title"
-                                          AdornmentColor="Color.Primary" />
+    <MudPaper Elevation="0" Class="form-paper">
+        <EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync">
+            <DataAnnotationsValidator/>
 
-                            <MudTextField Label="Descrição"
-                                          Lines="4"
-                                          Placeholder="Descreva brevemente para que serve esta categoria"
-                                          Variant="Variant.Outlined"
-                                          @bind-Value="InputModel.Description"
-                                          For="@(() => InputModel.Description)"
-                                          Adornment="Adornment.Start"
-                                          AdornmentIcon="@Icons.Material.Filled.Description"
-                                          AdornmentColor="Color.Primary" />
-                        </div>
-                    </MudCardContent>
-                    <MudCardActions Class="pa-8 pt-0">
-                        <MudButton ButtonType="ButtonType.Submit"
-                                   Variant="Variant.Filled"
-                                   Color="Color.Primary"
-                                   Size="Size.Large"
-                                   FullWidth="true"
-                                   Disabled="IsBusy"
-                                   Style="border-radius: 12px; font-weight: 600; padding: 16px; text-transform: none;">
-                            @if (IsBusy)
-                            {
-                                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                                <span class="ms-2">Salvando...</span>
-                            }
-                            else
-                            {
-                                <span>Criar Categoria</span>
-                            }
-                        </MudButton>
-                    </MudCardActions>
-                </EditForm>
-            </MudCard>
-        </MudItem>
+            <div class="form-section">
+                <span class="text-label">Informações</span>
+                <MudGrid Spacing="3">
+                    <MudItem xs="12">
+                        <MudTextField Label="Nome da Categoria"
+                                      Placeholder="Ex: Alimentação, Lazer, Saúde"
+                                      Variant="Variant.Outlined"
+                                      @bind-Value="InputModel.Title"
+                                      For="@(() => InputModel.Title)"
+                                      Margin="Margin.Dense" />
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudTextField Label="Descrição"
+                                      Lines="3"
+                                      Placeholder="Descreva brevemente para que serve esta categoria"
+                                      Variant="Variant.Outlined"
+                                      @bind-Value="InputModel.Description"
+                                      For="@(() => InputModel.Description)"
+                                      Margin="Margin.Dense" />
+                    </MudItem>
+                </MudGrid>
+            </div>
 
-        <!-- Sidebar de Informações -->
-        <CategoryHelperSidebar />
-    </MudGrid>
+            <MudDivider Class="my-5" />
+
+            <MudButton ButtonType="ButtonType.Submit"
+                       Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       Size="Size.Large"
+                       FullWidth="true"
+                       Disabled="IsBusy"
+                       Style="border-radius: 10px; font-weight: 600; padding: 14px; text-transform: none;">
+                @if (IsBusy)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                    <span class="ms-2">Salvando...</span>
+                }
+                else
+                {
+                    <span>Criar Categoria</span>
+                }
+            </MudButton>
+
+        </EditForm>
+    </MudPaper>
+
 </div>
 
 <style>
-    .animate-fade-in {
-        animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    .form-paper {
+        border-radius: 14px !important;
+        border: 1px solid var(--mud-palette-divider) !important;
+        background: var(--mud-palette-surface) !important;
+        padding: 2rem;
+        max-width: 560px;
     }
 
-    @@keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+    .form-section {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
     }
 </style>

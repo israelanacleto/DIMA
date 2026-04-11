@@ -2,110 +2,206 @@
 @using Dima.Core.Models
 @inherits ListCategoriesPage
 
-<div class="d-flex flex-column gap-y-8 animate-fade-in">
+<div class="d-flex flex-column gap-6 animate-fade-in">
 
-    <!-- Cabeçalho -->
-    <div class="d-flex align-center justify-space-between">
+    @* Header *@
+    <div class="d-flex align-center justify-space-between flex-wrap gap-3">
         <div>
-            <MudText Typo="Typo.h4" Style="font-weight: 800;">Categorias</MudText>
-            <MudText Typo="Typo.body1" Color="Color.Secondary">Gerencie suas categorias para melhor organizar suas finanças</MudText>
+            <MudText Typo="Typo.h3" Style="font-weight: 700; letter-spacing: -0.02em;">Categorias</MudText>
+            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
+                Organize suas finanças com categorias personalizadas
+            </MudText>
         </div>
         <MudButton
             Variant="Variant.Filled"
             Color="Color.Primary"
-            StartIcon="@Icons.Material.Filled.Add"
+            StartIcon="@Icons.Material.Outlined.Add"
             Href="/categories/add"
-            Style="border-radius: 12px; text-transform: none;">
+            Class="dima-action-btn">
             Nova Categoria
         </MudButton>
     </div>
 
-    <MudTable Items="@Categories"
-              T="Category"
-              Filter="Filter"
-              Hover="true"
-              Elevation="4"
-              Loading="@IsBusy"
-              RowsPerPage="10"
-              Style="border-radius: 16px;"
-              Class="pa-4">
-        <ToolBarContent>
-            <MudText Typo="Typo.h6">Categorias</MudText>
-            <MudSpacer/>
-            <MudTextField
-                @bind-Value="SearchTerm"
-                Placeholder="Filtrar..."
-                Adornment="Adornment.Start"
-                AdornmentIcon="@Icons.Material.Filled.Search"
-                Immediate="true"
-                IconSize="Size.Medium"
-                Class="mt-0">
-            </MudTextField>
-        </ToolBarContent>
-        <HeaderContent>
-            <MudTh>
-                <MudTableSortLabel SortBy="new Func<Category, object>(x => x.Title)">
-                    Categoria
-                </MudTableSortLabel>
-            </MudTh>
-            <MudTh>
-                <MudTableSortLabel SortBy="new Func<Category, object>(x => x.Description ?? string.Empty)">
-                    Descrição
-                </MudTableSortLabel>
-            </MudTh>
-            <MudTh Style="text-align: right">Ações</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Categoria">
-                <MudText Typo="Typo.body1" Style="font-weight: 600;">@context.Title</MudText>
-            </MudTd>
-            <MudTd DataLabel="Descrição">
-                <MudText Typo="Typo.body2" Color="Color.Secondary">@context.Description</MudText>
-            </MudTd>
-            <MudTd DataLabel="Ações" Style="text-align: right">
-                <MudStack Row Justify="Justify.FlexEnd" Spacing="0">
-                    <MudTooltip Text="Editar">
-                        <MudIconButton 
-                            Icon="@Icons.Material.Filled.Edit"
-                            Href="@($"/categories/edit/{context.Id}")"
-                            Color="Color.Primary"
-                            Size="Size.Small"
-                            Variant="Variant.Text">
-                        </MudIconButton>
-                    </MudTooltip>
-                    <MudTooltip Text="Excluir">
-                        <MudIconButton 
-                            Icon="@Icons.Material.Filled.Delete"
-                            Color="Color.Error"
-                            Size="Size.Small"
-                            Variant="Variant.Text"
-                            OnClick="() => OnDeleteButtonClickedAsync(context.Id, context.Title)">
-                        </MudIconButton>
-                    </MudTooltip>
-                </MudStack>
-            </MudTd>
-        </RowTemplate>
-        <NoRecordsContent>
-            <MudText Typo="Typo.body1" Align="Align.Center">
-                Nenhuma categoria encontrada
-            </MudText>
-        </NoRecordsContent>
-        <PagerContent>
-            <MudTablePager 
-                RowsPerPageString="Itens por página:"
-                InfoFormat="{first_item}-{last_item} de {all_items}"
-                HorizontalAlignment="HorizontalAlignment.Right" />
-        </PagerContent>
-    </MudTable>
+    @* Grid de cards *@
+    @if (IsBusy)
+    {
+        <MudGrid Spacing="3">
+            @for (var i = 0; i < 6; i++)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudPaper Elevation="0" Class="category-card">
+                        <div class="skeleton" style="width: 44px; height: 44px; border-radius: 10px;"></div>
+                        <div class="d-flex flex-column gap-2 flex-grow-1">
+                            <div class="skeleton" style="width: 60%; height: 16px;"></div>
+                            <div class="skeleton" style="width: 80%; height: 12px;"></div>
+                        </div>
+                    </MudPaper>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+    else if (!Categories.Any())
+    {
+        <MudPaper Elevation="0" Class="dima-table">
+            <div class="empty-state">
+                <div class="empty-icon-wrap">
+                    <MudIcon Icon="@Icons.Material.Outlined.Category" Style="font-size: 36px; color: #64748B;" />
+                </div>
+                <MudText Typo="Typo.h6" Style="font-weight: 600; color: #64748B;">
+                    Nenhuma categoria ainda
+                </MudText>
+                <MudText Typo="Typo.body2" Color="Color.Secondary">
+                    Crie categorias para organizar melhor seus lançamentos.
+                </MudText>
+                <MudButton
+                    Variant="Variant.Filled"
+                    Color="Color.Primary"
+                    StartIcon="@Icons.Material.Outlined.Add"
+                    Href="/categories/add"
+                    Class="dima-action-btn mt-2">
+                    Criar Primeira Categoria
+                </MudButton>
+            </div>
+        </MudPaper>
+    }
+    else
+    {
+        @* Barra de pesquisa *@
+        <MudTextField
+            @bind-Value="SearchTerm"
+            Placeholder="Pesquisar categorias..."
+            Adornment="Adornment.Start"
+            AdornmentIcon="@Icons.Material.Outlined.Search"
+            Immediate="true"
+            Variant="Variant.Outlined"
+            Margin="Margin.Dense"
+            Style="max-width: 320px;" />
+
+        <MudGrid Spacing="3">
+            @foreach (var category in Categories.Where(c => string.IsNullOrEmpty(SearchTerm) || c.Title.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)))
+            {
+                var colorIndex = Math.Abs(category.Title.GetHashCode()) % CategoryColors.Length;
+                <MudItem xs="12" sm="6" md="4" Class="animate-scale-in">
+                    <MudPaper Elevation="0" Class="category-card">
+                        <div class="category-icon-wrap" style="background: @CategoryColors[colorIndex]20; color: @CategoryColors[colorIndex];">
+                            <MudIcon Icon="@Icons.Material.Outlined.Label" Style="font-size: 20px;" />
+                        </div>
+                        <div class="category-info">
+                            <MudText Typo="Typo.body1" Style="font-weight: 700;">@category.Title</MudText>
+                            @if (!string.IsNullOrEmpty(category.Description))
+                            {
+                                <MudText Typo="Typo.body2" Color="Color.Secondary" Style="font-size: 0.8125rem;">
+                                    @category.Description
+                                </MudText>
+                            }
+                        </div>
+                        <div class="category-actions">
+                            <MudTooltip Text="Editar">
+                                <MudIconButton
+                                    Icon="@Icons.Material.Outlined.Edit"
+                                    Href="@($"/categories/edit/{category.Id}")"
+                                    Color="Color.Primary"
+                                    Size="Size.Small"
+                                    Variant="Variant.Text"/>
+                            </MudTooltip>
+                            <MudTooltip Text="Excluir">
+                                <MudIconButton
+                                    Icon="@Icons.Material.Outlined.Delete"
+                                    Color="Color.Error"
+                                    Size="Size.Small"
+                                    Variant="Variant.Text"
+                                    OnClick="() => OnDeleteButtonClickedAsync(category.Id, category.Title)"/>
+                            </MudTooltip>
+                        </div>
+                    </MudPaper>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+
 </div>
 
 <style>
-    .animate-fade-in {
-        animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    .dima-action-btn {
+        border-radius: 10px !important;
+        text-transform: none !important;
+        font-weight: 600 !important;
     }
 
-    @@keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+    .dima-table {
+        border-radius: 14px !important;
+        border: 1px solid var(--mud-palette-divider) !important;
+        background: var(--mud-palette-surface) !important;
+        overflow: hidden;
+    }
+
+    .category-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+        border-radius: 12px !important;
+        border: 1px solid var(--mud-palette-divider) !important;
+        background: var(--mud-palette-surface) !important;
+        transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+    }
+
+    .category-card:hover {
+        border-color: rgba(0, 180, 216, 0.3) !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important;
+        transform: translateY(-1px);
+    }
+
+    .category-icon-wrap {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .category-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .category-actions {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        flex-shrink: 0;
+    }
+
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 3rem 1.5rem;
+        text-align: center;
+    }
+
+    .empty-icon-wrap {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: rgba(100, 116, 139, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.5rem;
     }
 </style>
+
+@code {
+    private static readonly string[] CategoryColors =
+    [
+        "#00B4D8", "#10B981", "#F59E0B", "#F43F5E",
+        "#8B5CF6", "#06B6D4", "#84CC16", "#FB923C"
+    ];
+}

@@ -1,0 +1,339 @@
+@page "/"
+@layout LandingLayout
+@using Dima.Web.Layouts
+@using Microsoft.AspNetCore.Authorization
+@attribute [AllowAnonymous]
+@inject NavigationManager Nav
+@inject AuthenticationStateProvider AuthStateProvider
+
+@* Redireciona usuários autenticados direto para o dashboard *@
+
+<!-- ============================================================
+     NAV BAR
+     ============================================================ -->
+<header class="landing-nav">
+    <div class="landing-container landing-nav-inner">
+        <div class="d-flex align-center gap-2">
+            <img src="img/logo_dark.png" alt="Dima" height="32" />
+        </div>
+        <nav class="landing-nav-links">
+            <a href="#features" class="landing-nav-a">Recursos</a>
+            <a href="#how-it-works" class="landing-nav-a">Como funciona</a>
+            <a href="#pricing" class="landing-nav-a">Planos</a>
+        </nav>
+        <div class="d-flex align-center gap-3">
+            <a href="/login" class="landing-btn-ghost">Entrar</a>
+            <a href="/register" class="landing-btn-primary">Começar Grátis</a>
+        </div>
+    </div>
+</header>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="landing-hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-bg-glow"></div>
+
+    <div class="landing-container hero-inner animate-fade-in-up">
+        <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            Plataforma Financeira Enterprise
+        </div>
+
+        <h1 class="hero-headline">
+            Controle financeiro<br/>
+            <span class="hero-accent">para quem leva</span><br/>
+            dinheiro a sério.
+        </h1>
+
+        <p class="hero-sub">
+            Gerencie categorias, acompanhe lançamentos e visualize<br class="hero-br"/>
+            seus resultados com clareza e precisão.
+        </p>
+
+        <div class="hero-ctas">
+            <a href="/register" class="landing-btn-primary landing-btn-lg">
+                Criar Conta Gratuita
+            </a>
+            <a href="#how-it-works" class="landing-btn-outline landing-btn-lg">
+                Ver como funciona →
+            </a>
+        </div>
+
+        <!-- Dashboard mockup -->
+        <div class="hero-mockup animate-scale-in animate-delay-3">
+            <div class="mockup-bar">
+                <span class="mockup-dot red"></span>
+                <span class="mockup-dot yellow"></span>
+                <span class="mockup-dot green"></span>
+                <span class="mockup-url">dima.app/dashboard</span>
+            </div>
+            <div class="mockup-body">
+                <div class="mockup-sidebar">
+                    <div class="mockup-logo-line"></div>
+                    <div class="mockup-nav-item active"></div>
+                    <div class="mockup-nav-item"></div>
+                    <div class="mockup-nav-item"></div>
+                    <div class="mockup-nav-item"></div>
+                </div>
+                <div class="mockup-content">
+                    <div class="mockup-cards">
+                        <div class="mockup-card green">
+                            <div class="mockup-card-label"></div>
+                            <div class="mockup-card-value"></div>
+                        </div>
+                        <div class="mockup-card red">
+                            <div class="mockup-card-label"></div>
+                            <div class="mockup-card-value"></div>
+                        </div>
+                        <div class="mockup-card blue">
+                            <div class="mockup-card-label"></div>
+                            <div class="mockup-card-value"></div>
+                        </div>
+                    </div>
+                    <div class="mockup-chart">
+                        <div class="mockup-bar-wrap">
+                            <div class="mockup-bar-item" style="height: 55%;"></div>
+                            <div class="mockup-bar-item" style="height: 75%;"></div>
+                            <div class="mockup-bar-item" style="height: 45%;"></div>
+                            <div class="mockup-bar-item" style="height: 90%;"></div>
+                            <div class="mockup-bar-item" style="height: 60%;"></div>
+                            <div class="mockup-bar-item" style="height: 80%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SOCIAL PROOF BAR
+     ============================================================ -->
+<section class="landing-proof">
+    <div class="landing-container proof-inner">
+        <div class="proof-item">
+            <span class="proof-value text-mono">R$ 2M+</span>
+            <span class="proof-label">em transações gerenciadas</span>
+        </div>
+        <div class="proof-divider"></div>
+        <div class="proof-item">
+            <span class="proof-value text-mono">500+</span>
+            <span class="proof-label">usuários ativos</span>
+        </div>
+        <div class="proof-divider"></div>
+        <div class="proof-item">
+            <span class="proof-value text-mono">99.9%</span>
+            <span class="proof-label">de disponibilidade</span>
+        </div>
+        <div class="proof-divider"></div>
+        <div class="proof-item">
+            <span class="proof-value text-mono">100%</span>
+            <span class="proof-label">auditoria de acessos</span>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     FEATURES
+     ============================================================ -->
+<section id="features" class="landing-section">
+    <div class="landing-container">
+        <div class="section-header">
+            <span class="section-tag">Recursos</span>
+            <h2 class="section-title">Tudo que você precisa<br/>para controlar suas finanças</h2>
+            <p class="section-sub">Uma plataforma completa, projetada para clareza e precisão financeira.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon-wrap">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Categorização Inteligente</h3>
+                <p class="feature-desc">Organize seus lançamentos em categorias personalizadas. Saúde, Lazer, Moradia — você define as regras.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-wrap">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Análise em Tempo Real</h3>
+                <p class="feature-desc">Gráficos de barras, pizza e donut para visualizar entradas e saídas com precisão por período.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-wrap">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Segurança & Auditoria</h3>
+                <p class="feature-desc">Cada ação sensível é registrada com timestamp e contexto. Compliance por design, não por acidente.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-wrap">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/>
+                        <line x1="12" y1="17" x2="12" y2="21"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Multi-dispositivo</h3>
+                <p class="feature-desc">Acesse do desktop, tablet ou celular. Interface responsiva e adaptada para qualquer tela.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-wrap">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Histórico Completo</h3>
+                <p class="feature-desc">Filtre por mês, trimestre ou ano. Todos os seus lançamentos organizados e pesquisáveis.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-wrap">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Planos Premium</h3>
+                <p class="feature-desc">Funcionalidades avançadas para usuários que precisam de mais controle. Integração com Stripe.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     HOW IT WORKS
+     ============================================================ -->
+<section id="how-it-works" class="landing-section landing-section-alt">
+    <div class="landing-container">
+        <div class="section-header">
+            <span class="section-tag">Como Funciona</span>
+            <h2 class="section-title">Em 3 passos você está no controle</h2>
+        </div>
+
+        <div class="steps-grid">
+            <div class="step-item">
+                <div class="step-number">01</div>
+                <h3 class="step-title">Crie sua conta</h3>
+                <p class="step-desc">Cadastro em segundos. Opção de gerar dados de demonstração para explorar a plataforma imediatamente.</p>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step-item">
+                <div class="step-number">02</div>
+                <h3 class="step-title">Configure categorias</h3>
+                <p class="step-desc">Crie categorias personalizadas que reflitam sua realidade financeira. Sem templates engessados.</p>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step-item">
+                <div class="step-number">03</div>
+                <h3 class="step-title">Acompanhe resultados</h3>
+                <p class="step-desc">Visualize seu saldo, entradas e saídas em gráficos claros. Tome decisões baseadas em dados reais.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     PRICING
+     ============================================================ -->
+<section id="pricing" class="landing-section">
+    <div class="landing-container">
+        <div class="section-header">
+            <span class="section-tag">Planos</span>
+            <h2 class="section-title">Simples e transparente</h2>
+            <p class="section-sub">Comece gratuitamente. Evolua quando precisar.</p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-plan-name">Free</div>
+                <div class="pricing-price">
+                    <span class="pricing-currency">R$</span>
+                    <span class="pricing-amount text-mono">0</span>
+                    <span class="pricing-period">/mês</span>
+                </div>
+                <ul class="pricing-features">
+                    <li class="pricing-feature">✓ Dashboard completo</li>
+                    <li class="pricing-feature">✓ Categorias ilimitadas</li>
+                    <li class="pricing-feature">✓ Histórico de lançamentos</li>
+                    <li class="pricing-feature">✓ Gráficos e análises</li>
+                </ul>
+                <a href="/register" class="landing-btn-outline" style="width: 100%; text-align: center;">
+                    Começar Grátis
+                </a>
+            </div>
+
+            <div class="pricing-card pricing-card-featured">
+                <div class="pricing-badge">Mais Popular</div>
+                <div class="pricing-plan-name">Premium</div>
+                <div class="pricing-price">
+                    <span class="pricing-currency">R$</span>
+                    <span class="pricing-amount text-mono">29</span>
+                    <span class="pricing-period">/mês</span>
+                </div>
+                <ul class="pricing-features">
+                    <li class="pricing-feature">✓ Tudo do plano Free</li>
+                    <li class="pricing-feature">✓ Relatórios avançados</li>
+                    <li class="pricing-feature">✓ Exportação de dados</li>
+                    <li class="pricing-feature">✓ Suporte prioritário</li>
+                    <li class="pricing-feature">✓ Histórico ilimitado</li>
+                </ul>
+                <a href="/register" class="landing-btn-primary" style="width: 100%; text-align: center;">
+                    Assinar Premium
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     FINAL CTA
+     ============================================================ -->
+<section class="landing-cta-final">
+    <div class="landing-container cta-final-inner">
+        <h2 class="cta-final-title">Pronto para assumir o controle<br/>das suas finanças?</h2>
+        <p class="cta-final-sub">Junte-se a quem já gerencia dinheiro com inteligência.</p>
+        <a href="/register" class="landing-btn-primary landing-btn-lg">
+            Criar Conta Gratuita — É Grátis
+        </a>
+    </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="landing-footer">
+    <div class="landing-container footer-inner">
+        <div class="footer-brand">
+            <img src="img/logo_dark.png" alt="Dima" height="28" />
+            <span class="footer-copy">© 2025 DIMA · Plataforma Financeira</span>
+        </div>
+        <div class="footer-links">
+            <a href="/login" class="footer-a">Entrar</a>
+            <a href="/register" class="footer-a">Cadastrar</a>
+            <a href="/help" class="footer-a">Ajuda</a>
+        </div>
+    </div>
+</footer>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity?.IsAuthenticated == true)
+        {
+            Nav.NavigateTo("/dashboard");
+        }
+    }
+}

@@ -1,5 +1,53 @@
-﻿@page "/not-found"
+@page "/not-found"
 @layout MainLayout
+@using Microsoft.AspNetCore.Authorization
+@attribute [AllowAnonymous]
 
-<h3>Erro 404</h3>
-<p>Desculpe, mas a página não foi encontrada</p>
+<div class="d-flex flex-column align-center justify-center not-found-wrap animate-fade-in">
+
+    <div class="not-found-code text-mono">404</div>
+
+    <MudText Typo="Typo.h4" Style="font-weight: 700; letter-spacing: -0.02em; margin-top: 1rem;">
+        Página não encontrada
+    </MudText>
+
+    <MudText Typo="Typo.body1" Color="Color.Secondary" Class="mt-2" Style="max-width: 400px; text-align: center; line-height: 1.6;">
+        A página que você está procurando não existe ou foi movida para outro endereço.
+    </MudText>
+
+    <div class="d-flex gap-3 mt-6 flex-wrap justify-center">
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   Href="/dashboard"
+                   StartIcon="@Icons.Material.Outlined.Dashboard"
+                   Style="border-radius: 10px; text-transform: none; font-weight: 600;">
+            Ir para o Dashboard
+        </MudButton>
+        <MudButton Variant="Variant.Outlined"
+                   Color="Color.Secondary"
+                   Href="/"
+                   StartIcon="@Icons.Material.Outlined.Home"
+                   Style="border-radius: 10px; text-transform: none; font-weight: 600;">
+            Página Inicial
+        </MudButton>
+    </div>
+
+</div>
+
+<style>
+    .not-found-wrap {
+        min-height: 60vh;
+        gap: 0;
+    }
+
+    .not-found-code {
+        font-size: clamp(5rem, 12vw, 9rem);
+        font-weight: 800;
+        line-height: 1;
+        background: linear-gradient(135deg, var(--mud-palette-primary), var(--mud-palette-secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        opacity: 0.8;
+    }
+</style>

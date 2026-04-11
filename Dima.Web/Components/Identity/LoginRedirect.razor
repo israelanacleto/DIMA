@@ -1,30 +1,59 @@
 @inject NavigationManager NavigationManager
 
-<MudGrid Justify="Justify.Center">
-    <MudItem xs="12" sm="8" md="6" lg="4" xl="4">
-        <MudPaper Class="pa-8 mud-elevation-4 mt-16" Style="border-radius: 16px;">
-            <div class="d-flex flex-column align-center text-center">
-                <img src="@(IsDarkMode ? "img/logo_dark.png" : "img/logo_light.png")" alt="Dima" class="mb-8" height="80"/>
-                
-                <MudProgressCircular Color="Color.Primary" Indeterminate="true" Size="Size.Large" Class="mb-6"/>
-                
-                <MudText Typo="Typo.h5" GutterBottom="true" Style="font-weight: 700;">
-                    Preparando seu acesso...
-                </MudText>
-                
-                <MudText Typo="Typo.body1" Color="Color.Secondary">
-                    Você será redirecionado para a tela de login em instantes.
-                </MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
-</MudGrid>
+<div class="redirect-wrap animate-fade-in">
+    <div class="redirect-inner">
+        <div class="redirect-logo">
+            <img src="img/logo_dark.png" alt="Dima" height="44" />
+        </div>
+
+        <MudProgressCircular
+            Color="Color.Secondary"
+            Indeterminate="true"
+            Size="Size.Small"
+            Class="redirect-spinner" />
+
+        <MudText Typo="Typo.h6" Style="font-weight: 600; letter-spacing: -0.01em;">
+            Redirecionando...
+        </MudText>
+        <MudText Typo="Typo.body2" Color="Color.Secondary">
+            Você será enviado para o login em instantes.
+        </MudText>
+    </div>
+</div>
+
+<style>
+    .redirect-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: var(--mud-palette-background);
+    }
+
+    .redirect-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .redirect-logo {
+        margin-bottom: 0.5rem;
+        opacity: 0.8;
+    }
+
+    .redirect-spinner {
+        margin: 0.25rem 0;
+    }
+</style>
 
 @code
 {
     [CascadingParameter]
     public bool IsDarkMode { get; set; }
-    
+
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(1500);

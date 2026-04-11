@@ -2,34 +2,39 @@
 @using Dima.Core.Models
 @inherits ListTransactionsPage
 
-<div class="d-flex flex-column gap-y-8 animate-fade-in">
+<div class="d-flex flex-column gap-6 animate-fade-in">
 
-    <!-- Cabeçalho -->
-    <div class="d-flex align-center justify-space-between">
+    @* Header *@
+    <div class="d-flex align-center justify-space-between flex-wrap gap-3">
         <div>
-            <MudText Typo="Typo.h4" Style="font-weight: 800;">Lançamentos</MudText>
-            <MudText Typo="Typo.body1" Color="Color.Secondary">Visualize e gerencie seu histórico financeiro</MudText>
+            <MudText Typo="Typo.h3" Style="font-weight: 700; letter-spacing: -0.02em;">Lançamentos</MudText>
+            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
+                Visualize e gerencie seu histórico financeiro
+            </MudText>
         </div>
         <MudButton
             Variant="Variant.Filled"
             Color="Color.Primary"
-            StartIcon="@Icons.Material.Filled.Add"
+            StartIcon="@Icons.Material.Outlined.Add"
             Href="/transactions/add"
-            Style="border-radius: 12px; text-transform: none;">
+            Class="dima-action-btn">
             Novo Lançamento
         </MudButton>
     </div>
 
-    <!-- Filtros de Período -->
-    <MudCard Elevation="4" Style="border-radius: 16px;">
-        <MudCardContent Class="d-flex align-center gap-4 pa-4">
+    @* Filtros *@
+    <MudPaper Elevation="0" Class="filter-paper">
+        <div class="filter-inner">
+            <MudIcon Icon="@Icons.Material.Outlined.FilterList" Color="Color.Secondary" Size="Size.Small" />
+            <MudText Typo="Typo.body2" Color="Color.Secondary" Style="font-weight: 600; white-space: nowrap;">
+                Período:
+            </MudText>
             <MudSelect T="int"
-                       Label="Mês"
                        @bind-Value="CurrentMonth"
                        Variant="Variant.Outlined"
                        Margin="Margin.Dense"
                        AnchorOrigin="Origin.BottomCenter"
-                       Style="min-width: 150px;">
+                       Style="min-width: 140px;">
                 @for (var month = 1; month <= 12; month++)
                 {
                     var date = new DateTime(DateTime.Now.Year, month, 1);
@@ -39,51 +44,49 @@
                 }
             </MudSelect>
             <MudSelect T="int"
-                       Label="Ano"
                        @bind-Value="@CurrentYear"
                        Variant="Variant.Outlined"
                        Margin="Margin.Dense"
                        AnchorOrigin="Origin.BottomCenter"
-                       Style="min-width: 120px;">
+                       Style="min-width: 100px;">
                 @foreach (var year in Years)
                 {
-                    <MudSelectItem T="int" Value="@year">
-                        @year
-                    </MudSelectItem>
+                    <MudSelectItem T="int" Value="@year">@year</MudSelectItem>
                 }
             </MudSelect>
-            <MudSpacer/>
             <MudButton
                 Variant="Variant.Filled"
-                Color="Color.Secondary"
-                StartIcon="@Icons.Material.Filled.Search"
+                Color="Color.Primary"
                 OnClick="OnSearchAsync"
-                Style="border-radius: 8px; height: 40px; text-transform: none;">
-                Pesquisar
+                Size="Size.Small"
+                Class="dima-search-btn">
+                Aplicar
             </MudButton>
-        </MudCardContent>
-    </MudCard>
+        </div>
+    </MudPaper>
 
+    @* Tabela *@
     <MudTable Items="@Transactions"
               T="Transaction"
               Filter="Filter"
               Hover="true"
-              Elevation="4"
+              Elevation="0"
               Loading="@IsBusy"
               RowsPerPage="10"
-              Style="border-radius: 16px;"
-              Class="pa-4">
+              Class="dima-table">
         <ToolBarContent>
-            <MudText Typo="Typo.h6">Histórico</MudText>
+            <MudText Typo="Typo.h6" Style="font-weight: 600;">Histórico</MudText>
             <MudSpacer/>
             <MudTextField
                 @bind-Value="SearchTerm"
-                Placeholder="Filtrar por título ou ID..."
+                Placeholder="Filtrar por título..."
                 Adornment="Adornment.Start"
-                AdornmentIcon="@Icons.Material.Filled.Search"
+                AdornmentIcon="@Icons.Material.Outlined.Search"
                 Immediate="true"
-                IconSize="Size.Medium"
-                Class="mt-0">
+                Variant="Variant.Outlined"
+                Margin="Margin.Dense"
+                IconSize="Size.Small"
+                Style="max-width: 260px;">
             </MudTextField>
         </ToolBarContent>
         <HeaderContent>
@@ -102,57 +105,75 @@
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Lançamento">
-                <MudText Typo="Typo.body1" Style="font-weight: 600;">@context.Title</MudText>
+                <MudText Typo="Typo.body2" Style="font-weight: 600;">@context.Title</MudText>
+                <MudText Typo="Typo.caption" Color="Color.Secondary">
+                    @context.PaidOrReceivedAt?.ToString("dd/MM/yyyy")
+                </MudText>
             </MudTd>
             <MudTd DataLabel="Tipo">
                 @if (context.Type == ETransactionType.Deposit)
                 {
-                    <MudChip Color="Color.Success" Size="Size.Small" Variant="Variant.Filled" T="string">
-                        entrada
-                    </MudChip>
+                    <span class="badge-success">
+                        ↑ Entrada
+                    </span>
                 }
                 else
                 {
-                    <MudChip Color="Color.Error" Size="Size.Small" Variant="Variant.Filled" T="string">
-                        saída
-                    </MudChip>
+                    <span class="badge-danger">
+                        ↓ Saída
+                    </span>
                 }
             </MudTd>
             <MudTd DataLabel="Valor">
-                <MudText Typo="Typo.body1" Color="@(context.Type == ETransactionType.Deposit ? Color.Success : Color.Error)" Style="font-weight: 700;">
+                <span class="text-financial"
+                      style="color: @(context.Type == ETransactionType.Deposit ? "#10B981" : "#F43F5E"); font-size: 0.9375rem;">
                     @context.Amount.ToString("C")
-                </MudText>
+                </span>
             </MudTd>
             <MudTd DataLabel="Ações" Style="text-align: right">
                 <MudStack Row Justify="Justify.FlexEnd" Spacing="0">
                     <MudTooltip Text="Editar">
-                        <MudIconButton 
-                            Icon="@Icons.Material.Filled.Edit"
+                        <MudIconButton
+                            Icon="@Icons.Material.Outlined.Edit"
                             Href="@($"/transactions/edit/{context.Id}")"
                             Color="Color.Primary"
                             Size="Size.Small"
-                            Variant="Variant.Text">
-                        </MudIconButton>
+                            Variant="Variant.Text"/>
                     </MudTooltip>
                     <MudTooltip Text="Excluir">
-                        <MudIconButton 
-                            Icon="@Icons.Material.Filled.Delete"
+                        <MudIconButton
+                            Icon="@Icons.Material.Outlined.Delete"
                             Color="Color.Error"
                             Size="Size.Small"
                             Variant="Variant.Text"
-                            OnClick="() => OnDeleteButtonClickedAsync(context.Id, context.Title)">
-                        </MudIconButton>
+                            OnClick="() => OnDeleteButtonClickedAsync(context.Id, context.Title)"/>
                     </MudTooltip>
                 </MudStack>
             </MudTd>
         </RowTemplate>
         <NoRecordsContent>
-            <MudText Typo="Typo.body1" Align="Align.Center">
-                Nenhum lançamento encontrado
-            </MudText>
+            <div class="empty-state">
+                <div class="empty-icon-wrap">
+                    <MudIcon Icon="@Icons.Material.Outlined.AccountBalanceWallet" Style="font-size: 36px; color: #64748B;" />
+                </div>
+                <MudText Typo="Typo.h6" Style="font-weight: 600; color: #64748B;">
+                    Nenhum lançamento encontrado
+                </MudText>
+                <MudText Typo="Typo.body2" Color="Color.Secondary">
+                    Tente ajustar o período ou adicione seu primeiro lançamento.
+                </MudText>
+                <MudButton
+                    Variant="Variant.Filled"
+                    Color="Color.Primary"
+                    StartIcon="@Icons.Material.Outlined.Add"
+                    Href="/transactions/add"
+                    Class="dima-action-btn mt-2">
+                    Adicionar Lançamento
+                </MudButton>
+            </div>
         </NoRecordsContent>
         <PagerContent>
-            <MudTablePager 
+            <MudTablePager
                 RowsPerPageString="Itens por página:"
                 InfoFormat="{first_item}-{last_item} de {all_items}"
                 HorizontalAlignment="HorizontalAlignment.Right" />
@@ -161,12 +182,57 @@
 </div>
 
 <style>
-    .animate-fade-in {
-        animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    .filter-paper {
+        padding: 0.875rem 1.25rem;
+        border-radius: 12px !important;
+        border: 1px solid var(--mud-palette-divider) !important;
+        background: var(--mud-palette-surface) !important;
     }
 
-    @@keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+    .filter-inner {
+        display: flex;
+        align-items: center;
+        gap: 0.875rem;
+        flex-wrap: wrap;
+    }
+
+    .dima-action-btn {
+        border-radius: 10px !important;
+        text-transform: none !important;
+        font-weight: 600 !important;
+    }
+
+    .dima-search-btn {
+        border-radius: 8px !important;
+        text-transform: none !important;
+        font-weight: 600 !important;
+        height: 36px !important;
+    }
+
+    .dima-table {
+        border-radius: 14px !important;
+        border: 1px solid var(--mud-palette-divider) !important;
+        background: var(--mud-palette-surface) !important;
+        overflow: hidden;
+    }
+
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 3rem 1.5rem;
+        text-align: center;
+    }
+
+    .empty-icon-wrap {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: rgba(100, 116, 139, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.5rem;
     }
 </style>

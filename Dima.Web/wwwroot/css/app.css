@@ -32,6 +32,33 @@
         content: "An error has occurred."
     }
 
+/* ============================================================
+   DIMA — Design Tokens & Global Styles
+   Paleta: Navy #0F2D5E + Cyan #00B4D8
+   ============================================================ */
+
+:root {
+    --dima-navy:          #0F2D5E;
+    --dima-navy-dark:     #0A1628;
+    --dima-navy-deeper:   #070E1C;
+    --dima-cyan:          #00B4D8;
+    --dima-cyan-muted:    rgba(0, 180, 216, 0.15);
+    --dima-success:       #10B981;
+    --dima-danger:        #F43F5E;
+    --dima-warning:       #F59E0B;
+    --dima-muted:         #64748B;
+    --dima-surface-light: #F0F4F8;
+    --dima-radius:        10px;
+    --dima-radius-lg:     16px;
+    --dima-shadow-sm:     0 1px 3px rgba(10, 22, 40, 0.08), 0 1px 2px rgba(10, 22, 40, 0.06);
+    --dima-shadow-md:     0 4px 12px rgba(10, 22, 40, 0.1), 0 2px 4px rgba(10, 22, 40, 0.06);
+    --dima-shadow-lg:     0 10px 30px rgba(10, 22, 40, 0.15), 0 4px 8px rgba(10, 22, 40, 0.08);
+    --dima-shadow-cyan:   0 4px 20px rgba(0, 180, 216, 0.25);
+}
+
+/* ============================================================
+   Loading Screen
+   ============================================================ */
 .loading-container {
     display: flex;
     flex-direction: column;
@@ -39,93 +66,316 @@
     justify-content: center;
     height: 100vh;
     width: 100%;
-    background-color: #0F172A; /* Navy do tema */
+    background-color: var(--dima-navy-dark);
     color: white;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Inter', sans-serif;
     position: fixed;
     top: 0;
     left: 0;
 }
 
 .loading-logo {
-    height: 80px;
+    height: 72px;
     margin-bottom: 2.5rem;
     animation: pulse 2s infinite ease-in-out;
 }
 
 .loading-bar-container {
-    width: 200px;
-    height: 4px;
-    background-color: rgba(255, 255, 255, 0.1);
+    width: 220px;
+    height: 3px;
+    background-color: rgba(255, 255, 255, 0.08);
     border-radius: 10px;
     overflow: hidden;
 }
 
 .loading-bar {
     height: 100%;
-    background-color: #10B981; /* Emerald do tema */
-    box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    background: linear-gradient(90deg, var(--dima-cyan), #4F8CC9);
+    box-shadow: 0 0 12px rgba(0, 180, 216, 0.6);
     transition: width 0.3s ease-in-out;
 }
 
 .loading-text {
     margin-top: 1.5rem;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.25em;
     font-weight: 500;
-    opacity: 0.6;
+    opacity: 0.45;
 }
 
+/* ============================================================
+   Keyframes
+   ============================================================ */
 @keyframes pulse {
-    0% {
-        transform: scale(1);
-        filter: brightness(1);
-    }
-    50% {
-        transform: scale(1.02);
-        filter: brightness(1.2);
-    }
-    100% {
-        transform: scale(1);
-        filter: brightness(1);
-    }
-}
-
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-    color: var(--bs-secondary-color);
-    text-align: end;
-}
-
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-    text-align: start;
-}
-
-/* Animações de entrada */
-.animate-fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
-}
-
-.animate-slide-up {
-    animation: slideUp 0.6s ease-out forwards;
+    0%   { transform: scale(1);    filter: brightness(1);   }
+    50%  { transform: scale(1.02); filter: brightness(1.15); }
+    100% { transform: scale(1);    filter: brightness(1);   }
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0);    }
 }
 
 @keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1);    }
+}
+
+@keyframes shimmer {
+    0%   { background-position: -600px 0; }
+    100% { background-position:  600px 0; }
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0);     }
+}
+
+/* ============================================================
+   Animation Utility Classes
+   ============================================================ */
+.animate-fade-in     { animation: fadeIn    0.5s ease-out forwards; }
+.animate-fade-in-up  { animation: fadeInUp  0.5s ease-out forwards; }
+.animate-slide-up    { animation: slideUp   0.6s ease-out forwards; }
+.animate-scale-in    { animation: scaleIn   0.4s ease-out forwards; }
+.animate-slide-left  { animation: slideInLeft 0.5s ease-out forwards; }
+
+.animate-delay-1 { animation-delay: 0.1s; opacity: 0; }
+.animate-delay-2 { animation-delay: 0.2s; opacity: 0; }
+.animate-delay-3 { animation-delay: 0.3s; opacity: 0; }
+.animate-delay-4 { animation-delay: 0.4s; opacity: 0; }
+.animate-delay-5 { animation-delay: 0.5s; opacity: 0; }
+
+/* ============================================================
+   Skeleton / Shimmer Loading
+   ============================================================ */
+.skeleton {
+    background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+    background-size: 600px 100%;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: var(--dima-radius);
+}
+
+/* ============================================================
+   Typography Utilities
+   ============================================================ */
+.text-mono {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-feature-settings: "tnum" 1;
+    letter-spacing: -0.02em;
+}
+
+.text-financial {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+}
+
+.text-muted-sm {
+    font-size: 0.75rem;
+    color: var(--dima-muted);
+    letter-spacing: 0.03em;
+}
+
+.text-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--dima-muted);
+}
+
+/* ============================================================
+   Layout Utilities
+   ============================================================ */
+.full-height { height: 100%; }
+.gap-xs { gap: 0.25rem; }
+.gap-sm { gap: 0.5rem;  }
+.gap-md { gap: 1rem;    }
+.gap-lg { gap: 1.5rem;  }
+
+/* ============================================================
+   Card / Surface Enhancements
+   ============================================================ */
+.dima-card {
+    border-radius: var(--dima-radius-lg) !important;
+    box-shadow: var(--dima-shadow-sm) !important;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.dima-card:hover {
+    box-shadow: var(--dima-shadow-md) !important;
+    transform: translateY(-1px);
+}
+
+.dima-card-accent {
+    border-left: 3px solid var(--dima-cyan) !important;
+}
+
+/* ============================================================
+   Badge / Pill Utilities
+   ============================================================ */
+.badge-success {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(16, 185, 129, 0.12);
+    color: #10B981;
+}
+
+.badge-danger {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(244, 63, 94, 0.12);
+    color: #F43F5E;
+}
+
+.badge-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(0, 180, 216, 0.12);
+    color: #00B4D8;
+}
+
+.badge-warning {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(245, 158, 11, 0.12);
+    color: #F59E0B;
+}
+
+/* ============================================================
+   Icon Container Utility
+   ============================================================ */
+.icon-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.icon-circle-sm {
+    width: 32px;
+    height: 32px;
+}
+
+.icon-circle-lg {
+    width: 52px;
+    height: 52px;
+}
+
+.icon-circle-success { background: rgba(16, 185, 129, 0.12); color: #10B981; }
+.icon-circle-danger  { background: rgba(244, 63, 94, 0.12);  color: #F43F5E; }
+.icon-circle-info    { background: rgba(0, 180, 216, 0.12);  color: #00B4D8; }
+.icon-circle-navy    { background: rgba(15, 45, 94, 0.1);    color: #0F2D5E; }
+.icon-circle-warning { background: rgba(245, 158, 11, 0.12); color: #F59E0B; }
+
+/* ============================================================
+   Blazor Error UI
+   ============================================================ */
+#blazor-error-ui {
+    color-scheme: light only;
+    background: #F43F5E;
+    color: white;
+    bottom: 0;
+    box-shadow: 0 -2px 8px rgba(244, 63, 94, 0.3);
+    box-sizing: border-box;
+    display: none;
+    left: 0;
+    padding: 0.75rem 1.5rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+    opacity: 0.8;
+}
+
+#blazor-error-ui .dismiss:hover { opacity: 1; }
+
+.blazor-error-boundary {
+    background: #F43F5E;
+    padding: 1rem 1rem 1rem 3.7rem;
+    color: white;
+    border-radius: var(--dima-radius);
+}
+
+.blazor-error-boundary::after {
+    content: "Ocorreu um erro inesperado.";
+}
+
+/* ============================================================
+   Form Utilities
+   ============================================================ */
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
+    color: var(--dima-muted);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}
+
+/* ============================================================
+   Scrollbar Customization
+   ============================================================ */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 180, 216, 0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 180, 216, 0.5);
 }

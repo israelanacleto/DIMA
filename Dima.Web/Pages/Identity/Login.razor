@@ -2,24 +2,21 @@
 @layout HeadlessLayout
 @inherits LoginPage
 
-<PageTitle>Dima - Entrar</PageTitle>
+<PageTitle>Dima — Entrar</PageTitle>
 
-<MudPaper Class="pa-10 mud-elevation-4 login-card">
-    <div class="d-flex flex-column align-center text-center">
-        <img src="@(IsDarkMode ? "img/logo_dark.png" : "img/logo_light.png")" alt="Dima" class="mb-6" height="80"/>
-        
-        <MudText Typo="Typo.h4" GutterBottom="true" Style="font-weight: 800;">
-            Bem-vindo!
+<div class="auth-form-wrap">
+    <div class="auth-form-header">
+        <MudText Typo="Typo.h4" Style="font-weight: 700; letter-spacing: -0.02em;">
+            Bem-vindo de volta
         </MudText>
-        
-        <MudText Typo="Typo.body1" Class="mb-8" Color="Color.Secondary">
-            Acesse sua conta para gerenciar suas finanças de forma simples e eficiente.
+        <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
+            Entre na sua conta para continuar
         </MudText>
     </div>
-    
-    <EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync" class="gap-4 d-flex flex-column">
+
+    <EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync" class="auth-form-fields">
         <DataAnnotationsValidator />
-        
+
         <MudTextField
             T="string"
             Label="E-mail"
@@ -27,10 +24,8 @@
             InputType="InputType.Email"
             For="@(() => InputModel.Email)"
             @bind-Value="InputModel.Email"
-            Adornment="Adornment.Start"
-            AdornmentIcon="@Icons.Material.Filled.Email"
-            AdornmentColor="Color.Primary"
-            Class="mt-2"/>
+            Margin="Margin.Dense"
+            Class="auth-field"/>
 
         <MudTextField
             T="string"
@@ -39,16 +34,14 @@
             InputType="InputType.Password"
             For="@(() => InputModel.Password)"
             @bind-Value="InputModel.Password"
-            Adornment="Adornment.Start"
-            AdornmentIcon="@Icons.Material.Filled.Lock"
-            AdornmentColor="Color.Primary"
-            Class="mt-2"/>
-        
-        <div class="d-flex flex-column mt-8 gap-3">
+            Margin="Margin.Dense"
+            Class="auth-field"/>
+
+        <div class="auth-actions">
             @if (IsBusy)
             {
-                <div class="d-flex justify-center">
-                    <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
+                <div class="d-flex justify-center py-2">
+                    <MudProgressCircular Color="Color.Primary" Indeterminate="true" Size="Size.Small"/>
                 </div>
             }
             else
@@ -59,40 +52,67 @@
                     FullWidth="true"
                     Color="Color.Primary"
                     Size="Size.Large"
-                    Style="border-radius: 12px; font-weight: 600; padding: 14px 0;">
+                    Class="auth-submit-btn">
                     Entrar
                 </MudButton>
             }
-            <MudButton
-                Disabled="IsBusy"
-                Variant="Variant.Text"
-                FullWidth="true"
-                Href="/register"
-                Style="border-radius: 12px; text-transform: none;">
-                Não possui uma conta? <span class="ml-1" style="color: var(--mud-palette-primary); font-weight: 700;">Cadastre-se</span>
-            </MudButton>
-
-            <MudDivider Class="my-2" />
-            
-            <MudButton
-                Variant="Variant.Outlined"
-                Color="Color.Info"
-                FullWidth="true"
-                Href="/help"
-                StartIcon="@Icons.Material.Filled.Help"
-                Style="border-radius: 12px; text-transform: none;">
-                Como funciona o DIMA?
-            </MudButton>
         </div>
-        
     </EditForm>
-</MudPaper>
+
+    <MudDivider Class="my-4" />
+
+    <div class="auth-footer-links">
+        <MudText Typo="Typo.body2" Color="Color.Secondary">
+            Não possui uma conta?
+            <MudLink Href="/register" Color="Color.Secondary" Style="font-weight: 700;">
+                Cadastre-se
+            </MudLink>
+        </MudText>
+        <MudLink Href="/help" Typo="Typo.body2" Color="Color.Secondary" Class="mt-2">
+            Como funciona o DIMA?
+        </MudLink>
+    </div>
+</div>
 
 <style>
-    .login-card {
-        border-radius: 16px;
-        backdrop-filter: blur(12px);
-        background-color: color-mix(in srgb, var(--mud-palette-surface), transparent 8%) !important;
-        border: 1px solid color-mix(in srgb, var(--mud-palette-divider), transparent 50%);
+    .auth-form-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        width: 100%;
+    }
+
+    .auth-form-header {
+        margin-bottom: 2rem;
+    }
+
+    .auth-form-fields {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .auth-field {
+        width: 100%;
+    }
+
+    .auth-actions {
+        margin-top: 0.5rem;
+    }
+
+    .auth-submit-btn {
+        border-radius: 10px !important;
+        font-weight: 600 !important;
+        padding: 12px 0 !important;
+        letter-spacing: 0.01em !important;
+        text-transform: none !important;
+    }
+
+    .auth-footer-links {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        text-align: center;
     }
 </style>

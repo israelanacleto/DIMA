@@ -6,10 +6,14 @@
 
 <MudContainer MaxWidth="MaxWidth.Large" Class="mt-8 animate-fade-in">
     <div class="d-flex align-center mb-8">
-        <MudIcon Icon="@Icons.Material.Filled.HelpCenter" Color="Color.Primary" Size="Size.Large" Class="mr-4" />
+        <div class="icon-circle icon-circle-lg icon-circle-info mr-4" style="flex-shrink: 0;">
+            <MudIcon Icon="@Icons.Material.Outlined.HelpOutline" Style="font-size: 28px;" />
+        </div>
         <div>
-            <MudText Typo="Typo.h4" Style="font-weight: 800;">Central de Ajuda</MudText>
-            <MudText Typo="Typo.body1" Color="Color.Secondary">Entenda como extrair o máximo do ecossistema DIMA</MudText>
+            <MudText Typo="Typo.h3" Style="font-weight: 700; letter-spacing: -0.02em;">Central de Ajuda</MudText>
+            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
+                Entenda como extrair o máximo do ecossistema DIMA
+            </MudText>
         </div>
     </div>
 
@@ -92,7 +96,10 @@
     </MudTabs>
 
     <div class="d-flex justify-center mt-12 pb-12">
-        <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.ArrowBack" Href="/">
+        <MudButton Variant="Variant.Outlined" Color="Color.Primary"
+                   StartIcon="@Icons.Material.Outlined.ArrowBack"
+                   Href="/dashboard"
+                   Style="border-radius: 10px; text-transform: none; font-weight: 600;">
             Voltar ao Dashboard
         </MudButton>
     </div>

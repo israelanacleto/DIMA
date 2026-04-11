@@ -1,7 +1,6 @@
 @inherits LayoutComponentBase
 
-
-<MudThemeProvider  
+<MudThemeProvider
     @ref="_mudThemeProvider"
     @bind-IsDarkMode="_isDarkMode"
     Theme="Configuration.Theme"/>
@@ -10,75 +9,208 @@
 <MudPopoverProvider />
 
 <MudLayout>
-    <MudMainContent 
-        Class="d-flex align-center justify-center pa-0 headless-bg" 
-        Style="min-height: 100vh;">
-        <MudContainer MaxWidth="MaxWidth.ExtraSmall" Class="pa-4" Style="z-index: 1;">
-            <CascadingValue Value="_isDarkMode">
-                <div class="animate-fade-in">
-                    @Body
+    <MudMainContent Class="headless-root">
+        <div class="headless-grid">
+
+            @* Painel esquerdo: branding (oculto em mobile) *@
+            <div class="headless-brand-panel">
+                <div class="brand-inner animate-fade-in">
+
+                    <div class="brand-logo-wrap">
+                        <MudImage Src="img/logo_dark.png" Alt="Dima" Height="44" />
+                    </div>
+
+                    <div class="brand-headline">
+                        <MudText Typo="Typo.h2" Style="color: white; font-weight: 700; line-height: 1.2;">
+                            Controle financeiro<br/>para quem leva<br/>dinheiro a sério.
+                        </MudText>
+                        <MudText Typo="Typo.body1" Style="color: rgba(255,255,255,0.6); margin-top: 1rem; max-width: 340px; line-height: 1.7;">
+                            Gerencie categorias, acompanhe lançamentos e visualize seus resultados com clareza.
+                        </MudText>
+                    </div>
+
+                    <div class="brand-features">
+                        <div class="brand-feature-item">
+                            <span class="brand-feature-icon">
+                                <MudIcon Icon="@Icons.Material.Outlined.BarChart" Style="font-size: 18px;" />
+                            </span>
+                            <MudText Typo="Typo.body2" Style="color: rgba(255,255,255,0.75);">
+                                Análise visual em tempo real
+                            </MudText>
+                        </div>
+                        <div class="brand-feature-item">
+                            <span class="brand-feature-icon">
+                                <MudIcon Icon="@Icons.Material.Outlined.Category" Style="font-size: 18px;" />
+                            </span>
+                            <MudText Typo="Typo.body2" Style="color: rgba(255,255,255,0.75);">
+                                Categorização inteligente de gastos
+                            </MudText>
+                        </div>
+                        <div class="brand-feature-item">
+                            <span class="brand-feature-icon">
+                                <MudIcon Icon="@Icons.Material.Outlined.Security" Style="font-size: 18px;" />
+                            </span>
+                            <MudText Typo="Typo.body2" Style="color: rgba(255,255,255,0.75);">
+                                Segurança com auditoria completa
+                            </MudText>
+                        </div>
+                    </div>
+
+                    <div class="brand-footer-text">
+                        <MudText Typo="Typo.caption" Style="color: rgba(255,255,255,0.3); letter-spacing: 0.05em;">
+                            DIMA · Plataforma Financeira
+                        </MudText>
+                    </div>
                 </div>
-            </CascadingValue>
-        </MudContainer>
+            </div>
+
+            @* Painel direito: formulário *@
+            <div class="headless-form-panel">
+                <div class="form-panel-inner">
+                    <CascadingValue Value="_isDarkMode">
+                        <div class="animate-fade-in-up">
+                            @Body
+                        </div>
+                    </CascadingValue>
+                </div>
+            </div>
+
+        </div>
     </MudMainContent>
 </MudLayout>
 
 <style>
-    .headless-bg {
-        position: relative;
+    .headless-root {
+        min-height: 100vh;
         background-color: var(--mud-palette-background);
+    }
+
+    .headless-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 100vh;
+    }
+
+    /* ---- Painel esquerdo (branding) ---- */
+    .headless-brand-panel {
+        background: linear-gradient(145deg, #0A1628 0%, #0F2D5E 60%, #1A4A8A 100%);
+        position: relative;
         overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem;
     }
 
-    .headless-bg::before {
+    /* Grid pattern de fundo */
+    .headless-brand-panel::before {
         content: "";
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: 
-            radial-gradient(circle at 20% 30%, color-mix(in srgb, var(--mud-palette-primary), transparent 80%), transparent 40%),
-            radial-gradient(circle at 80% 20%, color-mix(in srgb, var(--mud-palette-tertiary), transparent 85%), transparent 40%),
-            radial-gradient(circle at 50% 80%, color-mix(in srgb, var(--mud-palette-secondary), transparent 85%), transparent 45%),
-            radial-gradient(circle at 80% 80%, color-mix(in srgb, var(--mud-palette-primary), transparent 80%), transparent 40%);
-        filter: blur(60px);
-        animation: drift 20s infinite alternate ease-in-out;
-        z-index: 0;
-    }
-
-    /* Adiciona um efeito de ruído sutil para tirar o aspecto "liso" demais */
-    .headless-bg::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        opacity: 0.03;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(0,180,216,0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,180,216,0.06) 1px, transparent 1px);
+        background-size: 40px 40px;
         pointer-events: none;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        z-index: 0;
     }
 
-    @@keyframes drift {
-        from { transform: scale(1) translate(0, 0); }
-        to { transform: scale(1.1) translate(2%, 3%); }
+    /* Glow sutil no canto inferior direito */
+    .headless-brand-panel::after {
+        content: "";
+        position: absolute;
+        bottom: -100px;
+        right: -100px;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(0,180,216,0.15) 0%, transparent 70%);
+        pointer-events: none;
     }
 
-    .animate-fade-in {
-        animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    .brand-inner {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+        max-width: 420px;
+        width: 100%;
     }
 
-    @@keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+    .brand-logo-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .brand-headline {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .brand-features {
+        display: flex;
+        flex-direction: column;
+        gap: 0.875rem;
+    }
+
+    .brand-feature-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .brand-feature-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: rgba(0, 180, 216, 0.15);
+        color: #00B4D8;
+        flex-shrink: 0;
+    }
+
+    .brand-footer-text {
+        margin-top: auto;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* ---- Painel direito (formulário) ---- */
+    .headless-form-panel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        background-color: var(--mud-palette-background);
+    }
+
+    .form-panel-inner {
+        width: 100%;
+        max-width: 420px;
+    }
+
+    /* ---- Responsividade ---- */
+    @@media (max-width: 960px) {
+        .headless-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .headless-brand-panel {
+            display: none;
+        }
+
+        .headless-form-panel {
+            padding: 1.5rem 1rem;
+            min-height: 100vh;
+        }
     }
 </style>
 
 @code {
 
-    private bool _isDarkMode = true;
+    private bool _isDarkMode = false;
     private MudThemeProvider _mudThemeProvider = null!;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

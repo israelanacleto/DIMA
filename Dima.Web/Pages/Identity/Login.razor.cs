@@ -42,7 +42,7 @@ public partial class LoginPage : ComponentBase
         var user = authState.User;
 
         if (user.Identity is { IsAuthenticated: true })
-            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/dashboard");
     }
 
     #endregion
@@ -61,7 +61,7 @@ public partial class LoginPage : ComponentBase
             {
                 await AuthenticationStateProvider.GetAuthenticationStateAsync();
                 AuthenticationStateProvider.NotifyAuthenticationStateChanged();
-                NavigationManager.NavigateTo("/");
+                NavigationManager.NavigateTo("/dashboard");
             }
             else
                 Snackbar.Add(result.Message ?? "Não foi possível realizar o login", Severity.Error);
