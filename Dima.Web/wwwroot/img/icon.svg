@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- Badge Navy — para favicon e tamanhos pequenos -->
+  <rect width="48" height="48" rx="11" fill="#0F2D5E"/>
+  <!-- D — branco bold -->
+  <text x="8" y="34"
+        font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif"
+        font-weight="700"
+        font-size="26"
+        fill="white">D</text>
+  <!-- sublinhado Cyan — âncora visual da marca -->
+  <rect x="8" y="38" width="16" height="3" rx="1.5" fill="#00B4D8"/>
+</svg>

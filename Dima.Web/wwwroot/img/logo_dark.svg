@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164 48" fill="none">
+  <!-- DI — branco (para fundos escuros/Navy) -->
+  <text x="2" y="36"
+        font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif"
+        font-weight="700"
+        font-size="30"
+        fill="white"
+        letter-spacing="-1">DI</text>
+  <!-- MA — Cyan -->
+  <text x="46" y="36"
+        font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif"
+        font-weight="700"
+        font-size="30"
+        fill="#00B4D8"
+        letter-spacing="-1">MA</text>
+  <!-- sublinhado Cyan sob o I -->
+  <rect x="29" y="40" width="13" height="3" rx="1.5" fill="#00B4D8"/>
+</svg>
