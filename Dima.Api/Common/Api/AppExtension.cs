@@ -8,7 +8,7 @@ namespace Dima.Api.Common.Api;
 
 public static class AppExtension
 {
-    public static void ConfigureDevEnvironment(this WebApplication app)
+    public static async Task ConfigureDevEnvironmentAsync(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -21,6 +21,9 @@ public static class AppExtension
             {
                 context.Database.Migrate();
             }
+
+            // 2. Seed Global Data (Products/Plans)
+            await DbInitializer.SeedAsync(context);
         }
         catch (Exception ex)
         {

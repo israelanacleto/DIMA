@@ -52,7 +52,7 @@ public class CategoryHandler(IHttpClientFactory httpClientFactory) : ICategoryHa
 
     public async Task<Response<List<ComboItens>>> GetAllComboSelectAsync(GetCombosRequest requests)
     {
-        return await _client.GetFromJsonAsync<Response<List<ComboItens>>>("/v1/categories/combos")
+        return await _client.GetFromJsonAsync<Response<List<ComboItens>>>("/v1/categories/all")
             ?? new Response<List<ComboItens>>(null, 400, "Não foi possível obter as categorias");
     }
 }

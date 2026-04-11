@@ -20,7 +20,7 @@ app.UseExceptionHandler();
 app.UseCors(ApiConfiguration.CorsPolicyName);
 app.UseSecurity();
 
-app.ConfigureDevEnvironment();
+await app.ConfigureDevEnvironmentAsync();
 
 app.MapEndpoints();
 

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet build:*)",
+      "Bash(find \"F:\\\\DEVFULLSTACK\\\\PROJETOS PARA PORTIFOLIO\\\\DIMA-israelanacleto\\\\Dima.Core\" -name \"Transaction.cs\" -exec grep -n \"public\" {} \\\\;)"
+    ]
+  }
+}

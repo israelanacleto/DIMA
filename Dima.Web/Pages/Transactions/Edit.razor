@@ -52,13 +52,14 @@
                                           Margin="Margin.Dense" />
                         </MudItem>
                         <MudItem xs="12" sm="6">
-                            <MudTextField Label="Valor"
-                                          T="decimal"
-                                          Format="C"
-                                          Variant="Variant.Outlined"
-                                          @bind-Value="InputModel.Amount"
-                                          For="@(() => InputModel.Amount)"
-                                          Margin="Margin.Dense" />
+                            <MudNumericField Label="Valor"
+                                             T="decimal"
+                                             Format="C"
+                                             HideSpinButtons="true"
+                                             Variant="Variant.Outlined"
+                                             @bind-Value="InputModel.Amount"
+                                             For="@(() => InputModel.Amount)"
+                                             Margin="Margin.Dense" />
                         </MudItem>
                         <MudItem xs="12" sm="6">
                             <MudDatePicker Label="Data"
