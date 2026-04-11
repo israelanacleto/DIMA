@@ -27,14 +27,14 @@
 
 ## 📸 Interface Experience / Experiência de Interface
 
-<div align="center">
-
+<!-- 
 ### 📊 Professional Dashboard / Dashboard Profissional
 | Light Mode (Indigo) | Dark Mode (Slate) |
 | :---: | :---: |
 | ![Dashboard Light](screenshots/Dima_Dashboard_Light.jpeg) | ![Dashboard Dark](screenshots/Dima_Dashboard_Dark.jpeg) |
+-->
 
-</div>
+*(Screenshots coming soon / Capturas de tela em breve)*
 
 ---
 
