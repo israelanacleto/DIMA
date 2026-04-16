@@ -106,31 +106,45 @@
 
     /* Override MudNavLink para o estilo DIMA */
     .dima-nav .mud-nav-link {
-        border-radius: 8px !important;
-        margin: 1px 0 !important;
-        padding: 0 0.75rem !important;
+        border-radius: 4px !important;
+        margin: 4px 8px !important;
+        padding: 8px 12px !important;
         font-size: 0.875rem !important;
         font-weight: 500 !important;
-        height: 40px !important;
-        transition: background 0.15s ease, color 0.15s ease !important;
+        transition: all 0.15s ease !important;
         color: var(--mud-palette-drawer-text) !important;
+        display: flex !important;
+        align-items: center !important;
+        height: auto !important; /* Deixa o padding definir a altura para centralizar melhor */
     }
 
     .dima-nav .mud-nav-link:hover {
-        background: rgba(0, 180, 216, 0.08) !important;
-        color: #00B4D8 !important;
+        background: rgba(0, 0, 0, 0.04) !important;
     }
 
     .dima-nav .mud-nav-link.active {
-        background: rgba(0, 180, 216, 0.12) !important;
+        background: rgba(0, 180, 216, 0.08) !important;
         color: #00B4D8 !important;
-        border-left: 3px solid #00B4D8 !important;
         font-weight: 600 !important;
     }
 
-    .dima-nav .mud-nav-link .mud-icon-root {
+    /* Indicador lateral sutil para o item ativo */
+    .dima-nav .mud-nav-link.active::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        height: 60%;
+        width: 4px;
+        background-color: #00B4D8;
+        border-radius: 0 4px 4px 0;
+    }
+
+    .dima-nav .mud-nav-link .mud-nav-link-icon-default {
+        margin-right: 12px !important;
         font-size: 20px !important;
         color: inherit !important;
+        display: flex !important;
+        align-items: center !important;
     }
 </style>
 

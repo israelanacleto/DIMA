@@ -87,10 +87,15 @@
                             <MudIcon Icon="@Icons.Material.Outlined.Label" Style="font-size: 20px;" />
                         </div>
                         <div class="category-info">
-                            <MudText Typo="Typo.body1" Style="font-weight: 700;">@category.Title</MudText>
+                            <div class="category-header">
+                                <span class="category-title">@category.Title</span>
+                                <span class="@(category.IsActive ? "status-badge-active" : "status-badge-inactive")">
+                                    @(category.IsActive ? "Ativa" : "Inativa")
+                                </span>
+                            </div>
                             @if (!string.IsNullOrEmpty(category.Description))
                             {
-                                <MudText Typo="Typo.body2" Color="Color.Secondary" Style="font-size: 0.8125rem;">
+                                <MudText Typo="Typo.body2" Color="Color.Secondary" Style="font-size: 0.8125rem; margin-top: 2px;">
                                     @category.Description
                                 </MudText>
                             }
@@ -140,6 +145,7 @@
         align-items: center;
         gap: 1rem;
         padding: 1rem 1.25rem;
+        height: 100%;
         border-radius: 12px !important;
         border: 1px solid var(--mud-palette-divider) !important;
         background: var(--mud-palette-surface) !important;
@@ -165,36 +171,45 @@
     .category-info {
         display: flex;
         flex-direction: column;
-        gap: 0.125rem;
+        justify-content: center;
         flex: 1;
         min-width: 0;
     }
 
-    .category-actions {
-        display: flex;
-        align-items: center;
-        gap: 0;
-        flex-shrink: 0;
+    .category-header {
+        display: block;
+        line-height: 1.2;
     }
 
-    .empty-state {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.625rem;
-        padding: 3rem 1.5rem;
-        text-align: center;
+    .category-title {
+        font-size: 0.9375rem;
+        font-weight: 700 !important;
+        color: var(--mud-palette-text-primary);
+        word-break: break-word;
     }
 
-    .empty-icon-wrap {
-        width: 72px;
-        height: 72px;
-        border-radius: 50%;
-        background: rgba(100, 116, 139, 0.08);
-        display: flex;
+    .status-badge-active, .status-badge-inactive {
+        display: inline-flex;
         align-items: center;
-        justify-content: center;
-        margin-bottom: 0.5rem;
+        vertical-align: middle;
+        white-space: nowrap;
+        margin-left: 6px;
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        position: relative;
+        top: -1px;
+    }
+
+    .status-badge-active {
+        background-color: rgba(16, 185, 129, 0.1);
+        color: #10B981;
+    }
+
+    .status-badge-inactive {
+        background-color: rgba(244, 63, 94, 0.1);
+        color: #F43F5E;
     }
 </style>
 
