@@ -51,7 +51,7 @@ public partial class SuccessPage : ComponentBase
     public async Task ConfirmPaymentAsync()
     {
         IsBusy = true;
-        await Task.Delay(10000);
+        
         try
         {
             var request = new PayOrderRequest
@@ -59,8 +59,11 @@ public partial class SuccessPage : ComponentBase
                 OrderNumber = OrderNumber
             };
 
-            for (var i = 0; i < 5; i++)
+            // Tenta 20 vezes com intervalos de 3 segundos (60 segundos no total)
+            // O Stripe Search API pode levar algum tempo para indexar em ambiente de teste
+            for (var i = 0; i < 20; i++)
             {
+                await Task.Delay(3000);
                 var result = await OrderHandler.PayAsync(request);
                 if (result.IsSuccess)
                 {
@@ -70,8 +73,6 @@ public partial class SuccessPage : ComponentBase
                     StateHasChanged();
                     return;
                 }
-
-                await Task.Delay(3000);
             }
 
             IsConfirmed = false;

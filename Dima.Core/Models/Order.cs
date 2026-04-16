@@ -5,7 +5,7 @@ namespace Dima.Core.Models;
 public class Order
 {
     public long Id { get; set; }
-    public string Number { get; set; } = Guid.NewGuid().ToString("N")[..8];
+    public string Number { get; set; } = Guid.NewGuid().ToString("N");
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
