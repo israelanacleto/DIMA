@@ -7,7 +7,7 @@ public static class Configuration
 {
     public const string HttpClientName = "dima";
 
-    public static string BackendUrl { get; set; } = "http://localhost:5204";
+    public static string BackendUrl { get; set; } = "https://localhost:7185";
     public static string StripePublicKey { get; set; } = "";
     
     public static readonly MudTheme Theme = new()

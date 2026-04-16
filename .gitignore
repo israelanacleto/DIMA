@@ -362,3 +362,7 @@ __pycache__/
 # Claude Cache
 .claude/
 .claude/**
+
+# AppSettings
+appsettings.json
+appsettings.Development.json
