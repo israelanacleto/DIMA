@@ -113,44 +113,30 @@ public class TransactionalHandler(AppDbContext context) : ITransactionHandler
 
     public async Task<PagedResponse<List<Transaction>?>> GetByPeriodAsync(GetTransactionsByPeriodRequest request)
     {
-        try
-        {
-            request.StartDate ??= DateTime.Now.GetFirstDay();
-            request.EndDate ??= DateTime.Now.GetLastDay();
-        }
-        catch
-        {
-            return new PagedResponse<List<Transaction>?>(null, 500,
-                "Não foi possível determinar a data de início ou término");
-        }
+        request.StartDate ??= DateTime.Now.GetFirstDay();
+        request.EndDate ??= DateTime.Now.GetLastDay();
 
-        try
-        {
-            var query = context
-                .Transactions
-                .AsNoTracking()
-                .Where(x =>
-                    x.PaidOrReceivedAt >= request.StartDate &&
-                    x.PaidOrReceivedAt <= request.EndDate &&
-                    x.UserId == request.UserId)
-                .OrderBy(x => x.PaidOrReceivedAt);
+        var query = context
+            .Transactions
+            .AsNoTracking()
+            .Include(x => x.Category)
+            .Where(x =>
+                x.PaidOrReceivedAt >= request.StartDate &&
+                x.PaidOrReceivedAt <= request.EndDate &&
+                x.UserId == request.UserId)
+            .OrderBy(x => x.PaidOrReceivedAt);
 
-            var transactions = await query
-                .Skip((request.PageNumber - 1) * request.PageSize)
-                .Take(request.PageSize)
-                .ToListAsync();
+        var transactions = await query
+            .Skip((request.PageNumber - 1) * request.PageSize)
+            .Take(request.PageSize)
+            .ToListAsync();
 
-            var count = await query.CountAsync();
+        var count = await query.CountAsync();
 
-            return new PagedResponse<List<Transaction>?>(
-                transactions,
-                count,
-                request.PageNumber,
-                request.PageSize);
-        }
-        catch
-        {
-            return new PagedResponse<List<Transaction>?>(null, 500, "Não foi possível obter as transações");
-        }
+        return new PagedResponse<List<Transaction>?>(
+            transactions,
+            count,
+            request.PageNumber,
+            request.PageSize);
     }
 }

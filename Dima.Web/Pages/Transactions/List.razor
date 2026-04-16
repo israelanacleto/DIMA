@@ -95,6 +95,7 @@
                     Lançamento
                 </MudTableSortLabel>
             </MudTh>
+            <MudTh>Categoria</MudTh>
             <MudTh>Tipo</MudTh>
             <MudTh>
                 <MudTableSortLabel SortBy="new Func<Transaction, object>(x => x.Amount)">
@@ -110,6 +111,7 @@
                     @context.PaidOrReceivedAt?.ToString("dd/MM/yyyy")
                 </MudText>
             </MudTd>
+            <MudTd DataLabel="Categoria">@context.Category?.Title</MudTd>
             <MudTd DataLabel="Tipo">
                 @if (context.Type == ETransactionType.Deposit)
                 {
