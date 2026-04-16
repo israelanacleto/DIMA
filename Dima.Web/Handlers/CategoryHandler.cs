@@ -32,10 +32,8 @@ public class CategoryHandler(IHttpClientFactory httpClientFactory) : ICategoryHa
     public async Task<Response<Category?>> DeleteAsync(DeleteCategoryRequest request)
     {
         var result = await _client.DeleteAsync($"/v1/categories/{request.Id}");
-        return await result
-                   .Content
-                   .ReadFromJsonAsync<Response<Category?>>() 
-               ?? new Response<Category?>(null, (int)result.StatusCode, "Falha ao excluir a categoria");
+        return await result.Content.ReadFromJsonAsync<Response<Category?>>()
+               ?? new Response<Category?>(null, (int)result.StatusCode, "Não foi possível excluir a categoria.");
     }
 
     public async Task<Response<Category?>> GetByIdAsync(GetCategoryByIdRequest request)
@@ -52,7 +50,7 @@ public class CategoryHandler(IHttpClientFactory httpClientFactory) : ICategoryHa
 
     public async Task<Response<List<ComboItens>>> GetAllComboSelectAsync(GetCombosRequest requests)
     {
-        return await _client.GetFromJsonAsync<Response<List<ComboItens>>>("/v1/categories/all")
+        return await _client.GetFromJsonAsync<Response<List<ComboItens>>>("/v1/categories/combo")
             ?? new Response<List<ComboItens>>(null, 400, "Não foi possível obter as categorias");
     }
 }

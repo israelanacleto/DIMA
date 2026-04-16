@@ -55,6 +55,17 @@
                                           For="@(() => InputModel.Description)"
                                           Margin="Margin.Dense" />
                         </MudItem>
+                        <MudItem xs="12">
+                            <div class="d-flex align-center justify-space-between mt-2">
+                                <MudText Typo="Typo.body1" Style="font-weight: 500;">Categoria Ativa</MudText>
+                                <MudSwitch @bind-Value="InputModel.IsActive" 
+                                           Color="Color.Primary" 
+                                           UnCheckedColor="Color.Error" />
+                            </div>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">
+                                Categorias inativas não podem ser selecionadas em novos lançamentos.
+                            </MudText>
+                        </MudItem>
                     </MudGrid>
                 </div>
 

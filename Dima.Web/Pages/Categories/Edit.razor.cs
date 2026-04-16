@@ -58,7 +58,8 @@ public partial class EditCategoryPage : ComponentBase
                 {
                     Id = response.Data.Id,
                     Title = response.Data.Title,
-                    Description = response.Data.Description
+                    Description = response.Data.Description,
+                    IsActive = response.Data.IsActive
                 };
             }
             else

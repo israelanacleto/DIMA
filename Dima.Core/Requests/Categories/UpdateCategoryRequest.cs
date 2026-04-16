@@ -12,4 +12,7 @@ public class UpdateCategoryRequest  : Request
 
     [Required(ErrorMessage = "Descrição inválida")]
     public string? Description { get; set; }
+
+    [Required(ErrorMessage = "Status inválido")]
+    public bool IsActive { get; set; } = true;
 }

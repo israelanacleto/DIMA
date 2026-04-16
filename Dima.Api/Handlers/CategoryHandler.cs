@@ -44,7 +44,8 @@ public class CategoryHandler(AppDbContext context) : ICategoryHandler
                 return new Response<Category?>(null, 404, "Categoria não encontrada");
 
             category.Title = request.Title;
-            category.Description = request.Description;
+            category.Description = request.Description ?? string.Empty;
+            category.IsActive = request.IsActive;
 
             context.Categories.Update(category);
             await context.SaveChangesAsync();
@@ -67,6 +68,11 @@ public class CategoryHandler(AppDbContext context) : ICategoryHandler
 
             if (category is null)
                 return new Response<Category?>(null, 404, "Categoria não encontrada");
+
+            // Validação: Impedir exclusão se houver transações
+            var hasTransactions = await context.Transactions.AnyAsync(x => x.CategoryId == request.Id);
+            if (hasTransactions)
+                return new Response<Category?>(null, 400, "Não é possível excluir uma categoria que possui lançamentos vinculados.");
 
             context.Categories.Remove(category);
             await context.SaveChangesAsync();
@@ -129,24 +135,17 @@ public class CategoryHandler(AppDbContext context) : ICategoryHandler
 
     public async Task<Response<List<ComboItens>>> GetAllComboSelectAsync(GetCombosRequest request)
     {
-        try
-        {
-            var comboItensList = await context.Categories
-                .AsNoTracking()
-                .Where(x => x.UserId == request.UserId)
-                .OrderBy(x => x.Title)
-                .Select(x => new ComboItens
-                {
-                    Value = x.Id.ToString(),
-                    Label = x.Title
-                })
-                .ToListAsync();
-            
-            return new Response<List<ComboItens>>(comboItensList);
-        }
-        catch
-        {
-            return new PagedResponse<List<ComboItens>>(null, 500, "Não foi possível consultar as categorias");
-        } 
+        var comboItensList = await context.Categories
+            .AsNoTracking()
+            .Where(x => x.UserId == request.UserId && x.IsActive)
+            .OrderBy(x => x.Title)
+            .Select(x => new ComboItens
+            {
+                Value = x.Id.ToString(),
+                Label = x.Title
+            })
+            .ToListAsync();
+        
+        return new Response<List<ComboItens>>(comboItensList);
     }
 }
