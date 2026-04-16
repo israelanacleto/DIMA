@@ -26,8 +26,8 @@ public class LoginEndpoint : IEndpoint
             lockoutOnFailure: false);
 
         if (result.Succeeded)
-            return Results.Ok();
+            return Results.Ok(new Dima.Core.Responses.Response<string>("Login realizado com sucesso!", 200, "Login realizado com sucesso!"));
 
-        return Results.Unauthorized();
+        return Results.Json(new Dima.Core.Responses.Response<string>(null, 401, "E-mail ou senha inválidos"), statusCode: 401);
     }
 }

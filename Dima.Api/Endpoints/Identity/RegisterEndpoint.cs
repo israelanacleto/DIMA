@@ -32,10 +32,7 @@ public class RegisterEndpoint : IEndpoint
         if (!result.Succeeded)
             return Results.BadRequest(result.Errors);
 
-        if (request.GenerateDemoData)
-        {
-            await DbInitializer.SeedDemoDataAsync(context, user.Email);
-        }
+        await DbInitializer.SeedDemoDataAsync(context, user.Email!);
 
         return Results.Ok();
     }
