@@ -1,11 +1,11 @@
 {
-  "name": "Dima.Web",
-  "short_name": "Dima.Web",
+  "name": "DIMA — Gestão Financeira",
+  "short_name": "DIMA",
   "id": "./",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#03173d",
+  "theme_color": "#0F2D5E",
   "prefer_related_applications": false,
   "icons": [
     {
