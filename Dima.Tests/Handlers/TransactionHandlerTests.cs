@@ -76,7 +76,16 @@ public class TransactionHandlerTests
         var handler = new TransactionalHandler(context);
         var userId = "test@user.com";
         var baseDate = new DateTime(2026, 03, 15);
-        
+
+        // O handler faz Include(x => x.Category); como a relação é obrigatória,
+        // o EF traduz para INNER JOIN. Sem uma Category válida, as transações
+        // seriam filtradas. Em produção toda transação tem categoria, então
+        // semeamos uma aqui para refletir o cenário real.
+        context.Categories.Add(new Dima.Core.Models.Category
+        {
+            Id = 1, Title = "Geral", UserId = userId
+        });
+
         // Seed transactions
         context.Transactions.AddRange(new List<Dima.Core.Models.Transaction>
         {
@@ -98,7 +107,7 @@ public class TransactionHandlerTests
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        result.Data.Should().HaveCount(2); 
+        result.Data.Should().HaveCount(2);
         result.Data!.Should().Contain(x => x.Title == "T1");
         result.Data!.Should().Contain(x => x.Title == "T2");
         result.Data!.Should().NotContain(x => x.Title == "T3");

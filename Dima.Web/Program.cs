@@ -10,6 +10,11 @@ using MudBlazor.Services;
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 Configuration.BackendUrl = builder.Configuration.GetValue<string>("BackendUrl") ?? string.Empty;
+// Sem BackendUrl definida, usa a própria origem do site (deploy single-service:
+// a API serve o WASM, então front e back compartilham host). Em dev, o
+// appsettings define http://localhost:5204 porque rodam separados.
+if (string.IsNullOrWhiteSpace(Configuration.BackendUrl))
+    Configuration.BackendUrl = builder.HostEnvironment.BaseAddress;
 Configuration.StripePublicKey = builder.Configuration.GetValue<string>("StripePublicKey") ?? string.Empty;
 
 builder.RootComponents.Add<App>("#app");

@@ -2,6 +2,7 @@ using Dima.Api.Data;
 using Dima.Api.Models;
 using Dima.Core.Enums;
 using Dima.Core.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dima.Api.Data;
@@ -58,36 +59,129 @@ public static class DbInitializer
         }
     }
 
+    /// <summary>
+    /// Cria (se não existir) a conta de demonstração e popula 6 meses de finanças,
+    /// para o dashboard e os relatórios nascerem com dados realistas. Idempotente.
+    /// Credenciais: demo@dima.app / Demo@123
+    /// </summary>
+    public static async Task SeedDemoAsync(AppDbContext context, UserManager<User> userManager)
+    {
+        const string demoEmail = "demo@dima.app";
+
+        try
+        {
+            if (await userManager.FindByEmailAsync(demoEmail) is null)
+            {
+                var user = new User
+                {
+                    UserName = demoEmail,
+                    Email = demoEmail,
+                    EmailConfirmed = true,
+                    Name = "Conta Demo"
+                };
+
+                var result = await userManager.CreateAsync(user, "Demo@123");
+                if (!result.Succeeded)
+                {
+                    Console.WriteLine("Failed to create demo user: " +
+                        string.Join("; ", result.Errors.Select(e => e.Description)));
+                    return;
+                }
+
+                Console.WriteLine("Demo user created: demo@dima.app / Demo@123");
+            }
+
+            await SeedDemoDataAsync(context, demoEmail);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to seed demo data: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Popula 6 meses de finanças (categorias + lançamentos) para um usuário.
+    /// Chamado no cadastro (todo novo usuário já nasce com dados) e pela conta demo.
+    /// Idempotente: não refaz se o usuário já tiver categorias.
+    /// </summary>
     public static async Task SeedDemoDataAsync(AppDbContext context, string userId)
     {
+        // O UserId gravado nas transações/categorias é o UserName (o que
+        // user.Identity.Name devolve), por isso usamos o e-mail aqui.
         if (await context.Categories.AnyAsync(x => x.UserId == userId))
             return;
 
-        var categories = new List<Category>
+        Console.WriteLine("Seeding demo finances (6 months)...");
+
+        var names = new[]
         {
-            new() { Title = "Salário", Description = "Renda principal", UserId = userId },
-            new() { Title = "Investimentos", Description = "Dividendos e Juros", UserId = userId },
-            new() { Title = "Aluguel", Description = "Moradia", UserId = userId },
-            new() { Title = "Alimentação", Description = "Supermercado e Restaurantes", UserId = userId },
-            new() { Title = "Lazer", Description = "Cinema, Viagens, etc", UserId = userId },
-            new() { Title = "Saúde", Description = "Farmácia e Convênio", UserId = userId }
+            "Salário", "Freelance", "Investimentos", "Moradia", "Alimentação",
+            "Transporte", "Saúde", "Lazer", "Educação", "Outros"
         };
 
-        await context.Categories.AddRangeAsync(categories);
+        var categories = names.ToDictionary(
+            n => n,
+            n => new Category { Title = n, Description = n, UserId = userId });
+
+        await context.Categories.AddRangeAsync(categories.Values);
         await context.SaveChangesAsync();
 
-        var salaryCat = categories[0];
-        var rentCat = categories[2];
-        var foodCat = categories[3];
+        var rnd = new Random(2026);
+        var today = DateTime.Now;
+        var transactions = new List<Transaction>();
 
-        var transactions = new List<Transaction>
+        DateTime DayIn(int monthsAgo, int day)
         {
-            new() { Title = "Salário Mensal", Amount = 5000, Type = ETransactionType.Deposit, CategoryId = salaryCat.Id, PaidOrReceivedAt = DateTime.Now.AddDays(-5), UserId = userId },
-            new() { Title = "Pagamento Aluguel", Amount = 1200, Type = ETransactionType.Withdrawal, CategoryId = rentCat.Id, PaidOrReceivedAt = DateTime.Now.AddDays(-3), UserId = userId },
-            new() { Title = "Jantar", Amount = 150, Type = ETransactionType.Withdrawal, CategoryId = foodCat.Id, PaidOrReceivedAt = DateTime.Now.AddDays(-1), UserId = userId }
-        };
+            var first = new DateTime(today.Year, today.Month, 1).AddMonths(-monthsAgo);
+            var clamped = Math.Min(day, DateTime.DaysInMonth(first.Year, first.Month));
+            var date = new DateTime(first.Year, first.Month, clamped, 12, 0, 0);
+            return monthsAgo == 0 && date > today ? today : date;
+        }
+
+        decimal Vary(decimal value, double pct)
+            => Math.Round(value * (decimal)(1 + (rnd.NextDouble() * 2 - 1) * pct), 2);
+
+        void Add(int monthsAgo, int day, string title, ETransactionType type, decimal amount, string category)
+        {
+            // Despesa (Withdrawal) é gravada com valor negativo, como o app faz.
+            var signed = type == ETransactionType.Withdrawal ? -Math.Abs(amount) : Math.Abs(amount);
+            var when = DayIn(monthsAgo, day);
+            transactions.Add(new Transaction
+            {
+                Title = title,
+                Type = type,
+                Amount = signed,
+                CategoryId = categories[category].Id,
+                UserId = userId,
+                CreatedAt = when,
+                PaidOrReceivedAt = when
+            });
+        }
+
+        for (var m = 5; m >= 0; m--)
+        {
+            // Entradas
+            Add(m, 5, "Salário", ETransactionType.Deposit, Vary(6500m, 0.04), "Salário");
+            if (rnd.NextDouble() < 0.5)
+                Add(m, 18, "Projeto freelance", ETransactionType.Deposit, Vary(1200m, 0.4), "Freelance");
+            if (rnd.NextDouble() < 0.6)
+                Add(m, 12, "Dividendos", ETransactionType.Deposit, Vary(280m, 0.5), "Investimentos");
+
+            // Saídas
+            Add(m, 8, "Aluguel", ETransactionType.Withdrawal, 1850m, "Moradia");
+            Add(m, 3, "Supermercado", ETransactionType.Withdrawal, Vary(620m, 0.2), "Alimentação");
+            Add(m, 20, "Restaurantes e delivery", ETransactionType.Withdrawal, Vary(310m, 0.3), "Alimentação");
+            Add(m, 6, "Transporte e combustível", ETransactionType.Withdrawal, Vary(380m, 0.25), "Transporte");
+            Add(m, 14, "Plano de saúde", ETransactionType.Withdrawal, 240m, "Saúde");
+            Add(m, 22, "Streaming e lazer", ETransactionType.Withdrawal, Vary(260m, 0.4), "Lazer");
+            Add(m, 10, "Curso online", ETransactionType.Withdrawal, Vary(220m, 0.5), "Educação");
+            if (rnd.NextDouble() < 0.7)
+                Add(m, 25, "Despesas diversas", ETransactionType.Withdrawal, Vary(190m, 0.5), "Outros");
+        }
 
         await context.Transactions.AddRangeAsync(transactions);
         await context.SaveChangesAsync();
+
+        Console.WriteLine($"Demo finances seeded: {categories.Count} categories, {transactions.Count} transactions.");
     }
 }

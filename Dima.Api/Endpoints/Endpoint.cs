@@ -26,9 +26,10 @@ public static class Endpoint
             .WithApiVersionSet(versionSet)
             .ProducesProblem(StatusCodes.Status500InternalServerError);
         
-        app.MapGroup("/")
-            .WithTags("Health Check")
-            .MapGet("/", () => new { Message = "Ok" });
+        // Health check em /health para não roubar a raiz "/" do Blazor WASM,
+        // que é servido pelo MapFallbackToFile("index.html").
+        app.MapGet("/health", () => new { Message = "Ok" })
+            .WithTags("Health Check");
         
         // Identity Endpoints
         var identity = endpoints.MapGroup("identity")

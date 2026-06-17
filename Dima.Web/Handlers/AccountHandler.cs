@@ -42,7 +42,9 @@ public class AccountHandler(IHttpClientFactory httpClientFactory) :
     public async Task LogoutAsync()
     {
         var emptyContent = new StringContent("{}", Encoding.UTF8, "application/json");
-        await _client.PostAsJsonAsync("v1/identity/logout", emptyContent);
+        // PostAsync envia o StringContent como corpo. PostAsJsonAsync tentaria
+        // serializar o StringContent como JSON e estoura NotSupportedException.
+        await _client.PostAsync("v1/identity/logout", emptyContent);
     }
 
     public async Task<Response<GetProfileResponse?>> GetProfileAsync(GetProfileRequest request)

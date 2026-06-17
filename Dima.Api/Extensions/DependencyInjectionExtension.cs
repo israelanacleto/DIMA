@@ -42,8 +42,11 @@ public static class DependencyInjectionExtension
     
     private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration
+        var raw = configuration
             .GetConnectionString("DefaultConnection") ?? string.Empty;
+
+        // "TestDb" é o marcador dos testes de integração (banco In-Memory).
+        var connectionString = raw == "TestDb" ? raw : ConnectionStringResolver.Resolve(raw);
 
         services.AddDbContext<AppDbContext>(config =>
         {
@@ -53,7 +56,7 @@ public static class DependencyInjectionExtension
             }
             else
             {
-                config.UseSqlServer(connectionString);
+                config.UseNpgsql(connectionString);
             }
         });
     }

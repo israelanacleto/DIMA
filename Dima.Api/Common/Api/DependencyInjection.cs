@@ -19,9 +19,9 @@ public static class DependencyInjection
     
     private static void AddDbContext(IServiceCollection services)
     {
-        services.AddDbContext<AppDbContext>(config => 
+        services.AddDbContext<AppDbContext>(config =>
             config
-                .UseSqlServer(connectionString: Configuration.ConnectionString)
+                .UseNpgsql(connectionString: Configuration.ConnectionString)
         );
     }
 
