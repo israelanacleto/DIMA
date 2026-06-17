@@ -1,49 +1,54 @@
 name: Dima
 
+# Espelha o ambiente do Railway localmente: PostgreSQL + um serviço único
+# (a API serve o Blazor WASM). A porta interna é a PORT (8080), igual ao Railway.
+
 services:
-  sql-server:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sql-server-dima
+  postgres:
+    image: postgres:17-alpine
+    container_name: dima-postgres
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=!Admin123
+      - POSTGRES_USER=dima
+      - POSTGRES_PASSWORD=dima
+      - POSTGRES_DB=dima
     ports:
-      - "1433:1433"
+      - "5432:5432"
+    volumes:
+      - dima-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dima -d dima"]
+      interval: 3s
+      timeout: 3s
+      retries: 15
     networks:
       - dima-net
 
-  dima-api:
+  dima:
     build:
       context: .
-      target: runtime_api
-    container_name: dima-api
+      args:
+        # URL que o navegador (WASM) usa para chamar a API. Serviço único:
+        # mesma origem do próprio site.
+        - BACKEND_URL=http://localhost:8080
+        - STRIPE_PUBLIC_KEY=pk_test_sua_chave_aqui
+    container_name: dima
     depends_on:
-      - sql-server
+      postgres:
+        condition: service_healthy
     environment:
-      # String de conexão apontando para o container do SQL Server
-      - ConnectionStrings__DefaultConnection=Server=localhost,1433;Database=dima-dev;User ID=sa;Password=!Admin123;Trusted_Connection=False; TrustServerCertificate=True;
-      - BackendUrl=http://localhost:5204
-      - FrontendUrl=http://localhost:5182
+      - PORT=8080
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=dima;Username=dima;Password=dima
+      - BackendUrl=http://localhost:8080
+      - FrontendUrl=http://localhost:8080
       - StripeApiKey=sk_test_sua_chave_aqui
     ports:
-      - "5204:8080"
-    networks:
-      - dima-net
-
-  dima-web:
-    build:
-      context: .
-      target: runtime_web
-      args:
-        # URL que o navegador usará para acessar a API
-        - BACKEND_URL=http://localhost:5204
-        - STRIPE_PUBLIC_KEY=pk_test_sua_chave_aqui
-    container_name: dima-web
-    ports:
-      - "5182:80"
+      - "8080:8080"
     networks:
       - dima-net
 
 networks:
   dima-net:
     driver: bridge
+
+volumes:
+  dima-pgdata:

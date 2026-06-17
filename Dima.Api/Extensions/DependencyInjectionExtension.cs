@@ -53,7 +53,7 @@ public static class DependencyInjectionExtension
             }
             else
             {
-                config.UseSqlServer(connectionString);
+                config.UseNpgsql(connectionString);
             }
         });
     }

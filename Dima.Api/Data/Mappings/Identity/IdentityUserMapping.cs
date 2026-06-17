@@ -26,8 +26,7 @@ public class IdentityUserMapping : IEntityTypeConfiguration<User>
             .HasMaxLength(250)
             .HasDefaultValue(null)
             .IsRequired(false)
-            .HasColumnName("Name")
-            .HasColumnType("NVARCHAR");
+            .HasColumnName("Name");
 
         builder.HasMany<IdentityUserClaim<long>>().WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
         builder.HasMany<IdentityUserLogin<long>>().WithOne().HasForeignKey(ul => ul.UserId).IsRequired();

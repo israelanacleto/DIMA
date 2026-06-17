@@ -69,13 +69,23 @@ public static class BuilderExtension
 
     public static void AddCrossOrigin(this WebApplicationBuilder builder)
     {
+        // Serviço único (WASM + API na mesma origem): o CORS praticamente não é
+        // exercitado. Mantemos a política, mas filtrando origens vazias para não
+        // quebrar quando BackendUrl/FrontendUrl não estão setados.
+        var origins = new[] { Configuration.BackendUrl, Configuration.FrontendUrl }
+            .Where(o => !string.IsNullOrWhiteSpace(o))
+            .Distinct()
+            .ToArray();
+
         builder.Services.AddCors(options => options.AddPolicy(
             ApiConfiguration.CorsPolicyName,
-            policy => policy
-                .WithOrigins(Configuration.BackendUrl, Configuration.FrontendUrl)
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials()
+            policy =>
+            {
+                if (origins.Length > 0)
+                    policy.WithOrigins(origins).AllowCredentials();
+
+                policy.AllowAnyMethod().AllowAnyHeader();
+            }
         ));
     }
 }
