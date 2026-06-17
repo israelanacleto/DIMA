@@ -27,9 +27,8 @@ services:
     build:
       context: .
       args:
-        # URL que o navegador (WASM) usa para chamar a API. Serviço único:
-        # mesma origem do próprio site.
-        - BACKEND_URL=http://localhost:8080
+        # Sem BACKEND_URL: o WASM usa a própria origem (single-service), igual
+        # ao Railway. Só defina se o front rodar em host separado da API.
         - STRIPE_PUBLIC_KEY=pk_test_sua_chave_aqui
     container_name: dima
     depends_on:

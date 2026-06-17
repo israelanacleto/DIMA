@@ -4,7 +4,10 @@ WORKDIR /src
 
 # Build args do frontend (Blazor WASM é estático: o que precisa ir no bundle
 # tem que ser definido em tempo de build).
-ARG BACKEND_URL=http://localhost:5204
+# BACKEND_URL vazio por padrão: como a API serve o próprio WASM (single-service),
+# o front usa a própria origem em runtime. Só sobrescreva se o front rodar em
+# um host diferente da API.
+ARG BACKEND_URL=
 ARG STRIPE_PUBLIC_KEY
 
 # Otimização de cache: restaura as dependências primeiro
