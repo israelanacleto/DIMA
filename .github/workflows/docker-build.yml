@@ -1,4 +1,4 @@
-name: Build Docker Images
+name: Build Docker Image
 
 on:
   push:
@@ -37,49 +37,28 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for API image
-        id: meta-api
+      - name: Extract metadata (tags, labels)
+        id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-api
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
             type=sha,prefix=sha-
             type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: Extract metadata (tags, labels) for Web image
-        id: meta-web
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-web
-          tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=sha,prefix=sha-
-            type=raw,value=latest,enable={{is_default_branch}}
-
-      - name: Build and push API image
+      # Serviço único: a API serve o Blazor WASM (stage "runtime" do Dockerfile).
+      - name: Build and push image
         uses: docker/build-push-action@v6
         with:
           context: .
-          target: runtime_api
+          target: runtime
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta-api.outputs.tags }}
-          labels: ${{ steps.meta-api.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Build and push Web image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          target: runtime_web
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta-web.outputs.tags }}
-          labels: ${{ steps.meta-web.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            BACKEND_URL=${{ vars.BACKEND_URL || 'http://localhost:5204' }}
+            BACKEND_URL=${{ vars.BACKEND_URL || '' }}
             STRIPE_PUBLIC_KEY=${{ secrets.STRIPE_PUBLIC_KEY || '' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
