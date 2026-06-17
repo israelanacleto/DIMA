@@ -9,10 +9,10 @@ public class HealthCheckTests(DimaWebApplicationFactory factory) : IClassFixture
     private readonly HttpClient _client = factory.CreateClient();
 
     [Fact]
-    public async Task Get_Root_ShouldReturnOk()
+    public async Task Get_Health_ShouldReturnOk()
     {
         // Act
-        var response = await _client.GetAsync("/");
+        var response = await _client.GetAsync("/health");
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
